@@ -1,0 +1,6 @@
+@ControlEquiposElectronicos.Api_HostAddress = http://localhost:5003
+
+GET {{ControlEquiposElectronicos.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
