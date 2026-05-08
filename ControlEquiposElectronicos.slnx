@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="ControlEquiposElectronicos.Api/ControlEquiposElectronicos.Api.csproj" />
   <Project Path="ControlEquiposElectronicos.csproj" />
 </Solution>
