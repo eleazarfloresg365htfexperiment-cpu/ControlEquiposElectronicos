@@ -66,14 +66,34 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="ViewModels\Controls\**" />
+	  <AndroidResource Remove="ViewModels\Helpers\**" />
+	  <AndroidResource Remove="ViewModels\Models\**" />
+	  <Compile Remove="ViewModels\Controls\**" />
+	  <Compile Remove="ViewModels\Helpers\**" />
+	  <Compile Remove="ViewModels\Models\**" />
+	  <EmbeddedResource Remove="ViewModels\Controls\**" />
+	  <EmbeddedResource Remove="ViewModels\Helpers\**" />
+	  <EmbeddedResource Remove="ViewModels\Models\**" />
+	  <MauiCss Remove="ViewModels\Controls\**" />
+	  <MauiCss Remove="ViewModels\Helpers\**" />
+	  <MauiCss Remove="ViewModels\Models\**" />
+	  <MauiXaml Remove="ViewModels\Controls\**" />
+	  <MauiXaml Remove="ViewModels\Helpers\**" />
+	  <MauiXaml Remove="ViewModels\Models\**" />
+	  <None Remove="ViewModels\Controls\**" />
+	  <None Remove="ViewModels\Helpers\**" />
+	  <None Remove="ViewModels\Models\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\Models\" />
-	  <Folder Include="ViewModels\Helpers\" />
-	  <Folder Include="ViewModels\Controls\" />
+	  <Folder Include="Controls\" />
+	  <Folder Include="Converters\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,6 +118,13 @@
 	  <MauiXaml Update="Views\Usuarios\UsuariosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="ControlEquiposElectronicos.Api\**\*.cs" />
+		<None Remove="ControlEquiposElectronicos.Api\**\*" />
+		<Content Remove="ControlEquiposElectronicos.Api\**\*" />
+		<EmbeddedResource Remove="ControlEquiposElectronicos.Api\**\*" />
 	</ItemGroup>
 
 </Project>

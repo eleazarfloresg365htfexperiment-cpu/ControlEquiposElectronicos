@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ControlEquiposElectronicos.Views.Equipos.ElectricidadPage"
+    Title="Electricidad">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+        <Label Text="Electricidad"
+               FontSize="24"
+               FontAttributes="Bold" />
+
+        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
+    </VerticalStackLayout>
+</ContentPage>

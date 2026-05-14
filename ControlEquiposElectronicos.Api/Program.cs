@@ -34,6 +34,8 @@ builder.Services.AddScoped<IReclasificacionEquipoService, ReclasificacionEquipoS
 builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioActualService, UsuarioActualService>();
+builder.Services.AddScoped<IPlantillaChecklistService, PlantillaChecklistService>();
+builder.Services.AddScoped<IChecklistTecnicoService, ChecklistTecnicoService>();
 
 var app = builder.Build();
 

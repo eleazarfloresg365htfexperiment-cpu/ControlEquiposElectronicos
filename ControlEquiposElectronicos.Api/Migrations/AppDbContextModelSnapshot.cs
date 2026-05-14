@@ -102,6 +102,224 @@ namespace ControlEquiposElectronicos.Api.Migrations
                     b.ToTable("HistorialOperaciones");
                 });
 
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("EstadoChecklist")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime?>("FechaFinalizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("ObservacionesGenerales")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("TecnicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UbicacionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TecnicoId");
+
+                    b.HasIndex("UbicacionId");
+
+                    b.ToTable("ChecklistTecnicos", (string)null);
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnicoDetalle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChecklistTecnicoEquipoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EstadoRevision")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Observacion")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("PlantillaChecklistItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChecklistTecnicoEquipoId");
+
+                    b.HasIndex("PlantillaChecklistItemId");
+
+                    b.ToTable("ChecklistTecnicoDetalles", (string)null);
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnicoEquipo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChecklistTecnicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("FechaRevision")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObservacionesEquipo")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("PlantillaChecklistId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResultadoGeneral")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChecklistTecnicoId");
+
+                    b.HasIndex("EquipoId");
+
+                    b.HasIndex("PlantillaChecklistId");
+
+                    b.ToTable("ChecklistTecnicoEquipos", (string)null);
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int?>("CategoriaEquipoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("TipoEquipoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaEquipoId");
+
+                    b.HasIndex("TipoEquipoId");
+
+                    b.ToTable("PlantillasChecklist", (string)null);
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklistItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("EsObligatorio")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlantillaChecklistId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlantillaChecklistId");
+
+                    b.ToTable("PlantillaChecklistItems", (string)null);
+                });
+
             modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.CategoriaEquipo", b =>
                 {
                     b.Property<int>("Id")
@@ -926,6 +1144,100 @@ namespace ControlEquiposElectronicos.Api.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnico", b =>
+                {
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Seguridad.Usuario", "Tecnico")
+                        .WithMany()
+                        .HasForeignKey("TecnicoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.Ubicacion", "Ubicacion")
+                        .WithMany()
+                        .HasForeignKey("UbicacionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tecnico");
+
+                    b.Navigation("Ubicacion");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnicoDetalle", b =>
+                {
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnicoEquipo", "ChecklistTecnicoEquipo")
+                        .WithMany("Detalles")
+                        .HasForeignKey("ChecklistTecnicoEquipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklistItem", "PlantillaChecklistItem")
+                        .WithMany("DetallesChecklist")
+                        .HasForeignKey("PlantillaChecklistItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ChecklistTecnicoEquipo");
+
+                    b.Navigation("PlantillaChecklistItem");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnicoEquipo", b =>
+                {
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnico", "ChecklistTecnico")
+                        .WithMany("EquiposRevisados")
+                        .HasForeignKey("ChecklistTecnicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.Equipo", "Equipo")
+                        .WithMany()
+                        .HasForeignKey("EquipoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklist", "PlantillaChecklist")
+                        .WithMany("ChecklistTecnicoEquipos")
+                        .HasForeignKey("PlantillaChecklistId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ChecklistTecnico");
+
+                    b.Navigation("Equipo");
+
+                    b.Navigation("PlantillaChecklist");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklist", b =>
+                {
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.CategoriaEquipo", "CategoriaEquipo")
+                        .WithMany()
+                        .HasForeignKey("CategoriaEquipoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.TipoEquipo", "TipoEquipo")
+                        .WithMany()
+                        .HasForeignKey("TipoEquipoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CategoriaEquipo");
+
+                    b.Navigation("TipoEquipo");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklistItem", b =>
+                {
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklist", "PlantillaChecklist")
+                        .WithMany("Items")
+                        .HasForeignKey("PlantillaChecklistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlantillaChecklist");
+                });
+
             modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.DetalleAmbiental", b =>
                 {
                     b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.Equipo", "Equipo")
@@ -1205,6 +1517,28 @@ namespace ControlEquiposElectronicos.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnico", b =>
+                {
+                    b.Navigation("EquiposRevisados");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.ChecklistTecnicoEquipo", b =>
+                {
+                    b.Navigation("Detalles");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklist", b =>
+                {
+                    b.Navigation("ChecklistTecnicoEquipos");
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Checklist.PlantillaChecklistItem", b =>
+                {
+                    b.Navigation("DetallesChecklist");
                 });
 
             modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.CategoriaEquipo", b =>

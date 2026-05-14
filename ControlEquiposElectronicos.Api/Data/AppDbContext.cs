@@ -4,6 +4,7 @@ using ControlEquiposElectronicos.Api.Entities.Inventario;
 using ControlEquiposElectronicos.Api.Entities.Reportes;
 using ControlEquiposElectronicos.Api.Entities.Mantenimientos;
 using ControlEquiposElectronicos.Api.Entities.Auditoria;
+using ControlEquiposElectronicos.Api.Entities.Checklist;
 
 namespace ControlEquiposElectronicos.Api.Data;
 
@@ -12,6 +13,13 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
+
+    // Checklist técnico
+    public DbSet<PlantillaChecklist> PlantillasChecklist => Set<PlantillaChecklist>();
+    public DbSet<PlantillaChecklistItem> PlantillaChecklistItems => Set<PlantillaChecklistItem>();
+    public DbSet<ChecklistTecnico> ChecklistTecnicos => Set<ChecklistTecnico>();
+    public DbSet<ChecklistTecnicoEquipo> ChecklistTecnicoEquipos => Set<ChecklistTecnicoEquipo>();
+    public DbSet<ChecklistTecnicoDetalle> ChecklistTecnicoDetalles => Set<ChecklistTecnicoDetalle>();
 
     // SEGURIDAD
     public DbSet<Usuario> Usuarios => Set<Usuario>();
@@ -263,6 +271,147 @@ public class AppDbContext : DbContext
             .WithMany(u => u.HistorialEstadosEquipo)
             .HasForeignKey(h => h.UsuarioId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // ===============================
+        // Checklist técnico
+        // ===============================
+
+        modelBuilder.Entity<PlantillaChecklist>(entity =>
+        {
+            entity.ToTable("PlantillasChecklist");
+
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(150)
+                .IsRequired();
+
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(500);
+
+            entity.Property(e => e.Activo)
+                .HasDefaultValue(true);
+
+            entity.Property(e => e.FechaCreacion)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            entity.HasOne(e => e.CategoriaEquipo)
+                .WithMany()
+                .HasForeignKey(e => e.CategoriaEquipoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.TipoEquipo)
+                .WithMany()
+                .HasForeignKey(e => e.TipoEquipoId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<PlantillaChecklistItem>(entity =>
+        {
+            entity.ToTable("PlantillaChecklistItems");
+
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(150)
+                .IsRequired();
+
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(500);
+
+            entity.Property(e => e.Orden)
+                .IsRequired();
+
+            entity.Property(e => e.EsObligatorio)
+                .HasDefaultValue(true);
+
+            entity.Property(e => e.Activo)
+                .HasDefaultValue(true);
+
+            entity.Property(e => e.FechaCreacion)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            entity.HasOne(e => e.PlantillaChecklist)
+                .WithMany(e => e.Items)
+                .HasForeignKey(e => e.PlantillaChecklistId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ChecklistTecnico>(entity =>
+        {
+            entity.ToTable("ChecklistTecnicos");
+
+            entity.Property(e => e.EstadoChecklist)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.Property(e => e.ObservacionesGenerales)
+                .HasMaxLength(1000);
+
+            entity.Property(e => e.Activo)
+                .HasDefaultValue(true);
+
+            entity.Property(e => e.FechaInicio)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            entity.Property(e => e.FechaCreacion)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            entity.HasOne(e => e.Ubicacion)
+                .WithMany()
+                .HasForeignKey(e => e.UbicacionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Tecnico)
+                .WithMany()
+                .HasForeignKey(e => e.TecnicoId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ChecklistTecnicoEquipo>(entity =>
+        {
+            entity.ToTable("ChecklistTecnicoEquipos");
+
+            entity.Property(e => e.ResultadoGeneral)
+                .HasMaxLength(80)
+                .IsRequired();
+
+            entity.Property(e => e.ObservacionesEquipo)
+                .HasMaxLength(1000);
+
+            entity.HasOne(e => e.ChecklistTecnico)
+                .WithMany(e => e.EquiposRevisados)
+                .HasForeignKey(e => e.ChecklistTecnicoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Equipo)
+                .WithMany()
+                .HasForeignKey(e => e.EquipoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.PlantillaChecklist)
+                .WithMany(e => e.ChecklistTecnicoEquipos)
+                .HasForeignKey(e => e.PlantillaChecklistId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ChecklistTecnicoDetalle>(entity =>
+        {
+            entity.ToTable("ChecklistTecnicoDetalles");
+
+            entity.Property(e => e.EstadoRevision)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.Property(e => e.Observacion)
+                .HasMaxLength(1000);
+
+            entity.HasOne(e => e.ChecklistTecnicoEquipo)
+                .WithMany(e => e.Detalles)
+                .HasForeignKey(e => e.ChecklistTecnicoEquipoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.PlantillaChecklistItem)
+                .WithMany(e => e.DetallesChecklist)
+                .HasForeignKey(e => e.PlantillaChecklistItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         // DECIMALES
         modelBuilder.Entity<Mantenimiento>()

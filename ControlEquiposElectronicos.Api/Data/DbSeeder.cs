@@ -66,58 +66,80 @@ public static class DbSeeder
 
     private static async Task SeedPermisosAsync(AppDbContext context)
     {
-        if (await context.Permisos.AnyAsync())
-            return;
-
         var permisos = new List<Permiso>
+    {
+        // Dashboard
+        new Permiso { Modulo = "Dashboard", Accion = "Ver", Descripcion = "Ver panel principal." },
+
+        // Equipos
+        new Permiso { Modulo = "Equipos", Accion = "Ver", Descripcion = "Ver equipos registrados." },
+        new Permiso { Modulo = "Equipos", Accion = "Crear", Descripcion = "Registrar nuevos equipos." },
+        new Permiso { Modulo = "Equipos", Accion = "Editar", Descripcion = "Editar información de equipos." },
+        new Permiso { Modulo = "Equipos", Accion = "Eliminar", Descripcion = "Eliminar o desactivar equipos." },
+        new Permiso { Modulo = "Equipos", Accion = "Reclasificar", Descripcion = "Reclasificar equipos." },
+        new Permiso { Modulo = "Equipos", Accion = "VerHistorial", Descripcion = "Ver historial de equipos." },
+
+        // Reportes
+        new Permiso { Modulo = "Reportes", Accion = "Ver", Descripcion = "Ver reportes de fallas." },
+        new Permiso { Modulo = "Reportes", Accion = "Crear", Descripcion = "Crear reportes de fallas." },
+        new Permiso { Modulo = "Reportes", Accion = "Editar", Descripcion = "Editar reportes de fallas." },
+        new Permiso { Modulo = "Reportes", Accion = "Cerrar", Descripcion = "Cerrar reportes de fallas." },
+
+        // Mantenimientos
+        new Permiso { Modulo = "Mantenimientos", Accion = "Ver", Descripcion = "Ver mantenimientos." },
+        new Permiso { Modulo = "Mantenimientos", Accion = "Crear", Descripcion = "Registrar mantenimientos." },
+        new Permiso { Modulo = "Mantenimientos", Accion = "Editar", Descripcion = "Editar mantenimientos." },
+        new Permiso { Modulo = "Mantenimientos", Accion = "Finalizar", Descripcion = "Finalizar mantenimientos." },
+
+        // Usuarios
+        new Permiso { Modulo = "Usuarios", Accion = "Ver", Descripcion = "Ver usuarios." },
+        new Permiso { Modulo = "Usuarios", Accion = "Crear", Descripcion = "Crear usuarios." },
+        new Permiso { Modulo = "Usuarios", Accion = "Editar", Descripcion = "Editar usuarios." },
+        new Permiso { Modulo = "Usuarios", Accion = "Desactivar", Descripcion = "Desactivar usuarios." },
+
+        // Configuración
+        new Permiso { Modulo = "Configuracion", Accion = "Ver", Descripcion = "Ver configuración del sistema." },
+        new Permiso { Modulo = "Configuracion", Accion = "Editar", Descripcion = "Editar configuración del sistema." },
+
+        // Permisos
+        new Permiso { Modulo = "Permisos", Accion = "Ver", Descripcion = "Ver permisos del sistema." },
+        new Permiso { Modulo = "Permisos", Accion = "Gestionar", Descripcion = "Gestionar permisos por rol." },
+
+        // Checklist técnico
+        new Permiso { Modulo = "Checklist", Accion = "Ver", Descripcion = "Ver checklist técnicos." },
+        new Permiso { Modulo = "Checklist", Accion = "Crear", Descripcion = "Iniciar checklist técnicos." },
+        new Permiso { Modulo = "Checklist", Accion = "Editar", Descripcion = "Guardar avances de checklist técnicos." },
+        new Permiso { Modulo = "Checklist", Accion = "Finalizar", Descripcion = "Finalizar checklist técnicos." },
+        new Permiso { Modulo = "Checklist", Accion = "Cancelar", Descripcion = "Cancelar checklist técnicos." },
+        new Permiso { Modulo = "Checklist", Accion = "CrearReporte", Descripcion = "Crear reportes de falla desde checklist." },
+
+        // Plantillas de checklist
+        new Permiso { Modulo = "ChecklistPlantillas", Accion = "Ver", Descripcion = "Ver plantillas de checklist." },
+        new Permiso { Modulo = "ChecklistPlantillas", Accion = "Crear", Descripcion = "Crear plantillas de checklist." },
+        new Permiso { Modulo = "ChecklistPlantillas", Accion = "Editar", Descripcion = "Editar plantillas de checklist." },
+        new Permiso { Modulo = "ChecklistPlantillas", Accion = "Eliminar", Descripcion = "Desactivar plantillas de checklist." },
+
+        // Aspectos/items de checklist
+        new Permiso { Modulo = "ChecklistItems", Accion = "Crear", Descripcion = "Agregar aspectos a plantillas de checklist." },
+        new Permiso { Modulo = "ChecklistItems", Accion = "Editar", Descripcion = "Editar aspectos de plantillas de checklist." },
+        new Permiso { Modulo = "ChecklistItems", Accion = "Eliminar", Descripcion = "Desactivar aspectos de plantillas de checklist." }
+    };
+
+        foreach (var permiso in permisos)
         {
-            // Dashboard
-            new Permiso { Modulo = "Dashboard", Accion = "Ver", Descripcion = "Ver panel principal." },
+            var existe = await context.Permisos
+                .AnyAsync(p => p.Modulo == permiso.Modulo && p.Accion == permiso.Accion);
 
-            // Equipos
-            new Permiso { Modulo = "Equipos", Accion = "Ver", Descripcion = "Ver equipos registrados." },
-            new Permiso { Modulo = "Equipos", Accion = "Crear", Descripcion = "Registrar nuevos equipos." },
-            new Permiso { Modulo = "Equipos", Accion = "Editar", Descripcion = "Editar información de equipos." },
-            new Permiso { Modulo = "Equipos", Accion = "Eliminar", Descripcion = "Eliminar o desactivar equipos." },
-            new Permiso { Modulo = "Equipos", Accion = "Reclasificar", Descripcion = "Reclasificar equipos." },
-            new Permiso { Modulo = "Equipos", Accion = "VerHistorial", Descripcion = "Ver historial de equipos." },
+            if (!existe)
+            {
+                context.Permisos.Add(permiso);
+            }
+        }
 
-            // Reportes
-            new Permiso { Modulo = "Reportes", Accion = "Ver", Descripcion = "Ver reportes de fallas." },
-            new Permiso { Modulo = "Reportes", Accion = "Crear", Descripcion = "Crear reportes de fallas." },
-            new Permiso { Modulo = "Reportes", Accion = "Editar", Descripcion = "Editar reportes de fallas." },
-            new Permiso { Modulo = "Reportes", Accion = "Cerrar", Descripcion = "Cerrar reportes de fallas." },
-
-            // Mantenimientos
-            new Permiso { Modulo = "Mantenimientos", Accion = "Ver", Descripcion = "Ver mantenimientos." },
-            new Permiso { Modulo = "Mantenimientos", Accion = "Crear", Descripcion = "Registrar mantenimientos." },
-            new Permiso { Modulo = "Mantenimientos", Accion = "Editar", Descripcion = "Editar mantenimientos." },
-            new Permiso { Modulo = "Mantenimientos", Accion = "Finalizar", Descripcion = "Finalizar mantenimientos." },
-
-            // Usuarios
-            new Permiso { Modulo = "Usuarios", Accion = "Ver", Descripcion = "Ver usuarios." },
-            new Permiso { Modulo = "Usuarios", Accion = "Crear", Descripcion = "Crear usuarios." },
-            new Permiso { Modulo = "Usuarios", Accion = "Editar", Descripcion = "Editar usuarios." },
-            new Permiso { Modulo = "Usuarios", Accion = "Desactivar", Descripcion = "Desactivar usuarios." },
-
-            // Configuración
-            new Permiso { Modulo = "Configuracion", Accion = "Ver", Descripcion = "Ver configuración del sistema." },
-            new Permiso { Modulo = "Configuracion", Accion = "Editar", Descripcion = "Editar configuración del sistema." },
-
-            // Permisos
-            new Permiso { Modulo = "Permisos", Accion = "Ver", Descripcion = "Ver permisos del sistema." },
-            new Permiso { Modulo = "Permisos", Accion = "Gestionar", Descripcion = "Gestionar permisos por rol." }
-        };
-
-        await context.Permisos.AddRangeAsync(permisos);
         await context.SaveChangesAsync();
     }
-
     private static async Task SeedRolPermisosAsync(AppDbContext context)
     {
-        if (await context.RolPermisos.AnyAsync())
-            return;
-
         var roles = await context.Roles.ToListAsync();
         var permisos = await context.Permisos.ToListAsync();
 
@@ -126,66 +148,90 @@ public static class DbSeeder
         var administrador = roles.First(r => r.NombreRol == "Administrador");
         var op = roles.First(r => r.NombreRol == "OP");
 
-        var rolPermisos = new List<RolPermiso>();
-
-        void Asignar(Rol rol, string modulo, string accion)
+        async Task AsignarSiNoExisteAsync(Rol rol, string modulo, string accion)
         {
             var permiso = permisos.First(p => p.Modulo == modulo && p.Accion == accion);
 
-            rolPermisos.Add(new RolPermiso
+            var existe = await context.RolPermisos
+                .AnyAsync(rp => rp.RolId == rol.RolId && rp.PermisoId == permiso.Id);
+
+            if (!existe)
             {
-                RolId = rol.RolId,
-                PermisoId = permiso.Id
-            });
+                context.RolPermisos.Add(new RolPermiso
+                {
+                    RolId = rol.RolId,
+                    PermisoId = permiso.Id
+                });
+            }
         }
 
         // Consulta
-        Asignar(consulta, "Dashboard", "Ver");
-        Asignar(consulta, "Equipos", "Ver");
-        Asignar(consulta, "Reportes", "Ver");
-        Asignar(consulta, "Mantenimientos", "Ver");
+        await AsignarSiNoExisteAsync(consulta, "Dashboard", "Ver");
+        await AsignarSiNoExisteAsync(consulta, "Equipos", "Ver");
+        await AsignarSiNoExisteAsync(consulta, "Reportes", "Ver");
+        await AsignarSiNoExisteAsync(consulta, "Mantenimientos", "Ver");
+        await AsignarSiNoExisteAsync(consulta, "Checklist", "Ver");
 
         // Técnico
-        Asignar(tecnico, "Dashboard", "Ver");
+        await AsignarSiNoExisteAsync(tecnico, "Dashboard", "Ver");
 
-        Asignar(tecnico, "Equipos", "Ver");
-        Asignar(tecnico, "Equipos", "Editar");
-        Asignar(tecnico, "Equipos", "Reclasificar");
-        Asignar(tecnico, "Equipos", "VerHistorial");
+        await AsignarSiNoExisteAsync(tecnico, "Equipos", "Ver");
+        await AsignarSiNoExisteAsync(tecnico, "Equipos", "Editar");
+        await AsignarSiNoExisteAsync(tecnico, "Equipos", "Reclasificar");
+        await AsignarSiNoExisteAsync(tecnico, "Equipos", "VerHistorial");
 
-        Asignar(tecnico, "Reportes", "Ver");
-        Asignar(tecnico, "Reportes", "Crear");
-        Asignar(tecnico, "Reportes", "Editar");
-        Asignar(tecnico, "Reportes", "Cerrar");
+        await AsignarSiNoExisteAsync(tecnico, "Reportes", "Ver");
+        await AsignarSiNoExisteAsync(tecnico, "Reportes", "Crear");
+        await AsignarSiNoExisteAsync(tecnico, "Reportes", "Editar");
+        await AsignarSiNoExisteAsync(tecnico, "Reportes", "Cerrar");
 
-        Asignar(tecnico, "Mantenimientos", "Ver");
-        Asignar(tecnico, "Mantenimientos", "Crear");
-        Asignar(tecnico, "Mantenimientos", "Editar");
-        Asignar(tecnico, "Mantenimientos", "Finalizar");
+        await AsignarSiNoExisteAsync(tecnico, "Mantenimientos", "Ver");
+        await AsignarSiNoExisteAsync(tecnico, "Mantenimientos", "Crear");
+        await AsignarSiNoExisteAsync(tecnico, "Mantenimientos", "Editar");
+        await AsignarSiNoExisteAsync(tecnico, "Mantenimientos", "Finalizar");
 
-        // Administrador: casi todo, excepto configuración crítica y gestión de permisos
+        await AsignarSiNoExisteAsync(tecnico, "Checklist", "Ver");
+        await AsignarSiNoExisteAsync(tecnico, "Checklist", "Crear");
+        await AsignarSiNoExisteAsync(tecnico, "Checklist", "Editar");
+        await AsignarSiNoExisteAsync(tecnico, "Checklist", "Finalizar");
+        await AsignarSiNoExisteAsync(tecnico, "Checklist", "CrearReporte");
+
+        // Administrador
         foreach (var permiso in permisos.Where(p =>
                      !(p.Modulo == "Permisos" && p.Accion == "Gestionar") &&
-                     !(p.Modulo == "Configuracion" && p.Accion == "Editar")))
+                     !(p.Modulo == "Configuracion" && p.Accion == "Editar") &&
+                     !(p.Modulo == "ChecklistPlantillas" && p.Accion is "Crear" or "Editar" or "Eliminar") &&
+                     !(p.Modulo == "ChecklistItems" && p.Accion is "Crear" or "Editar" or "Eliminar")))
         {
-            rolPermisos.Add(new RolPermiso
+            var existe = await context.RolPermisos
+                .AnyAsync(rp => rp.RolId == administrador.RolId && rp.PermisoId == permiso.Id);
+
+            if (!existe)
             {
-                RolId = administrador.RolId,
-                PermisoId = permiso.Id
-            });
+                context.RolPermisos.Add(new RolPermiso
+                {
+                    RolId = administrador.RolId,
+                    PermisoId = permiso.Id
+                });
+            }
         }
 
         // OP: todos los permisos
         foreach (var permiso in permisos)
         {
-            rolPermisos.Add(new RolPermiso
+            var existe = await context.RolPermisos
+                .AnyAsync(rp => rp.RolId == op.RolId && rp.PermisoId == permiso.Id);
+
+            if (!existe)
             {
-                RolId = op.RolId,
-                PermisoId = permiso.Id
-            });
+                context.RolPermisos.Add(new RolPermiso
+                {
+                    RolId = op.RolId,
+                    PermisoId = permiso.Id
+                });
+            }
         }
 
-        await context.RolPermisos.AddRangeAsync(rolPermisos);
         await context.SaveChangesAsync();
     }
 
