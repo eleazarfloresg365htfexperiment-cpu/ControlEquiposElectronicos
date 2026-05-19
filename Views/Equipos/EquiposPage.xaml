@@ -3,11 +3,109 @@
     x:Class="ControlEquiposElectronicos.Views.Equipos.EquiposPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Equipos">
+    Title="Gestión de Equipos"
+    BackgroundColor="#F8F9FB">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Equipos" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,Auto,*">
 
+        <VerticalStackLayout Grid.Row="0" Padding="24,20,24,12" Spacing="2">
+            <Label Text="Gestión de Equipos" FontSize="24" FontAttributes="Bold" TextColor="#1A1F3A"/>
+            <Label Text="Administra el inventario de activos tecnológicos" FontSize="13" TextColor="#9AA3BE"/>
+        </VerticalStackLayout>
+        
+        <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="24,0,24,16">
+            <HorizontalStackLayout Spacing="12">
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
+                    <VerticalStackLayout Spacing="6">
+                        <Border BackgroundColor="#DBEAFE" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
+                            <Label Text="➕" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Registrar equipo" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Agregar nuevo activo" FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
+                    <VerticalStackLayout Spacing="6">
+                        <Border BackgroundColor="#DCFCE7" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
+                            <Label Text="🖊️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Editar equipo" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Modificar información" FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
+                    <VerticalStackLayout Spacing="6">
+                        <Border BackgroundColor="#FEE2E2" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
+                            <Label Text="🗑️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Desactivar" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Solo Administrador" FontSize="10" TextColor="#C0392B" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
+                    <VerticalStackLayout Spacing="6">
+                        <Border BackgroundColor="#FFEDD5" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
+                            <Label Text="🔄️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Cambiar estado" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Funcional, dañado..." FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
+                    <VerticalStackLayout Spacing="6">
+                        <Border BackgroundColor="#FEF3C7" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
+                            <Label Text="🏷️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Reclasificar" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Cambiar función" FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </HorizontalStackLayout>
+        </ScrollView>
+        
+        <Border Grid.Row="2" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Margin="24,0,24,24">
+            <Grid RowDefinitions="Auto,Auto,*">
+
+                <Grid Grid.Row="0" Padding="16,14" ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0" Text="Listado de equipos" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
+                    <Button Grid.Column="1" Text="Registrar Equipo ➕" BackgroundColor="#1E2A6E" TextColor="White" FontSize="12" CornerRadius="8" Padding="12,8"/>
+                </Grid>
+
+                <HorizontalStackLayout Grid.Row="1" Padding="16,0,16,12" Spacing="8">
+                    <Border BackgroundColor="#F8F9FB" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="10,6" WidthRequest="180">
+                        <Label Text="Buscando equipo...🔍" FontSize="12" TextColor="#9AA3BE"/>
+                    </Border>
+                    <Picker Title="Categoría" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="120"/>
+                    <Picker Title="Ubicación" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="120"/>
+                    <Picker Title="Estado" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="100"/>
+                </HorizontalStackLayout>
+
+                <CollectionView Grid.Row="2" x:Name="ListaEquipos" ItemsSource="{Binding Equipos}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="16,10" ColumnDefinitions="80,*,100,100,120,120" BackgroundColor="White">
+                                
+                                <Border Grid.Column="0" BackgroundColor="#F0F2F7" StrokeThickness="0" StrokeShape="RoundRectangle 5" Padding="6,3" HorizontalOptions="Start" VerticalOptions="Center">
+                                    <Label Text="{Binding Codigo}" FontSize="11" TextColor="#1E2A6E" FontAttributes="Bold"/>
+                                </Border>
+                                <Label Grid.Column="1" Text="{Binding Nombre}" FontSize="12" VerticalOptions="Center" Margin="8,0"/>
+                                <Label Grid.Column="2" Text="{Binding Categoria}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
+                                <Label Grid.Column="3" Text="{Binding Tipo}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
+                                <Label Grid.Column="4" Text="{Binding Ubicacion}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
+                                <Label Grid.Column="5" Text="{Binding Estado}" FontSize="11" VerticalOptions="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Grid>
+        </Border>
+
+    </Grid>
 </ContentPage>
