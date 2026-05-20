@@ -17,4 +17,4 @@ public partial class EquiposPage : ContentPage
         base.OnAppearing();
         await _viewModel.CargarEquiposAsync();
     }
-}
+} 
