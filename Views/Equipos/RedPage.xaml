@@ -5,11 +5,30 @@
     x:Class="ControlEquiposElectronicos.Views.Equipos.RedPage"
     Title="Red">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Red"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <Label Text="Modulo Red"
+                   FontSize="30"
+                   FontAttributes="Bold"/>
+
+            <Button Text="Registrar Router"
+                    Clicked="OnRegistrarRouter"/>
+
+            <Button Text="Registrar Switch"
+                    Clicked="OnRegistrarSwitch"/>
+
+            <Button Text="Registrar Puerto"
+                    Clicked="OnRegistrarPuerto"/>
+
+            <Button Text="Ver Historial"
+                    Clicked="OnVerHistorial"/>
+
+            <Button Text="Reportar Falla"
+                    Clicked="OnReportarFalla"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>
+    

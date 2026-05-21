@@ -5,11 +5,29 @@
     x:Class="ControlEquiposElectronicos.Views.Equipos.ElectricidadPage"
     Title="Electricidad">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Electricidad"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <Label Text="Modulo Electricidad"
+                   FontSize="30"
+                   FontAttributes="Bold"/>
+
+            <Button Text="Registrar UPS"
+                    Clicked="OnRegistrarUPS"/>
+
+            <Button Text="Registrar Bateria"
+                    Clicked="OnRegistrarBateria"/>
+
+            <Button Text="Registrar Aire Acondicionado"
+                    Clicked="OnRegistrarAire"/>
+
+            <Button Text="Registrar BTU"
+                    Clicked="OnRegistrarBTU"/>
+
+            <Button Text="Ver Servicios"
+                    Clicked="OnVerServicios"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>
