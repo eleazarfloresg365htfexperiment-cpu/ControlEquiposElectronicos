@@ -2,6 +2,7 @@
 using ControlEquiposElectronicos.DTOs.Checklist;
 using ControlEquiposElectronicos.DTOs.Equipos;
 using ControlEquiposElectronicos.Services.Interfaces;
+using Microsoft.Maui.Layouts;
 using System.Collections.ObjectModel;
 
 namespace ControlEquiposElectronicos.ViewModels.Equipos;
@@ -116,5 +117,55 @@ public class EquipoFormularioViewModel : BaseViewModel
         TipoSeleccionado = null;
         EstadoSeleccionado = null;
         UbicacionSeleccionada = null;
+    }
+
+    public void CargarDatosParaEditar(EquipoListadoDto equipo)
+    {
+        Codigo = equipo.Codigo;
+        Nombre = equipo.Nombre;
+        Marca = equipo.Marca ?? string.Empty;
+        Modelo = equipo.Modelo ?? string.Empty;
+        NumeroSerie = equipo.NumeroSerie ?? string.Empty;
+        Observacones = equipo.Observaciones ?? string.Empty;
+    }
+
+    public async Task<bool> ActualizarEquipoAsync(int id)
+    {
+        if (string.IsNullOrWhiteSpace(Codigo) || string.IsNullOrWhiteSpace(Nombre) ||
+            string.IsNullOrWhiteSpace(Marca) || CategoriaSeleccionada == null ||
+            TipoSeleccionado == null || EstadoSeleccionado == null || UbicacionSeleccionada == null)
+        {
+            await Shell.Current.DisplayAlert("Campos incompletos", "Por favor llena todos los campos obligatorios", "OK");
+            return false;
+        }
+        try
+        {
+            IsBusy = true;
+            var dto = new ActualizarEquipoDto
+            {
+                Codigo = Codigo,
+                Nombre = Nombre,
+                Marca = Marca,
+                Modelo = Modelo,
+                NumeroSerie = NumeroSerie,
+                Observaciones = Observacones,
+                CategoriaEquipoId = CategoriaSeleccionada.Id,
+                TipoEquipoId = TipoSeleccionado.Id,
+                EstadoEquipoId = EstadoSeleccionado.Id,
+                UbicacionId = UbicacionSeleccionada.Id,
+                Activo = true
+            };
+
+            return await _equipoApiService.ActualizarAsync(id, dto);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"No se pudo actualiar el equipo: {ex.Message}", "OK");
+            return false;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

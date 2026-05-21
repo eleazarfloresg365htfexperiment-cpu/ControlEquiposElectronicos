@@ -1,15 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Equipos.ComputoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Equipos.ComputoPage"
-    Title="Cómputo">
+    Title="Cómputo"
+    BackgroundColor="#F8F9FB">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Cómputo"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <VerticalStackLayout Spacing="2">
+                <Label Text="Submódulo Cómputo" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                <Label Text="PC, periféricos y asignaciones" FontSize="13" TextColor="#9AA3BE"/>
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+
+                <Border Grid.Column="0" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <HorizontalStackLayout Spacing="12">
+                        <Border BackgroundColor="#DBEAFE" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44">
+                            <Label Text="💻" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                            <Label Text="Registrar PC" FontSize="13" FontAttributes="Bold"/>
+                            <Label Text="Agregar nueva computadora" FontSize="11" TextColor="#9AA3BE"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <HorizontalStackLayout Spacing="12">
+                        <Border BackgroundColor="#DCFCE7" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44">
+                            <Label Text="🖱" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                            <Label Text="Registrar periférico" FontSize="13" FontAttributes="Bold"/>
+                            <Label Text="Mouse, teclado, monitor..." FontSize="11" TextColor="#9AA3BE"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <HorizontalStackLayout Spacing="12">
+                        <Border BackgroundColor="#EDE9FE" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44">
+                            <Label Text="🔗" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                            <Label Text="Asignar periférico" FontSize="13" FontAttributes="Bold"/>
+                            <Label Text="Relacionar con una PC" FontSize="11" TextColor="#9AA3BE"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" >
+                <VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto" Padding="16,14">
+                        <Label Grid.Column="0" Text="PCs registradas" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Button Grid.Column="1" Text="+ Registrar PC"
+                                BackgroundColor="#1E2A6E" TextColor="White"
+                                CornerRadius="8" FontSize="12" Padding="12,7"
+                                x:Name="BtnRegistrarPC"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
+
+                    <CollectionView x:Name="ListaPCs" ItemsSource="{Binding Equipos}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="16,12" ColumnDefinitions="80,*,120,120,100" BackgroundColor="White">
+
+                                    <Border Grid.Column="0" BackgroundColor="#F0F2F7" StrokeThickness="0" StrokeShape="RoundRectangle 5" Padding="6,3" HorizontalOptions="Start" VerticalOptions="Center">
+                                        <Label Text="{Binding Codigo}" FontSize="11" TextColor="#1E2A6E" FontAttributes="Bold"/>
+                                    </Border>
+
+                                    <Label Grid.Column="1" Text="{Binding Nombre}" FontSize="12" VerticalOptions="Center" Margin="8,0"/>
+
+                                    <Label Grid.Column="2" Text="{Binding Ubicacion}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
+
+                                    <Label Grid.Column="3" Text="{Binding Estado}" FontSize="11" VerticalOptions="Center"/>
+
+                                    <HorizontalStackLayout Grid.Column="4" Spacing="6" VerticalOptions="Center">
+                                        <Button Text="🖊️" BackgroundColor="#DBEAFE" TextColor="#1E40AF" CornerRadius="6" FontSize="12" Padding="8,4" WidthRequest="36" HeightRequest="32"/>
+                                        <Button Text="🔄" BackgroundColor="#FEF3C7" TextColor="#92400E" CornerRadius="6" FontSize="12" Padding="8,4" WidthRequest="36" HeightRequest="32"/>
+                                        <Button Text="🏷️" BackgroundColor="#EDE9FE" TextColor="#5B21B6" CornerRadius="6" FontSize="12" Padding="8,4" WidthRequest="36" HeightRequest="32"/>
+                                    </HorizontalStackLayout>
+
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

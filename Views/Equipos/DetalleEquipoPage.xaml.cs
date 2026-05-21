@@ -17,17 +17,37 @@ public partial class DetalleEquipoPage : ContentPage
 
         BtnEditar.Clicked += async (s, e) =>
         {
-            await DisplayAlert("Editar", "Todavia no la hago esperate", "OK");
+            if (_viewModel.Equipo == null) return;
+            await Shell.Current.GoToAsync($"RegistrarEquipoPage?equipoId={_viewModel.Equipo.Id}");
         };
 
         BtnCambiarEstado.Clicked += async (s, e) =>
         {
-            await DisplayAlert("Cambiar estado", "Todavia no la hago esperate", "OK");
+            string accion = await DisplayActionSheet(
+                "Cambiar estado", "Cancelar", null,
+                "Activo", "En mantenimiento", "Dañado", "Inactivo");
+
+            if (accion != null && accion != "Cancelar")
+            {
+                await _viewModel.CambiarEstadoAsync(accion);
+                await DisplayAlert("Éxito", $"Estado cambiado a {accion}", "OK");
+            }
         };
 
         BtnReclasificar.Clicked += async (s, e) =>
         {
-            await DisplayAlert("Reclasificar", "Todavia no la hago esperate", "OK");
+            if (_viewModel.Equipo == null) return;
+            bool confirmar = await DisplayAlert("Desactivar",
+                $"¿Estás seguro de desactivar {_viewModel.Equipo.Nombre}?", "Si", "No");
+            if (confirmar)
+            {
+                var resultado = await _viewModel.DesactivarEquipoAsync();
+                if (resultado)
+                {
+                    await DisplayAlert("Éxito", "Equipo desactivado correctamente", "OK");
+                    await Shell.Current.GoToAsync("..");
+                }
+            }
         };
 
         BtnDesactivar.Clicked += async (s, e) =>
