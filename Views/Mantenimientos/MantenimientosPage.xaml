@@ -3,11 +3,272 @@
     x:Class="ControlEquiposElectronicos.Views.Mantenimientos.MantenimientosPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Mantenimientos">
+    Title="Mantenimientos"
+    BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Mantenimientos" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <!-- ENCABEZADO -->
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Mantenimientos"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#1A1A2E" />
+                <Label Text="Gestiona el historial técnico de equipos de la academia"
+                       FontSize="14"
+                       TextColor="#666666" />
+            </VerticalStackLayout>
+
+            <!-- TARJETAS DE ACCIÓN -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+
+                <!-- Registrar mantenimiento -->
+                <Border Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#E0E0E0"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#4F8EF7"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="Transparent"
+                                HeightRequest="56" WidthRequest="56"
+                                HorizontalOptions="Center">
+                            <Label Text="+"
+                                   FontSize="28"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Registrar mantenimiento"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Agregar nuevo registro técnico"
+                               FontSize="11"
+                               TextColor="#888888"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Editar -->
+                <Border Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#E0E0E0"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#2ECB8A"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="Transparent"
+                                HeightRequest="56" WidthRequest="56"
+                                HorizontalOptions="Center">
+                            <Label Text="✏️"
+                                   FontSize="24"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Editar registro"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Modifica registros existentes"
+                               FontSize="11"
+                               TextColor="#888888"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Finalizar -->
+                <Border Grid.Column="2"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#E0E0E0"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#A855F7"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="Transparent"
+                                HeightRequest="56" WidthRequest="56"
+                                HorizontalOptions="Center">
+                            <Label Text="✔️"
+                                   FontSize="24"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Finalizar mantenimiento"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Marcar como completado"
+                               FontSize="11"
+                               TextColor="#888888"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Historial -->
+                <Border Grid.Column="3"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#E0E0E0"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#F5A623"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="Transparent"
+                                HeightRequest="56" WidthRequest="56"
+                                HorizontalOptions="Center">
+                            <Label Text="🕐"
+                                   FontSize="24"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Historial técnico"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Ver historial de cambios"
+                               FontSize="11"
+                               TextColor="#888888"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- SECCIÓN TABLA -->
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="#E0E0E0"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+
+                    <!-- Título y botón -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Listado de mantenimientos"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#1A1A2E"
+                               VerticalOptions="Center" />
+                        <Border Grid.Column="1"
+                                BackgroundColor="#4F8EF7"
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="Transparent"
+                                Padding="14,10">
+                            <Label Text="+ Registrar nuevo"
+                                   TextColor="White"
+                                   FontAttributes="Bold"
+                                   FontSize="13" />
+                        </Border>
+                    </Grid>
+
+                    <!-- Buscador -->
+                    <Border StrokeShape="RoundRectangle 8"
+                            Stroke="#E0E0E0"
+                            BackgroundColor="#FAFAFA"
+                            Padding="12,8">
+                        <Entry Placeholder="🔍  Buscar mantenimiento..."
+                               PlaceholderColor="#AAAAAA"
+                               FontSize="13"
+                               BackgroundColor="Transparent" />
+                    </Border>
+
+                    <!-- Encabezado de tabla -->
+                    <Grid ColumnDefinitions="60,120,*,120,120,100"
+                          BackgroundColor="#F0F0F0"
+                          Padding="10,8">
+                        <Label Grid.Column="0" Text="ID" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="1" Text="Código equipo" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="2" Text="Descripción" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="3" Text="Fecha" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="4" Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="5" Text="Acciones" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                    </Grid>
+
+                    <!-- Fila ejemplo 1 -->
+                    <Grid ColumnDefinitions="60,120,*,120,120,100"
+                          Padding="10,10"
+                          BackgroundColor="White">
+                        <Label Grid.Column="0" Text="1" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="EQ-001" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Limpieza general de proyector" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="15/05/2025" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Border Grid.Column="4"
+                                BackgroundColor="#D4EDDA"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="Transparent"
+                                Padding="10,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center">
+                            <Label Text="Completado" TextColor="#1E7E34" FontSize="12" FontAttributes="Bold"/>
+                        </Border>
+                        <Label Grid.Column="5" Text="✏️ 🗑️" FontSize="16" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" BackgroundColor="#F0F0F0"/>
+
+                    <!-- Fila ejemplo 2 -->
+                    <Grid ColumnDefinitions="60,120,*,120,120,100"
+                          Padding="10,10"
+                          BackgroundColor="White">
+                        <Label Grid.Column="0" Text="2" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="EQ-002" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Revisión de teclado y mouse" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="18/05/2025" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Border Grid.Column="4"
+                                BackgroundColor="#FFF3CD"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="Transparent"
+                                Padding="10,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center">
+                            <Label Text="En proceso" TextColor="#856404" FontSize="12" FontAttributes="Bold"/>
+                        </Border>
+                        <Label Grid.Column="5" Text="✏️ 🗑️" FontSize="16" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" BackgroundColor="#F0F0F0"/>
+
+                    <!-- Fila ejemplo 3 -->
+                    <Grid ColumnDefinitions="60,120,*,120,120,100"
+                          Padding="10,10"
+                          BackgroundColor="White">
+                        <Label Grid.Column="0" Text="3" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="EQ-003" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Cambio de cartucho impresora" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="20/05/2025" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Border Grid.Column="4"
+                                BackgroundColor="#E2E3E5"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="Transparent"
+                                Padding="10,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center">
+                            <Label Text="Pendiente" TextColor="#383D41" FontSize="12" FontAttributes="Bold"/>
+                        </Border>
+                        <Label Grid.Column="5" Text="✏️ 🗑️" FontSize="16" VerticalOptions="Center"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

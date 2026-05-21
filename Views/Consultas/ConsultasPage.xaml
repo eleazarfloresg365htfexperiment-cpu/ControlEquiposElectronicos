@@ -1,15 +1,259 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Consultas.ConsultasPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Consultas.ConsultasPage"
-    Title="Consultas">
+    Title="Consultas"
+    BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Consultas"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <!-- ENCABEZADO -->
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Consultas"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#1A1A2E" />
+                <Label Text="Busca y filtra información técnica del sistema"
+                       FontSize="14"
+                       TextColor="#666666" />
+            </VerticalStackLayout>
+
+            <!-- FILTROS -->
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="#E0E0E0"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+
+                    <Label Text="Filtros de búsqueda"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A2E" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" RowDefinitions="Auto,Auto" RowSpacing="12">
+
+                        <!-- Búsqueda por código -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="6">
+                            <Label Text="Código de equipo"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="#FAFAFA"
+                                    Padding="12,10">
+                                <Entry Placeholder="🔍  Ej: EQ-001"
+                                       PlaceholderColor="#AAAAAA"
+                                       FontSize="13"
+                                       BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Categoría -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="6">
+                            <Label Text="Categoría"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="#FAFAFA"
+                                    Padding="12,4">
+                                <Picker Title="Todas las categorías"
+                                        TitleColor="#AAAAAA"
+                                        FontSize="13"
+                                        BackgroundColor="Transparent">
+                                    <Picker.Items>
+                                        <x:String>Cómputo</x:String>
+                                        <x:String>Red</x:String>
+                                        <x:String>Impresión</x:String>
+                                        <x:String>Electricidad</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Ubicación -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="6">
+                            <Label Text="Ubicación"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="#FAFAFA"
+                                    Padding="12,4">
+                                <Picker Title="Todas las ubicaciones"
+                                        TitleColor="#AAAAAA"
+                                        FontSize="13"
+                                        BackgroundColor="Transparent">
+                                    <Picker.Items>
+                                        <x:String>Aula 101</x:String>
+                                        <x:String>Laboratorio 2</x:String>
+                                        <x:String>Secretaría</x:String>
+                                        <x:String>Dirección</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Estado -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="6">
+                            <Label Text="Estado"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="#FAFAFA"
+                                    Padding="12,4">
+                                <Picker Title="Todos los estados"
+                                        TitleColor="#AAAAAA"
+                                        FontSize="13"
+                                        BackgroundColor="Transparent">
+                                    <Picker.Items>
+                                        <x:String>Activo</x:String>
+                                        <x:String>En mantenimiento</x:String>
+                                        <x:String>Inactivo</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                    <!-- Rango de fechas -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="6">
+                            <Label Text="Fecha desde"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="#FAFAFA"
+                                    Padding="12,4">
+                                <DatePicker Format="dd/MM/yyyy"
+                                            FontSize="13"
+                                            BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Fecha hasta"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    BackgroundColor="#FAFAFA"
+                                    Padding="12,4">
+                                <DatePicker Format="dd/MM/yyyy"
+                                            FontSize="13"
+                                            BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Botón buscar -->
+                    <Border BackgroundColor="#4F8EF7"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="Transparent"
+                            Padding="0,14"
+                            HorizontalOptions="Fill">
+                        <Label Text="🔍  Buscar"
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"
+                               FontSize="15"
+                               TextColor="White" />
+                    </Border>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- RESULTADOS -->
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="#E0E0E0"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+
+                    <Label Text="Resultados"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A2E" />
+
+                    <!-- Encabezado tabla -->
+                    <Grid ColumnDefinitions="50,110,*,110,110"
+                          BackgroundColor="#F0F0F0"
+                          Padding="10,8">
+                        <Label Grid.Column="0" Text="ID" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="1" Text="Código" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="2" Text="Tipo / Categoría" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="3" Text="Ubicación" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="4" Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                    </Grid>
+
+                    <!-- Fila 1 -->
+                    <Grid ColumnDefinitions="50,110,*,110,110" Padding="10,10" BackgroundColor="White">
+                        <Label Grid.Column="0" Text="1" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="EQ-001" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Proyector / Cómputo" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="Aula 101" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Border Grid.Column="4"
+                                BackgroundColor="#D4EDDA"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="Transparent"
+                                Padding="10,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center">
+                            <Label Text="Activo" TextColor="#1E7E34" FontSize="12" FontAttributes="Bold"/>
+                        </Border>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" BackgroundColor="#F0F0F0"/>
+
+                    <!-- Fila 2 -->
+                    <Grid ColumnDefinitions="50,110,*,110,110" Padding="10,10" BackgroundColor="White">
+                        <Label Grid.Column="0" Text="2" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="EQ-002" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Computadora / Cómputo" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="Laboratorio 2" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Border Grid.Column="4"
+                                BackgroundColor="#FFF3CD"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="Transparent"
+                                Padding="10,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center">
+                            <Label Text="En mantenimiento" TextColor="#856404" FontSize="12" FontAttributes="Bold"/>
+                        </Border>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" BackgroundColor="#F0F0F0"/>
+
+                    <!-- Fila 3 -->
+                    <Grid ColumnDefinitions="50,110,*,110,110" Padding="10,10" BackgroundColor="White">
+                        <Label Grid.Column="0" Text="3" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="EQ-003" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Impresora / Impresión" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Label Grid.Column="3" Text="Secretaría" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
+                        <Border Grid.Column="4"
+                                BackgroundColor="#E2E3E5"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="Transparent"
+                                Padding="10,4"
+                                HorizontalOptions="Start"
+                                VerticalOptions="Center">
+                            <Label Text="Inactivo" TextColor="#383D41" FontSize="12" FontAttributes="Bold"/>
+                        </Border>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

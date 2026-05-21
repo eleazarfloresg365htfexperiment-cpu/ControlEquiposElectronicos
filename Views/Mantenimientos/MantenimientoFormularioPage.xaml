@@ -1,15 +1,199 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Mantenimientos.MantenimientoFormularioPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Mantenimientos.MantenimientoFormularioPage"
-    Title="Formulario de mantenimiento">
+    Title="Formulario de mantenimiento"
+    BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Formulario de mantenimiento"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <!-- ENCABEZADO -->
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Registrar mantenimiento"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#1A1A2E" />
+                <Label Text="Completa los datos del mantenimiento técnico"
+                       FontSize="14"
+                       TextColor="#666666" />
+            </VerticalStackLayout>
+
+            <!-- TARJETA FORMULARIO -->
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="#E0E0E0"
+                    Padding="24">
+                <VerticalStackLayout Spacing="18">
+
+                    <!-- Código de equipo -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Código de equipo"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,10">
+                            <Entry Placeholder="Ej: EQ-001"
+                                   PlaceholderColor="#AAAAAA"
+                                   FontSize="14"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Tipo de mantenimiento -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Tipo de mantenimiento"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,4">
+                            <Picker Title="Seleccionar tipo..."
+                                    TitleColor="#AAAAAA"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent">
+                                <Picker.Items>
+                                    <x:String>Preventivo</x:String>
+                                    <x:String>Correctivo</x:String>
+                                    <x:String>Limpieza</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Descripción -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Descripción del trabajo realizado"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,10">
+                            <Editor Placeholder="Describe el mantenimiento realizado..."
+                                    PlaceholderColor="#AAAAAA"
+                                    FontSize="14"
+                                    HeightRequest="100"
+                                    BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Técnico responsable -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Técnico responsable"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,10">
+                            <Entry Placeholder="Nombre del técnico"
+                                   PlaceholderColor="#AAAAAA"
+                                   FontSize="14"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Fecha -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Fecha de mantenimiento"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,4">
+                            <DatePicker Format="dd/MM/yyyy"
+                                        FontSize="14"
+                                        BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Estado -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Estado"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,4">
+                            <Picker Title="Seleccionar estado..."
+                                    TitleColor="#AAAAAA"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent">
+                                <Picker.Items>
+                                    <x:String>Pendiente</x:String>
+                                    <x:String>En proceso</x:String>
+                                    <x:String>Completado</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Observaciones -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Observaciones (opcional)"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                BackgroundColor="#FAFAFA"
+                                Padding="12,10">
+                            <Editor Placeholder="Notas adicionales..."
+                                    PlaceholderColor="#AAAAAA"
+                                    FontSize="14"
+                                    HeightRequest="80"
+                                    BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- BOTONES -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+
+                        <!-- Cancelar -->
+                        <Border Grid.Column="0"
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="#CCCCCC"
+                                BackgroundColor="White"
+                                Padding="0,12">
+                            <Label Text="Cancelar"
+                                   HorizontalOptions="Center"
+                                   FontAttributes="Bold"
+                                   FontSize="14"
+                                   TextColor="#666666" />
+                        </Border>
+
+                        <!-- Guardar -->
+                        <Border Grid.Column="1"
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="Transparent"
+                                BackgroundColor="#4F8EF7"
+                                Padding="0,12">
+                            <Label Text="Guardar registro"
+                                   HorizontalOptions="Center"
+                                   FontAttributes="Bold"
+                                   FontSize="14"
+                                   TextColor="White" />
+                        </Border>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>
