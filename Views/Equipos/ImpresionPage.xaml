@@ -10,19 +10,22 @@
 
             <Label Text="Modulo Impresión"
                    FontSize="30"
-                   FontAttributes="Bold"/>
+                   FontAttributes="Bold" />
 
             <Button Text="Registrar Impresora"
-                    Clicked="OnRegistrarImpresora"/>
+                    Clicked="OnRegistrarImpresora" />
 
             <Button Text="Registrar Cartucho"
-                    Clicked="OnRegistrarCartucho"/>
+                    Clicked="OnRegistrarCartucho" />
 
             <Button Text="Editar Detalle"
-                    Clicked="OnEditarDetalle"/>
+                    Clicked="OnEditarDetalle" />
 
             <Button Text="Ver Historial"
-                    Clicked="OnVerHistorial"/>
+                    Clicked="OnVerHistorial" />
+
+            <Button Text="Reportar Falla"
+                    Clicked="OnReportarFalla" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -1,35 +1,33 @@
-﻿using Microsoft.Maui.Controls;
+﻿namespace ControlEquiposElectronicos.Views.Equipos;
 
-namespace ControlEquiposElectronicos.Views.Equipos;
-
-public partial class ImpresionPage : ContentPage
+public partial class RedPage : ContentPage
 {
-    public ImpresionPage()
+    public RedPage()
     {
         InitializeComponent();
     }
 
-    private async void OnRegistrarImpresora(object sender, EventArgs e)
+    private async void OnRegistrarRouter(object sender, EventArgs e)
     {
         await Application.Current.MainPage!.DisplayAlert(
-            "Impresora",
-            "Registrar Impresora funcionando",
+            "Router",
+            "Registrar Router funcionando",
             "OK");
     }
 
-    private async void OnRegistrarCartucho(object sender, EventArgs e)
+    private async void OnRegistrarSwitch(object sender, EventArgs e)
     {
         await Application.Current.MainPage!.DisplayAlert(
-            "Cartucho",
-            "Registrar Cartucho funcionando",
+            "Switch",
+            "Registrar Switch funcionando",
             "OK");
     }
 
-    private async void OnEditarDetalle(object sender, EventArgs e)
+    private async void OnRegistrarPuerto(object sender, EventArgs e)
     {
         await Application.Current.MainPage!.DisplayAlert(
-            "Detalle",
-            "Editar detalle funcionando",
+            "Puerto",
+            "Registrar Puerto funcionando",
             "OK");
     }
 
@@ -38,6 +36,14 @@ public partial class ImpresionPage : ContentPage
         await Application.Current.MainPage!.DisplayAlert(
             "Historial",
             "Historial funcionando",
+            "OK");
+    }
+
+    private async void OnReportarFalla(object sender, EventArgs e)
+    {
+        await Application.Current.MainPage!.DisplayAlert(
+            "Falla",
+            "Reporte funcionando",
             "OK");
     }
 }
