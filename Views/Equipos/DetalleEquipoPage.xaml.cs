@@ -1,11 +1,22 @@
 ﻿using ControlEquiposElectronicos.ViewModels.Equipos;
-using ControlEquiposElectronicos.ViewModels;
 
 namespace ControlEquiposElectronicos.Views.Equipos;
 
+[QueryProperty(nameof(EquipoId), "equipoId")]
 public partial class DetalleEquipoPage : ContentPage
 {
     private readonly DetalleEquiposViewModel _viewModel;
+
+    private int _equipoId;
+    public int EquipoId
+    {
+        get => _equipoId;
+        set
+        {
+            _equipoId = value;
+            _ = _viewModel.CargarEquipoAsync(value);
+        }
+    }
 
     public DetalleEquipoPage(DetalleEquiposViewModel viewModel)
     {
@@ -36,35 +47,28 @@ public partial class DetalleEquipoPage : ContentPage
 
         BtnReclasificar.Clicked += async (s, e) =>
         {
+            await DisplayAlert("Reclasificar", "Selecciona la nueva clasificación del equipo.", "OK");
+        };
+
+        BtnDesactivar.Clicked += async (s, e) =>
+        {
             if (_viewModel.Equipo == null) return;
             bool confirmar = await DisplayAlert("Desactivar",
-                $"¿Estás seguro de desactivar {_viewModel.Equipo.Nombre}?", "Si", "No");
+                $"¿Estás segura de desactivar {_viewModel.Equipo.Nombre}?", "Sí", "No");
             if (confirmar)
             {
                 var resultado = await _viewModel.DesactivarEquipoAsync();
                 if (resultado)
                 {
-                    await DisplayAlert("Éxito", "Equipo desactivado correctamente", "OK");
+                    await DisplayAlert("Éxito", "Equipo desactivado correctamente.", "OK");
                     await Shell.Current.GoToAsync("..");
                 }
             }
         };
-
-        BtnDesactivar.Clicked += async (s, e) =>
-        {
-            bool confirmar = await DisplayAlert("Desactivar", "¿Estás seguro de desactivar este equipo?", "Sí", "No");
-            if (confirmar)
-            {
-                await DisplayAlert("Desactivado", "Equipo desactivado correctamente.", "OK");
-                await Shell.Current.GoToAsync("..");
-            }
-        };
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        if (_viewModel.Equipo == null)
-            await _viewModel.CargarEquipoAsync(0);
     }
 }

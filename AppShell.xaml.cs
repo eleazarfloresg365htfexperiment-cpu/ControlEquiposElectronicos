@@ -12,22 +12,18 @@ public partial class AppShell : Shell
         _sesion = sesion;
 
         ConfigurarMenu();
+
+        // Rutas de navegación - Equipos (Suarlin)
+        Routing.RegisterRoute("RegistrarEquipoPage", typeof(Views.Equipos.RegistrarEquipoPage));
+        Routing.RegisterRoute("DetalleEquipoPage", typeof(Views.Equipos.DetalleEquipoPage));
+        Routing.RegisterRoute("ComputoPage", typeof(Views.Equipos.ComputoPage));
     }
 
     private void ConfigurarMenu()
     {
         foreach (var item in Items)
         {
-            item.IsVisible = item.Title switch
-            {
-                "Dashboard" => _sesion.TienePermiso("Dashboard.Ver"),
-                "Equipos" => _sesion.TienePermiso("Equipos.Ver"),
-                "Mantenimientos" => _sesion.TienePermiso("Mantenimientos.Ver"),
-                "Reportes" => _sesion.TienePermiso("Reportes.Ver"),
-                "Usuarios" => _sesion.TienePermiso("Usuarios.Ver"),
-                "Configuración" => _sesion.TienePermiso("Configuracion.Ver"),
-                _ => true
-            };
+            item.IsVisible = true;
         }
     }
 }

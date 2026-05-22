@@ -6,99 +6,161 @@
     Title="Gestión de Equipos"
     BackgroundColor="#F8F9FB">
 
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
 
-        <VerticalStackLayout Grid.Row="0" Padding="24,20,24,12" Spacing="2">
-            <Label Text="Gestión de Equipos" FontSize="24" FontAttributes="Bold" TextColor="#1A1F3A"/>
-            <Label Text="Administra el inventario de activos tecnológicos" FontSize="13" TextColor="#9AA3BE"/>
-        </VerticalStackLayout>
-        
-        <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="24,0,24,16">
-            <HorizontalStackLayout Spacing="12">
+        <!-- ENCABEZADO -->
+        <Grid Grid.Row="0" Padding="28,18,28,14" BackgroundColor="White" ColumnDefinitions="*,Auto">
+            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                <Label Text="Gestión de Equipos" FontSize="26" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                <Label Text="Administra la información de los equipos de la academia" FontSize="13" TextColor="#9AA3BE"/>
+            </VerticalStackLayout>
+            <Border Grid.Column="1" BackgroundColor="#F0F2F7" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 40" Padding="8,6,16,6">
+                <HorizontalStackLayout Spacing="10">
+                    <Border BackgroundColor="#3D2DB5" StrokeThickness="0" StrokeShape="RoundRectangle 20" WidthRequest="36" HeightRequest="36">
+                        <Label Text="👤" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="1">
+                        <Label Text="Suarlin" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                        <Label Text="Técnico" FontSize="11" TextColor="#9AA3BE"/>
+                    </VerticalStackLayout>
+                    <Label Text="▾" FontSize="12" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
 
-                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
-                    <VerticalStackLayout Spacing="6">
-                        <Border BackgroundColor="#DBEAFE" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
-                            <Label Text="➕" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+        <!-- TARJETAS DE ACCIÓN -->
+        <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="28,16,28,16" BackgroundColor="White">
+            <HorizontalStackLayout Spacing="14">
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20,16" WidthRequest="170">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRegistrarEquipoTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="#4285F4" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label Text="➕" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
-                        <Label Text="Registrar equipo" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
-                        <Label Text="Agregar nuevo activo" FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Registrar nuevo equipo" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Agregar un nuevo equipo al inventario" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
-                    <VerticalStackLayout Spacing="6">
-                        <Border BackgroundColor="#DCFCE7" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
-                            <Label Text="🖊️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20,16" WidthRequest="170">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnEditarEquipoTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="#34A853" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label Text="✏️" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
-                        <Label Text="Editar equipo" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
-                        <Label Text="Modificar información" FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Editar equipo" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Modifica la información de equipos registrados" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
-                    <VerticalStackLayout Spacing="6">
-                        <Border BackgroundColor="#FEE2E2" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
-                            <Label Text="🗑️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20,16" WidthRequest="170">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDesactivarTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="#EA4335" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label Text="🗑️" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
-                        <Label Text="Desactivar" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
-                        <Label Text="Solo Administrador" FontSize="10" TextColor="#C0392B" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Eliminar / Desactivar" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Eliminar o desactivar registros" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Sólo Administradores" FontSize="10" FontAttributes="Bold" TextColor="#C0392B" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
-                    <VerticalStackLayout Spacing="6">
-                        <Border BackgroundColor="#FFEDD5" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
-                            <Label Text="🔄️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20,16" WidthRequest="170">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCambiarEstadoTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="#9C27B0" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label Text="📍" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
-                        <Label Text="Cambiar estado" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
-                        <Label Text="Funcional, dañado..." FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Asignar ubicación" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Asignar o reasignar ubicación del equipo" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Técnico" FontSize="10" FontAttributes="Bold" TextColor="#1A73E8" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16,14" WidthRequest="150">
-                    <VerticalStackLayout Spacing="6">
-                        <Border BackgroundColor="#FEF3C7" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44" HorizontalOptions="Center">
-                            <Label Text="🏷️" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20,16" WidthRequest="170">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnReclasificarTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="#FBBC04" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label Text="🕐" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
-                        <Label Text="Reclasificar" FontSize="12" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
-                        <Label Text="Cambiar función" FontSize="10" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Historial de equipos" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Ver historial de cambios y movimientos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
             </HorizontalStackLayout>
         </ScrollView>
-        
-        <Border Grid.Row="2" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Margin="24,0,24,24">
-            <Grid RowDefinitions="Auto,Auto,*">
 
-                <Grid Grid.Row="0" Padding="16,14" ColumnDefinitions="*,Auto">
-                    <Label Grid.Column="0" Text="Listado de equipos" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Button Grid.Column="1" Text="Registrar Equipo ➕" BackgroundColor="#1E2A6E" TextColor="White" FontSize="12" CornerRadius="8" Padding="12,8"/>
-                </Grid>
+        <!-- HEADER TABLA -->
+        <Grid Grid.Row="2" Padding="28,14,28,14" ColumnDefinitions="*,Auto" BackgroundColor="#F8F9FB">
+            <Label Grid.Column="0" Text="Listado de equipos" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+            <Button Grid.Column="1" Text="➕ Registrar nuevo equipo"
+                    BackgroundColor="#4285F4" TextColor="White"
+                    CornerRadius="10" FontSize="13" Padding="16,10"
+                    Clicked="OnRegistrarEquipoTapped"/>
+        </Grid>
 
-                <HorizontalStackLayout Grid.Row="1" Padding="16,0,16,12" Spacing="8">
-                    <Border BackgroundColor="#F8F9FB" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="10,6" WidthRequest="180">
-                        <Label Text="Buscando equipo...🔍" FontSize="12" TextColor="#9AA3BE"/>
+        <!-- TABLA -->
+        <Border Grid.Row="3" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Margin="28,0,28,24">
+            <Grid RowDefinitions="Auto,*">
+
+                <!-- Filtros -->
+                <HorizontalStackLayout Grid.Row="0" Padding="18,12" Spacing="10">
+                    <Border BackgroundColor="#F8F9FB" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,8" WidthRequest="200">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label Text="🔍" FontSize="13" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                            <Label Text="Buscar equipo..." FontSize="13" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
                     </Border>
-                    <Picker Title="Categoría" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="120"/>
-                    <Picker Title="Ubicación" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="120"/>
-                    <Picker Title="Estado" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="100"/>
+                    <Picker Title="Todos los tipos" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="130"/>
+                    <Picker Title="Todas las ubicaciones" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="150"/>
+                    <Picker Title="Todos los estados" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="140"/>
                 </HorizontalStackLayout>
 
-                <CollectionView Grid.Row="2" x:Name="ListaEquipos" ItemsSource="{Binding Equipos}">
+                <!-- Encabezados tabla -->
+                <CollectionView Grid.Row="1" x:Name="ListaEquipos" ItemsSource="{Binding Equipos}" SelectionMode="Single" SelectionChanged="OnEquipoSeleccionado">
+                    <CollectionView.Header>
+                        <Grid Padding="18,10" ColumnDefinitions="60,100,*,150,150,120" BackgroundColor="#F8F9FB">
+                            <Label Grid.Column="0" Text="ID" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="1" Text="CÓDIGO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="2" Text="TIPO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="3" Text="UBICACIÓN ACTUAL" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="4" Text="ESTADO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="5" Text="ACCIONES" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                        </Grid>
+                    </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="16,10" ColumnDefinitions="80,*,100,100,120,120" BackgroundColor="White">
-                                
-                                <Border Grid.Column="0" BackgroundColor="#F0F2F7" StrokeThickness="0" StrokeShape="RoundRectangle 5" Padding="6,3" HorizontalOptions="Start" VerticalOptions="Center">
-                                    <Label Text="{Binding Codigo}" FontSize="11" TextColor="#1E2A6E" FontAttributes="Bold"/>
+                            <Grid Padding="18,12" ColumnDefinitions="60,100,*,150,150,120" BackgroundColor="White">
+                                <Label Grid.Column="0" Text="{Binding Id}" FontSize="13" VerticalOptions="Center" TextColor="#5A6282"/>
+                                <Border Grid.Column="1" BackgroundColor="#F0F2F7" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="8,4" HorizontalOptions="Start" VerticalOptions="Center">
+                                    <Label Text="{Binding Codigo}" FontSize="12" TextColor="#3D2DB5" FontAttributes="Bold"/>
                                 </Border>
-                                <Label Grid.Column="1" Text="{Binding Nombre}" FontSize="12" VerticalOptions="Center" Margin="8,0"/>
-                                <Label Grid.Column="2" Text="{Binding Categoria}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
-                                <Label Grid.Column="3" Text="{Binding Tipo}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
-                                <Label Grid.Column="4" Text="{Binding Ubicacion}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
-                                <Label Grid.Column="5" Text="{Binding Estado}" FontSize="11" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Text="{Binding Tipo}" FontSize="13" VerticalOptions="Center" Margin="8,0"/>
+                                <Label Grid.Column="3" Text="{Binding Ubicacion}" FontSize="13" TextColor="#5A6282" VerticalOptions="Center"/>
+                                <Label Grid.Column="4" Text="{Binding Estado}" FontSize="12" VerticalOptions="Center" FontAttributes="Bold"/>
+                                <HorizontalStackLayout Grid.Column="5" Spacing="6" VerticalOptions="Center">
+                                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="32" HeightRequest="32">
+                                        <Label Text="✏️" FontSize="14" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="32" HeightRequest="32">
+                                        <Label Text="📍" FontSize="14" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="32" HeightRequest="32">
+                                        <Label Text="⋯" FontSize="14" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                </HorizontalStackLayout>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

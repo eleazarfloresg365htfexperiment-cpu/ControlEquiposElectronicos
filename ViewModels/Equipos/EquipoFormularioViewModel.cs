@@ -12,10 +12,10 @@ public class EquipoFormularioViewModel : BaseViewModel
     private readonly IEquipoApiService _equipoApiService;
     private readonly ICatalogoApiService _catalagoApiService;
 
-    public ObservableCollection<CatalogoItemDto> Categorias { get; set; }
-    public ObservableCollection<CatalogoItemDto> Tipos { get; set; }
-    public ObservableCollection<CatalogoItemDto> Estados {  get; set; }
-    public ObservableCollection<CatalogoItemDto> Ubicaciones {  get; set; }
+    public ObservableCollection<CatalogoItemDto> Categorias { get; set; } = new();
+    public ObservableCollection<CatalogoItemDto> Tipos { get; set; } = new();
+    public ObservableCollection<CatalogoItemDto> Estados { get; set; } = new();
+    public ObservableCollection<CatalogoItemDto> Ubicaciones { get; set; } = new();
 
     public string Codigo { get; set; } = string.Empty;
     public string Nombre { get; set; } = string.Empty;

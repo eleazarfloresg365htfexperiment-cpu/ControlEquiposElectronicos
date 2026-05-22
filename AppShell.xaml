@@ -35,5 +35,5 @@
     <FlyoutItem Title="Configuración" Route="Configuracion">
         <ShellContent ContentTemplate="{DataTemplate config:ConfiguracionPage}" />
     </FlyoutItem>
-
+    
 </Shell>
