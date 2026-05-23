@@ -13,9 +13,19 @@ public partial class LoginPage : ContentPage
         _sesion = sesion;
     }
 
-    private void OnLoginClicked(object? sender, EventArgs e)
+    private async void OnLoginClicked(object? sender, EventArgs e)
     {
-        var usuario = new UsuarioSesionDto
+        var usuario = UsuarioEntry.Text?.Trim() ?? string.Empty;
+        var contrasena = ContrasenaEntry.Text ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contrasena))
+        {
+            await DisplayAlert("Datos incompletos",
+                "Por favor ingresa tu usuario y contraseña.", "Entendido");
+            return;
+        }
+
+        var usuarioSesion = new UsuarioSesionDto
         {
             Nombre = "Admin CPC",
             Rol = "Administrador",
@@ -30,7 +40,7 @@ public partial class LoginPage : ContentPage
             }
         };
 
-        _sesion.IniciarSesion(usuario);
+        _sesion.IniciarSesion(usuarioSesion);
 
         Application.Current!.Windows[0].Page = new AppShell(_sesion);
     }

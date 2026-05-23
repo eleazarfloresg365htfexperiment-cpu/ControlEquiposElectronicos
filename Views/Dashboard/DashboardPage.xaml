@@ -3,11 +3,155 @@
     x:Class="ControlEquiposElectronicos.Views.Dashboard.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Dashboard">
+    Title="Dashboard"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Dashboard" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+
+                <Border Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Equipos" FontSize="14" TextColor="{StaticResource Gray500}" />
+                        <Label Text="{Binding TotalEquipos}"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}" />
+                        <Label Text="Total registrados" FontSize="12" TextColor="{StaticResource Gray400}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Mantenimientos" FontSize="14" TextColor="{StaticResource Gray500}" />
+                        <Label Text="{Binding TotalMantenimientos}"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}" />
+                        <Label Text="En total" FontSize="12" TextColor="{StaticResource Gray400}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Reportes" FontSize="14" TextColor="{StaticResource Gray500}" />
+                        <Label Text="{Binding TotalReportes}"
+                               FontSize="34"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}" />
+                        <Label Text="Reportes de falla" FontSize="12" TextColor="{StaticResource Gray400}" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+
+            <Label Text="Accesos rápidos"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Gray900}"
+                   Margin="0,8,0,0" />
+
+            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="16">
+
+                <Border Grid.Row="0" Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnEquiposTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Equipos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="Gestionar equipos" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMantenimientosTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Mantenimientos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="Ver mantenimientos" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="2"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnReportesTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Reportes" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="Ver reportes" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnUsuariosTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Usuarios" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="Gestionar usuarios" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnConfiguracionTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Configuración" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="Ajustes del sistema" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

@@ -11,7 +11,17 @@ public partial class AppShell : Shell
         InitializeComponent();
         _sesion = sesion;
 
+        MostrarUsuario();
         ConfigurarMenu();
+    }
+
+    private void MostrarUsuario()
+    {
+        if (_sesion.UsuarioActual != null)
+        {
+            NombreUsuarioLabel.Text = _sesion.UsuarioActual.Nombre;
+            RolUsuarioLabel.Text = _sesion.UsuarioActual.Rol;
+        }
     }
 
     private void ConfigurarMenu()

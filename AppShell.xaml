@@ -9,8 +9,51 @@
     xmlns:reportes="clr-namespace:ControlEquiposElectronicos.Views.Reportes"
     xmlns:usuarios="clr-namespace:ControlEquiposElectronicos.Views.Usuarios"
     xmlns:config="clr-namespace:ControlEquiposElectronicos.Views.Configuracion"
-    Shell.FlyoutBehavior="Flyout"
-    Title="Control de Equipos CPC">
+Shell.FlyoutBehavior="Flyout"
+    FlyoutBackgroundColor="{StaticResource Primary}"
+    Shell.BackgroundColor="{StaticResource Gray100}"
+    Shell.ForegroundColor="{StaticResource Primary}"
+    Shell.TitleColor="{StaticResource Gray900}"
+    Title="Control de Equipos CPC"> 
+
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,30" RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+
+            <Border
+                Grid.Row="0"
+                WidthRequest="60"
+                HeightRequest="60"
+                HorizontalOptions="Start"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 14"
+                StrokeThickness="0">
+                <Label
+                    Text="CPC"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+            </Border>
+
+            <Label
+                Grid.Row="1"
+                x:Name="NombreUsuarioLabel"
+                Text="Usuario"
+                TextColor="White"
+                FontSize="16"
+                FontAttributes="Bold"
+                Margin="0,10,0,0" />
+
+            <Label
+                Grid.Row="2"
+                x:Name="RolUsuarioLabel"
+                Text="Rol"
+                TextColor="{StaticResource Secondary}"
+                FontSize="13" />
+
+        </Grid>
+    </Shell.FlyoutHeader>
 
     <FlyoutItem Title="Dashboard" Route="Dashboard">
         <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}" />

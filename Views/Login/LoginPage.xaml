@@ -3,20 +3,107 @@
     x:Class="ControlEquiposElectronicos.Views.Login.LoginPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Login">
+    Title="Login"
+    BackgroundColor="{StaticResource Secondary}">
 
-    <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
-        <Label
-            Text="Centro Profesional de Cómputo CPC"
-            FontSize="24"
-            FontAttributes="Bold"
-            HorizontalOptions="Center" />
+    <Grid>
+        <Border
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            WidthRequest="380"
+            Padding="32"
+            BackgroundColor="White"
+            StrokeShape="RoundRectangle 16"
+            StrokeThickness="0">
 
-        <Entry Placeholder="Usuario" />
-        <Entry Placeholder="Contraseña" IsPassword="True" />
+            <VerticalStackLayout Spacing="18">
 
-        <Button
-            Text="Iniciar sesión"
-            Clicked="OnLoginClicked" />
-    </VerticalStackLayout>
+                <Border
+                    WidthRequest="76"
+                    HeightRequest="76"
+                    HorizontalOptions="Center"
+                    BackgroundColor="{StaticResource Primary}"
+                    StrokeShape="RoundRectangle 18"
+                    StrokeThickness="0">
+                    <Label
+                        Text="CPC"
+                        TextColor="White"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+                </Border>
+
+                <VerticalStackLayout Spacing="2">
+                    <Label
+                        Text="Centro Profesional de Cómputo"
+                        FontSize="19"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Gray900}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center" />
+                    <Label
+                        Text="Control de Equipos Electrónicos"
+                        FontSize="13"
+                        TextColor="{StaticResource Gray500}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6" Margin="0,8,0,0">
+                    <Label Text="Usuario" FontSize="13" TextColor="{StaticResource Gray500}" />
+                    <Border
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="12,0">
+                        <Entry
+                        x:Name="UsuarioEntry"
+                        Placeholder="usuario@cpc.com"
+                        TextColor="{StaticResource Gray900}"
+                        PlaceholderColor="{StaticResource Gray400}"
+                        HeightRequest="44"
+                        BackgroundColor="Transparent" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Contraseña" FontSize="13" TextColor="{StaticResource Gray500}" />
+                    <Border
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="12,0">
+                        <Entry
+                         x:Name="ContrasenaEntry"
+                         Placeholder="••••••••"
+                         IsPassword="True"
+                         TextColor="{StaticResource Gray900}"
+                         PlaceholderColor="{StaticResource Gray400}"
+                         HeightRequest="44"
+                         BackgroundColor="Transparent" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button
+                    Text="Iniciar sesión"
+                    Clicked="OnLoginClicked"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontSize="15"
+                    FontAttributes="Bold"
+                    HeightRequest="46"
+                    CornerRadius="8"
+                    Margin="0,8,0,0" />
+
+                <Label
+                    Text="¿Olvidaste tu contraseña?"
+                    FontSize="12"
+                    TextColor="{StaticResource Gray400}"
+                    HorizontalOptions="Center" />
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
 </ContentPage>

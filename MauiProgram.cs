@@ -17,27 +17,26 @@ namespace ControlEquiposElectronicos
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
-            builder.Services.AddSingleton<SesionService>();
-            builder.Services.AddTransient<AppShell>();
+            builder.Logging.AddDebug();
 #endif
 
+            // Servicio base de la API (necesario para todos los demás services)
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IApiService, ControlEquiposElectronicos.Services.ApiService>();
 
-            // Services base de consumo API
-            builder.Services.AddSingleton<
-        ControlEquiposElectronicos.Services.Interfaces.IEquipoApiService,
-        ControlEquiposElectronicos.Services.EquipoApiService>();
+            // Sesión y navegación
+            builder.Services.AddSingleton<SesionService>();
+            builder.Services.AddTransient<AppShell>();
 
             // Services por módulo
             builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IEquipoApiService, ControlEquiposElectronicos.Services.EquipoApiService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IChecklistApiService, ControlEquiposElectronicos.Services.ChecklistApiService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IMantenimientoApiService, ControlEquiposElectronicos.Services.MantenimientoApiService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IReporteFallaApiService, ControlEquiposElectronicos.Services.ReporteFallaApiService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IUsuarioApiService, ControlEquiposElectronicos.Services.UsuarioApiService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.ICatalogoApiService, ControlEquiposElectronicos.Services.CatalogoApiService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IAuditoriaApiService, ControlEquiposElectronicos.Services.AuditoriaApiService>();
-        return builder.Build();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IChecklistApiService, ControlEquiposElectronicos.Services.ChecklistApiService>();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IMantenimientoApiService, ControlEquiposElectronicos.Services.MantenimientoApiService>();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IReporteFallaApiService, ControlEquiposElectronicos.Services.ReporteFallaApiService>();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IUsuarioApiService, ControlEquiposElectronicos.Services.UsuarioApiService>();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.ICatalogoApiService, ControlEquiposElectronicos.Services.CatalogoApiService>();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IAuditoriaApiService, ControlEquiposElectronicos.Services.AuditoriaApiService>();
+
+            return builder.Build();
         }
     }
 }
-
