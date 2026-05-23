@@ -7,6 +7,7 @@
     BackgroundColor="{StaticResource Secondary}">
 
     <Grid>
+        <!-- Tarjeta central del login -->
         <Border
             VerticalOptions="Center"
             HorizontalOptions="Center"
@@ -18,6 +19,7 @@
 
             <VerticalStackLayout Spacing="18">
 
+                <!-- Logo CPC -->
                 <Border
                     WidthRequest="76"
                     HeightRequest="76"
@@ -34,6 +36,7 @@
                         VerticalOptions="Center" />
                 </Border>
 
+                <!-- Títulos -->
                 <VerticalStackLayout Spacing="2">
                     <Label
                         Text="Centro Profesional de Cómputo"
@@ -50,6 +53,7 @@
                         HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
 
+                <!-- Campo Usuario -->
                 <VerticalStackLayout Spacing="6" Margin="0,8,0,0">
                     <Label Text="Usuario" FontSize="13" TextColor="{StaticResource Gray500}" />
                     <Border
@@ -58,15 +62,16 @@
                         StrokeThickness="1"
                         Padding="12,0">
                         <Entry
-                        x:Name="UsuarioEntry"
-                        Placeholder="usuario@cpc.com"
-                        TextColor="{StaticResource Gray900}"
-                        PlaceholderColor="{StaticResource Gray400}"
-                        HeightRequest="44"
-                        BackgroundColor="Transparent" />
+                            x:Name="UsuarioEntry"
+                            Placeholder="usuario@cpc.com"
+                            TextColor="{StaticResource Gray900}"
+                            PlaceholderColor="{StaticResource Gray400}"
+                            HeightRequest="44"
+                            BackgroundColor="Transparent" />
                     </Border>
                 </VerticalStackLayout>
 
+                <!-- Campo Contraseña -->
                 <VerticalStackLayout Spacing="6">
                     <Label Text="Contraseña" FontSize="13" TextColor="{StaticResource Gray500}" />
                     <Border
@@ -75,16 +80,17 @@
                         StrokeThickness="1"
                         Padding="12,0">
                         <Entry
-                         x:Name="ContrasenaEntry"
-                         Placeholder="••••••••"
-                         IsPassword="True"
-                         TextColor="{StaticResource Gray900}"
-                         PlaceholderColor="{StaticResource Gray400}"
-                         HeightRequest="44"
-                         BackgroundColor="Transparent" />
+                            x:Name="ContrasenaEntry"
+                            Placeholder="••••••••"
+                            IsPassword="True"
+                            TextColor="{StaticResource Gray900}"
+                            PlaceholderColor="{StaticResource Gray400}"
+                            HeightRequest="44"
+                            BackgroundColor="Transparent" />
                     </Border>
                 </VerticalStackLayout>
 
+                <!-- Botón Iniciar sesión -->
                 <Button
                     Text="Iniciar sesión"
                     Clicked="OnLoginClicked"
@@ -96,11 +102,17 @@
                     CornerRadius="8"
                     Margin="0,8,0,0" />
 
+                <!-- Enlace de registro -->
                 <Label
-                    Text="¿Olvidaste tu contraseña?"
-                    FontSize="12"
-                    TextColor="{StaticResource Gray400}"
-                    HorizontalOptions="Center" />
+                    Text="¿No tienes cuenta? Regístrate"
+                    FontSize="13"
+                    TextColor="{StaticResource Primary}"
+                    HorizontalOptions="Center"
+                    Margin="0,4,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRegistrarseTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
 
             </VerticalStackLayout>
         </Border>

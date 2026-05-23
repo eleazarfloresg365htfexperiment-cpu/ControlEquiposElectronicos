@@ -3,11 +3,115 @@
     x:Class="ControlEquiposElectronicos.Views.Configuracion.ConfiguracionPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Configuracion">
+    Title="Configuración"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Configuracion" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+
+            <Border x:Name="AccesoRestringido"
+                    IsVisible="False"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeThickness="1"
+                    Padding="24">
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label Text="Acceso restringido"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Solo los administradores pueden acceder a la configuración del sistema."
+                           FontSize="14"
+                           TextColor="{StaticResource Gray500}"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout x:Name="ContenidoConfig" IsVisible="False" Spacing="20">
+
+                <Border BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Información de la sesión"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Usuario:" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Row="0" Grid.Column="1" x:Name="NombreLabel" Text="-" TextColor="{StaticResource Gray900}" FontAttributes="Bold" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Rol:" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Row="1" Grid.Column="1" x:Name="RolLabel" Text="-" TextColor="{StaticResource Gray900}" FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="Ajustes generales"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Notificaciones" TextColor="{StaticResource Gray900}" />
+                                <Label Text="Recibir avisos del sistema" FontSize="12" TextColor="{StaticResource Gray400}" />
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="1" IsToggled="True" OnColor="{StaticResource Primary}" VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="Confirmar antes de eliminar" TextColor="{StaticResource Gray900}" />
+                                <Label Text="Pedir confirmación en acciones críticas" FontSize="12" TextColor="{StaticResource Gray400}" />
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="1" IsToggled="True" OnColor="{StaticResource Primary}" VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Administración"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Button Text="Gestionar permisos por rol"
+                                Clicked="OnPermisosClicked"
+                                BackgroundColor="{StaticResource Secondary}"
+                                TextColor="{StaticResource Primary}"
+                                FontAttributes="Bold"
+                                HeightRequest="46"
+                                CornerRadius="8" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="Cerrar sesión"
+                        Clicked="OnCerrarSesionClicked"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HeightRequest="48"
+                        CornerRadius="8" />
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

@@ -3,13 +3,113 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ControlEquiposElectronicos.Views.Login.RegistroUsuarioPage"
-    Title="Registro de usuario">
+    Title="Registro de usuario"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Registro de usuario"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeThickness="1"
+                    Padding="24">
+                <VerticalStackLayout Spacing="16">
+
+                    <Label Text="Registrar nuevo usuario"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}" />
+                    <Label Text="Completa los datos para crear una cuenta de acceso al sistema."
+                           FontSize="13"
+                           TextColor="{StaticResource Gray500}" />
+
+                    <!-- Nombre completo -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Nombre completo" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
+                            <Entry x:Name="NombreEntry"
+                                   Placeholder="Ej. Juan Pérez"
+                                   TextColor="{StaticResource Gray900}"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   HeightRequest="44"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Nickname / Usuario -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Nombre de usuario" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
+                            <Entry x:Name="NicknameEntry"
+                                   Placeholder="Ej. jperez"
+                                   TextColor="{StaticResource Gray900}"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   HeightRequest="44"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Contraseña -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Contraseña" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
+                            <Entry x:Name="ContrasenaEntry"
+                                   Placeholder="••••••••"
+                                   IsPassword="True"
+                                   TextColor="{StaticResource Gray900}"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   HeightRequest="44"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Rol -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Rol" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
+                            <Picker x:Name="RolPicker"
+                                    Title="Selecciona un rol"
+                                    TextColor="{StaticResource Gray900}"
+                                    TitleColor="{StaticResource Gray400}"
+                                    HeightRequest="44">
+                                <Picker.Items>
+                                    <x:String>Administrador</x:String>
+                                    <x:String>Técnico</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Activo -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Usuario activo" TextColor="{StaticResource Gray900}" />
+                            <Label Text="Permite el acceso al sistema" FontSize="12" TextColor="{StaticResource Gray400}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" x:Name="ActivoSwitch" IsToggled="True" OnColor="{StaticResource Primary}" VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Botón registrar -->
+                    <Button Text="Registrar usuario"
+                            Clicked="OnRegistrarClicked"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="48"
+                            CornerRadius="8"
+                            Margin="0,8,0,0" />
+
+                    <Button Text="Volver al login"
+                            Clicked="OnVolverClicked"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource Primary}"
+                            HeightRequest="44" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

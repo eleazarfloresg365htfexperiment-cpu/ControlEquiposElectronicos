@@ -18,6 +18,7 @@ public partial class LoginPage : ContentPage
         var usuario = UsuarioEntry.Text?.Trim() ?? string.Empty;
         var contrasena = ContrasenaEntry.Text ?? string.Empty;
 
+        // Validación básica: que no estén vacíos
         if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contrasena))
         {
             await DisplayAlert("Datos incompletos",
@@ -25,6 +26,7 @@ public partial class LoginPage : ContentPage
             return;
         }
 
+        // Login simulado (mientras se conecta el AuthService real con la API)
         var usuarioSesion = new UsuarioSesionDto
         {
             Nombre = "Admin CPC",
@@ -43,5 +45,10 @@ public partial class LoginPage : ContentPage
         _sesion.IniciarSesion(usuarioSesion);
 
         Application.Current!.Windows[0].Page = new AppShell(_sesion);
+    }
+
+    private async void OnRegistrarseTapped(object? sender, TappedEventArgs e)
+    {
+        await Navigation.PushModalAsync(new RegistroUsuarioPage());
     }
 }
