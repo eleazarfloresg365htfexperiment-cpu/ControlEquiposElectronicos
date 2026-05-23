@@ -1,15 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.PlantillasChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.PlantillasChecklistPage"
     Title="Plantillas de checklist">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Plantillas de checklist"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12">
+        <Label x:Name="MensajeErrorLabel"
+               Grid.Row="0"
+               TextColor="IndianRed"
+               IsVisible="False" />
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+        <CollectionView x:Name="PlantillasCollection"
+                        Grid.Row="1" />
+
+        <Button Grid.Row="2"
+                Text="Volver"
+                Clicked="OnVolverClicked" />
+
+        <ActivityIndicator x:Name="CargandoIndicator"
+                           Grid.Row="1"
+                           IsRunning="False"
+                           IsVisible="False"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

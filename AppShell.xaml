@@ -9,6 +9,7 @@
     xmlns:reportes="clr-namespace:ControlEquiposElectronicos.Views.Reportes"
     xmlns:usuarios="clr-namespace:ControlEquiposElectronicos.Views.Usuarios"
     xmlns:config="clr-namespace:ControlEquiposElectronicos.Views.Configuracion"
+    xmlns:checklist="clr-namespace:ControlEquiposElectronicos.Views.Checklist"
     Shell.FlyoutBehavior="Flyout"
     Title="Control de Equipos CPC">
 
@@ -18,6 +19,10 @@
 
     <FlyoutItem Title="Equipos" Route="Equipos">
         <ShellContent ContentTemplate="{DataTemplate equipos:EquiposPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Checklist" Route="Checklist">
+        <ShellContent ContentTemplate="{DataTemplate checklist:ChecklistPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Mantenimientos" Route="Mantenimientos">

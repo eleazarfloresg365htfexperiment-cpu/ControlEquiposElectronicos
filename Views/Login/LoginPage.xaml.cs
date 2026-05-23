@@ -17,12 +17,14 @@ public partial class LoginPage : ContentPage
     {
         var usuario = new UsuarioSesionDto
         {
-            Nombre = "Admin CPC",
+            UsuarioId = 1,
+            Nombre = "Danny / Admin CPC",
             Rol = "Administrador",
             Permisos = new List<string>
             {
                 "Dashboard.Ver",
                 "Equipos.Ver",
+                "Checklist.Ver",
                 "Mantenimientos.Ver",
                 "Reportes.Ver",
                 "Usuarios.Ver",
