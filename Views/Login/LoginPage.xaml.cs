@@ -18,8 +18,8 @@ public partial class LoginPage : ContentPage
         var usuario = new UsuarioSesionDto
         {
             UsuarioId = 1,
-            Nombre = "Danny / Admin CPC",
-            Rol = "Administrador",
+            Nombre = "Danny",
+            Rol = "Técnico de revisión",
             Permisos = new List<string>
             {
                 "Dashboard.Ver",

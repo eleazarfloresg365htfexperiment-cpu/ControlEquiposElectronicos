@@ -22,7 +22,7 @@ public partial class ChecklistPage : ContentPage
         await _viewModel.CargarAsync();
     }
 
-    private async void OnChecklistSeleccionado(object? sender, SelectionChangedEventArgs e)
+    private async void OnRevisionSeleccionada(object? sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is not ChecklistResumenItem item)
             return;
@@ -30,8 +30,7 @@ public partial class ChecklistPage : ContentPage
         if (sender is CollectionView collectionView)
             collectionView.SelectedItem = null;
 
-        await Shell.Current.GoToAsync(
-            $"{nameof(NuevoChecklistPage)}?ChecklistId={item.Id}");
+        await _viewModel.AbrirRevisionItemAsync(item);
     }
 
 }
