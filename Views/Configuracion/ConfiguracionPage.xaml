@@ -9,6 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="20">
 
+            <!-- Vista cuando NO es administrador -->
             <Border x:Name="AccesoRestringido"
                     IsVisible="False"
                     BackgroundColor="White"
@@ -29,8 +30,10 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Vista cuando SÍ es administrador -->
             <VerticalStackLayout x:Name="ContenidoConfig" IsVisible="False" Spacing="20">
 
+                <!-- Información del usuario -->
                 <Border BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -52,6 +55,7 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <!-- Ajustes generales -->
                 <Border BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -81,6 +85,7 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <!-- Administración (permisos por rol) -->
                 <Border BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -91,6 +96,13 @@
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
+                        <Button Text="Registrar nuevo usuario"
+                                Clicked="OnRegistrarUsuarioClicked"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                HeightRequest="46"
+                                CornerRadius="8" />
                         <Button Text="Gestionar permisos por rol"
                                 Clicked="OnPermisosClicked"
                                 BackgroundColor="{StaticResource Secondary}"
@@ -101,6 +113,7 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <!-- Cerrar sesión -->
                 <Button Text="Cerrar sesión"
                         Clicked="OnCerrarSesionClicked"
                         BackgroundColor="{StaticResource Primary}"

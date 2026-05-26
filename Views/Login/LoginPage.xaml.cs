@@ -47,8 +47,11 @@ public partial class LoginPage : ContentPage
         Application.Current!.Windows[0].Page = new AppShell(_sesion);
     }
 
-    private async void OnRegistrarseTapped(object? sender, TappedEventArgs e)
+    private async void OnOlvidasteContrasenaTapped(object? sender, TappedEventArgs e)
     {
-        await Navigation.PushModalAsync(new RegistroUsuarioPage());
+        await DisplayAlert("Recuperar contraseña",
+            "Para restablecer tu contraseña, contacta al administrador al siguiente número: +502 1234-5678",
+            "Entendido");
     }
 }
+ 

@@ -12,6 +12,7 @@ public partial class AppShell : Shell
         _sesion = sesion;
 
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
+        Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
 
         MostrarUsuario();
         ConfigurarMenu();

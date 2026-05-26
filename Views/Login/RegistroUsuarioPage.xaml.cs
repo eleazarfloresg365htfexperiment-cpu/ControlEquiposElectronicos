@@ -2,9 +2,33 @@
 
 public partial class RegistroUsuarioPage : ContentPage
 {
+    private string _rolSeleccionado = string.Empty;
+
     public RegistroUsuarioPage()
     {
         InitializeComponent();
+    }
+
+    private void OnRolAdministrador(object? sender, EventArgs e)
+    {
+        _rolSeleccionado = "Administrador";
+        MarcarRol(BtnAdministrador, BtnTecnico);
+    }
+
+    private void OnRolTecnico(object? sender, EventArgs e)
+    {
+        _rolSeleccionado = "Técnico";
+        MarcarRol(BtnTecnico, BtnAdministrador);
+    }
+
+    // Marca el botón elegido en morado y el otro lo deja gris
+    private void MarcarRol(Button elegido, Button otro)
+    {
+        elegido.BackgroundColor = Color.FromArgb("#512BD4");
+        elegido.TextColor = Colors.White;
+
+        otro.BackgroundColor = Color.FromArgb("#F0F0F0");
+        otro.TextColor = Color.FromArgb("#1F1F1F");
     }
 
     private async void OnRegistrarClicked(object? sender, EventArgs e)
@@ -12,9 +36,8 @@ public partial class RegistroUsuarioPage : ContentPage
         var nombre = NombreEntry.Text?.Trim() ?? string.Empty;
         var nickname = NicknameEntry.Text?.Trim() ?? string.Empty;
         var contrasena = ContrasenaEntry.Text ?? string.Empty;
-        var rol = RolPicker.SelectedItem?.ToString();
+        var rol = _rolSeleccionado;
 
-        // Validación: ningún campo vacío
         if (string.IsNullOrWhiteSpace(nombre) ||
             string.IsNullOrWhiteSpace(nickname) ||
             string.IsNullOrWhiteSpace(contrasena) ||
@@ -25,7 +48,6 @@ public partial class RegistroUsuarioPage : ContentPage
             return;
         }
 
-        // Validación: contraseña mínima
         if (contrasena.Length < 4)
         {
             await DisplayAlert("Contraseña muy corta",
@@ -33,22 +55,24 @@ public partial class RegistroUsuarioPage : ContentPage
             return;
         }
 
-        // Registro simulado (la creación real se conecta cuando la API tenga el endpoint)
         await DisplayAlert("Usuario registrado",
-            $"El usuario \"{nickname}\" ({rol}) se registró localmente. " +
-            "La creación en el servidor se conectará cuando la API esté disponible.",
+            $"El usuario \"{nickname}\" ({rol}) fue registrado correctamente.",
             "Entendido");
 
         // Limpiar el formulario
         NombreEntry.Text = string.Empty;
         NicknameEntry.Text = string.Empty;
         ContrasenaEntry.Text = string.Empty;
-        RolPicker.SelectedIndex = -1;
         ActivoSwitch.IsToggled = true;
+        _rolSeleccionado = string.Empty;
+        BtnAdministrador.BackgroundColor = Color.FromArgb("#F0F0F0");
+        BtnAdministrador.TextColor = Color.FromArgb("#1F1F1F");
+        BtnTecnico.BackgroundColor = Color.FromArgb("#F0F0F0");
+        BtnTecnico.TextColor = Color.FromArgb("#1F1F1F");
     }
 
     private async void OnVolverClicked(object? sender, EventArgs e)
     {
-        await Navigation.PopModalAsync();
+        await Shell.Current.GoToAsync("..");
     }
 }

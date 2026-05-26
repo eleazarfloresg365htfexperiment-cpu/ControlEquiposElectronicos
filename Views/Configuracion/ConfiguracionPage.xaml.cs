@@ -24,6 +24,7 @@ public partial class ConfiguracionPage : ContentPage
         var usuario = _sesion.UsuarioActual;
         bool esAdministrador = usuario != null && usuario.Rol == "Administrador";
 
+        // Solo los administradores ven el contenido; los demás ven el aviso
         ContenidoConfig.IsVisible = esAdministrador;
         AccesoRestringido.IsVisible = !esAdministrador;
 
@@ -37,6 +38,11 @@ public partial class ConfiguracionPage : ContentPage
     private async void OnPermisosClicked(object? sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("PermisosRol");
+    }
+
+    private async void OnRegistrarUsuarioClicked(object? sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("RegistroUsuario");
     }
 
     private async void OnCerrarSesionClicked(object? sender, EventArgs e)

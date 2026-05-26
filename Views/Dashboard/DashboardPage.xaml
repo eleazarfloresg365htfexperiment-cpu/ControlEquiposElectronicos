@@ -9,6 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="20">
 
+            <!-- Tarjetas de resumen -->
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
 
                 <Border Grid.Column="0"
@@ -17,14 +18,21 @@
                         Stroke="{StaticResource Gray200}"
                         StrokeThickness="1"
                         Padding="18">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Equipos" FontSize="14" TextColor="{StaticResource Gray500}" />
-                        <Label Text="{Binding TotalEquipos}"
-                               FontSize="34"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Primary}" />
-                        <Label Text="Total registrados" FontSize="12" TextColor="{StaticResource Gray400}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#378ADD"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf108;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Equipos" FontSize="14" TextColor="{StaticResource Gray500}" />
+                            <Label Text="{Binding TotalEquipos}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Total registrados" FontSize="11" TextColor="{StaticResource Gray400}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
                 <Border Grid.Column="1"
@@ -33,14 +41,21 @@
                         Stroke="{StaticResource Gray200}"
                         StrokeThickness="1"
                         Padding="18">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Mantenimientos" FontSize="14" TextColor="{StaticResource Gray500}" />
-                        <Label Text="{Binding TotalMantenimientos}"
-                               FontSize="34"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Primary}" />
-                        <Label Text="En total" FontSize="12" TextColor="{StaticResource Gray400}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#BA7517"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf0ad;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Mantenimientos" FontSize="14" TextColor="{StaticResource Gray500}" />
+                            <Label Text="{Binding TotalMantenimientos}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="En total" FontSize="11" TextColor="{StaticResource Gray400}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
                 <Border Grid.Column="2"
@@ -49,14 +64,21 @@
                         Stroke="{StaticResource Gray200}"
                         StrokeThickness="1"
                         Padding="18">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Reportes" FontSize="14" TextColor="{StaticResource Gray500}" />
-                        <Label Text="{Binding TotalReportes}"
-                               FontSize="34"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource Primary}" />
-                        <Label Text="Reportes de falla" FontSize="12" TextColor="{StaticResource Gray400}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#E24B4A"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf15c;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Reportes" FontSize="14" TextColor="{StaticResource Gray500}" />
+                            <Label Text="{Binding TotalReportes}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Reportes de falla" FontSize="11" TextColor="{StaticResource Gray400}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
             </Grid>
@@ -74,79 +96,79 @@
 
             <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="16">
 
-                <Border Grid.Row="0" Grid.Column="0"
-                        BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="20">
+                <Border Grid.Row="0" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnEquiposTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Equipos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                        <Label Text="Gestionar equipos" FontSize="12" TextColor="{StaticResource Gray500}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#378ADD" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf108;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Equipos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Gestionar equipos" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="1"
-                        BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="20">
+                <Border Grid.Row="0" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnMantenimientosTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Mantenimientos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                        <Label Text="Ver mantenimientos" FontSize="12" TextColor="{StaticResource Gray500}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#BA7517" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf0ad;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Mantenimientos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Ver mantenimientos" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="2"
-                        BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="20">
+                <Border Grid.Row="0" Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnReportesTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Reportes" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                        <Label Text="Ver reportes" FontSize="12" TextColor="{StaticResource Gray500}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#E24B4A" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf15c;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Reportes" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Ver reportes" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="0"
-                        BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="20">
+                <Border Grid.Row="1" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnUsuariosTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Usuarios" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                        <Label Text="Gestionar usuarios" FontSize="12" TextColor="{StaticResource Gray500}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#639922" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf0c0;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Usuarios" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Gestionar usuarios" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="1"
-                        BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="20">
+                <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnConfiguracionTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Configuración" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                        <Label Text="Ajustes del sistema" FontSize="12" TextColor="{StaticResource Gray500}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#7F77DD" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf013;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Configuración" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Text="Ajustes del sistema" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
             </Grid>
