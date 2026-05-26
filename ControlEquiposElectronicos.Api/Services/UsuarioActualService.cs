@@ -13,28 +13,13 @@ public class UsuarioActualService : IUsuarioActualService
 
     public int ObtenerUsuarioId()
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-
-        if (httpContext == null)
-            return 1;
-
-        if (httpContext.Request.Headers.TryGetValue("X-Usuario-Id", out var valores))
-        {
-            var valor = valores.FirstOrDefault();
-
-            if (int.TryParse(valor, out var usuarioId) && usuarioId > 0)
-                return usuarioId;
-        }
-
-        // Temporal mientras conectamos login real.
-        // Por ahora usa el usuario de prueba.
+        // Temporal mientras no usamos autenticación con token/JWT.
+        // Por ahora usamos el usuario de prueba con Id = 1.
         return 1;
     }
 
     public string? ObtenerDireccionIP()
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-
-        return httpContext?.Connection.RemoteIpAddress?.ToString();
+        return _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
     }
 }
