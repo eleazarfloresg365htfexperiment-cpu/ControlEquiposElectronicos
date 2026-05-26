@@ -102,7 +102,7 @@
                         <VerticalStackLayout Spacing="8">
                             <Label Text="🛠️ Acciones" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E" Margin="0,0,0,4"/>
 
-                            <Button Text="✏🖊️ Editar información"
+                            <Button Text="✏ Editar información"
                                     BackgroundColor="#DBEAFE" TextColor="#1E40AF"
                                     CornerRadius="9" FontSize="12" Padding="10"
                                     x:Name="BtnEditar"/>

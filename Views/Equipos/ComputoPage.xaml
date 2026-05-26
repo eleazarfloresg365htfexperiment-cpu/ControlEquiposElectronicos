@@ -10,13 +10,16 @@
         <VerticalStackLayout Padding="24" Spacing="16">
 
             <VerticalStackLayout Spacing="2">
-                <Label Text="Submódulo Cómputo" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                <Label Text="Cómputo" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
                 <Label Text="PC, periféricos y asignaciones" FontSize="13" TextColor="#9AA3BE"/>
             </VerticalStackLayout>
 
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
 
                 <Border Grid.Column="0" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRegistrarPCTapped"/>
+                    </Border.GestureRecognizers>
                     <HorizontalStackLayout Spacing="12">
                         <Border BackgroundColor="#DBEAFE" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44">
                             <Label Text="💻" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -29,6 +32,9 @@
                 </Border>
 
                 <Border Grid.Column="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRegistrarPeifericoTapped"/>
+                    </Border.GestureRecognizers>
                     <HorizontalStackLayout Spacing="12">
                         <Border BackgroundColor="#DCFCE7" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44">
                             <Label Text="🖱" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -41,6 +47,9 @@
                 </Border>
 
                 <Border Grid.Column="2" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAsignarPeifericoTapped"/>
+                    </Border.GestureRecognizers>
                     <HorizontalStackLayout Spacing="12">
                         <Border BackgroundColor="#EDE9FE" StrokeThickness="0" StrokeShape="RoundRectangle 10" WidthRequest="44" HeightRequest="44">
                             <Label Text="🔗" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -54,7 +63,7 @@
 
             </Grid>
 
-            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" >
+            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14">
                 <VerticalStackLayout>
 
                     <Grid ColumnDefinitions="*,Auto" Padding="16,14">
@@ -70,22 +79,35 @@
                     <CollectionView x:Name="ListaPCs" ItemsSource="{Binding Equipos}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="16,12" ColumnDefinitions="80,*,120,120,100" BackgroundColor="White">
+                                <Grid Padding="16,12" ColumnDefinitions="80,*,120,120,120" BackgroundColor="White">
 
                                     <Border Grid.Column="0" BackgroundColor="#F0F2F7" StrokeThickness="0" StrokeShape="RoundRectangle 5" Padding="6,3" HorizontalOptions="Start" VerticalOptions="Center">
                                         <Label Text="{Binding Codigo}" FontSize="11" TextColor="#1E2A6E" FontAttributes="Bold"/>
                                     </Border>
 
                                     <Label Grid.Column="1" Text="{Binding Nombre}" FontSize="12" VerticalOptions="Center" Margin="8,0"/>
-
                                     <Label Grid.Column="2" Text="{Binding Ubicacion}" FontSize="11" TextColor="#5A6282" VerticalOptions="Center"/>
-
                                     <Label Grid.Column="3" Text="{Binding Estado}" FontSize="11" VerticalOptions="Center"/>
 
                                     <HorizontalStackLayout Grid.Column="4" Spacing="6" VerticalOptions="Center">
-                                        <Button Text="🖊️" BackgroundColor="#DBEAFE" TextColor="#1E40AF" CornerRadius="6" FontSize="12" Padding="8,4" WidthRequest="36" HeightRequest="32"/>
-                                        <Button Text="🔄" BackgroundColor="#FEF3C7" TextColor="#92400E" CornerRadius="6" FontSize="12" Padding="8,4" WidthRequest="36" HeightRequest="32"/>
-                                        <Button Text="🏷️" BackgroundColor="#EDE9FE" TextColor="#5B21B6" CornerRadius="6" FontSize="12" Padding="8,4" WidthRequest="36" HeightRequest="32"/>
+                                        <Border BackgroundColor="#DBEAFE" Stroke="#93C5FD" StrokeThickness="1" StrokeShape="RoundRectangle 6" WidthRequest="36" HeightRequest="32">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnEditarPCTapped" CommandParameter="{Binding Id}"/>
+                                            </Border.GestureRecognizers>
+                                            <Label Text="✏️" FontSize="13" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </Border>
+                                        <Border BackgroundColor="#FEF3C7" Stroke="#FCD34D" StrokeThickness="1" StrokeShape="RoundRectangle 6" WidthRequest="36" HeightRequest="32">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnCambiarEstadoPCTapped" CommandParameter="{Binding Id}"/>
+                                            </Border.GestureRecognizers>
+                                            <Label Text="🔄" FontSize="13" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </Border>
+                                        <Border BackgroundColor="#EDE9FE" Stroke="#C4B5FD" StrokeThickness="1" StrokeShape="RoundRectangle 6" WidthRequest="36" HeightRequest="32">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnReclasificarPCTapped" CommandParameter="{Binding Id}"/>
+                                            </Border.GestureRecognizers>
+                                            <Label Text="🏷️" FontSize="13" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </Border>
                                     </HorizontalStackLayout>
 
                                 </Grid>

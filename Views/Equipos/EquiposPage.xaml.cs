@@ -1,4 +1,5 @@
-﻿using ControlEquiposElectronicos.ViewModels;
+﻿using ControlEquiposElectronicos.DTOs.Equipos;
+using ControlEquiposElectronicos.ViewModels;
 
 namespace ControlEquiposElectronicos.Views.Equipos;
 
@@ -31,31 +32,72 @@ public partial class EquiposPage : ContentPage
         await Shell.Current.GoToAsync("RegistrarEquipoPage");
     }
 
-    private async void OnEditarEquipoTapped(object sender, EventArgs e)
+    private async void OnActualizarListaTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Editar", "Selecciona un equipo de la lista para editar.", "OK");
+        await _viewModel.CargarEquiposAsync();
+        await DisplayAlert("Actualizado", "Lista de equipos actualizada.", "OK");
     }
 
-    private async void OnDesactivarTapped(object sender, EventArgs e)
+    private async void OnVerComputoTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Desactivar", "Selecciona un equipo de la lista para desactivar.", "OK");
+        await Shell.Current.GoToAsync("ComputoPage");
     }
 
-    private async void OnCambiarEstadoTapped(object sender, EventArgs e)
+    private void OnFiltrarActivosTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Cambiar estado", "Selecciona un equipo de la lista para cambiar su estado.", "OK");
+        _viewModel.TextoBusqueda = string.Empty;
+        _viewModel.FiltrarPorEstado("Funcional");
     }
 
-    private async void OnReclasificarTapped(object sender, EventArgs e)
+    private void OnFiltrarInactivosTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Reclasificar", "Selecciona un equipo de la lista para reclasificar.", "OK");
+        _viewModel.TextoBusqueda = string.Empty;
+        _viewModel.FiltrarPorEstado("mantenimiento");
+    }
+
+    private async void OnEditarFilaTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is int id)
+            await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={id}");
+    }
+
+    private async void OnMasOpcionesTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is not int id) return;
+
+        string accion = await DisplayActionSheet(
+            "Opciones del equipo", "Cancelar", null,
+            "🔄 Cambiar estado",
+            "🏷️ Reclasificar",
+            "🗑️ Desactivar");
+
+        if (accion == null || accion == "Cancelar") return;
+
+        if (accion.Contains("Cambiar estado"))
+        {
+            string estado = await DisplayActionSheet(
+                "Cambiar estado", "Cancelar", null,
+                "Activo", "En mantenimiento", "Dañado", "Inactivo");
+            if (estado != null && estado != "Cancelar")
+                await DisplayAlert("Estado", $"Estado cambiado a {estado}", "OK");
+        }
+        else if (accion.Contains("Reclasificar"))
+        {
+            await DisplayAlert("Reclasificar", "Función próximamente.", "OK");
+        }
+        else if (accion.Contains("Desactivar"))
+        {
+            bool confirmar = await DisplayAlert("Desactivar",
+                "¿Estás segura de desactivar este equipo?", "Sí", "No");
+            if (confirmar)
+                await DisplayAlert("Desactivado", "Equipo desactivado correctamente.", "OK");
+        }
     }
 
     private async void OnEquipoSeleccionado(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is not ControlEquiposElectronicos.DTOs.Equipos.EquipoListadoDto equipo)
+        if (e.CurrentSelection.FirstOrDefault() is not EquipoListadoDto equipo)
             return;
-
         ListaEquipos.SelectedItem = null;
         await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={equipo.Id}");
     }

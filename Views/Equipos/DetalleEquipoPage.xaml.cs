@@ -41,6 +41,7 @@ public partial class DetalleEquipoPage : ContentPage
             if (accion != null && accion != "Cancelar")
             {
                 await _viewModel.CambiarEstadoAsync(accion);
+                await _viewModel.CargarEquipoAsync(_equipoId);
                 await DisplayAlert("Éxito", $"Estado cambiado a {accion}", "OK");
             }
         };
