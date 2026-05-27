@@ -22,7 +22,7 @@ public class AuthService : IAuthService
         var usuario = await _context.Usuarios
             .Include(u => u.Rol)
             .FirstOrDefaultAsync(u =>
-               (u.Nickname == nickname || u.NombreUsuario == nickname) &&
+                (u.Nickname == nickname || u.NombreUsuario == nickname) &&
                 u.PasswordHash == contrasena &&
                 u.Activo);
 
@@ -36,9 +36,9 @@ public class AuthService : IAuthService
             .ThenBy(rp => rp.Permiso.Accion)
             .Select(rp => new PermisoSesionDto
             {
-                PermisoId = rp.Permiso.Id,
-                Modulo = rp.Permiso.Modulo,
-                Accion = rp.Permiso.Accion,
+                PermisoId = rp.Permiso != null ? rp.Permiso.Id : 0,
+                Modulo = rp.Permiso != null ? (rp.Permiso.Modulo ?? string.Empty) : string.Empty,
+                Accion = rp.Permiso != null ? (rp.Permiso.Accion ?? string.Empty) : string.Empty,
                 Descripcion = rp.Permiso != null ? (rp.Permiso.Descripcion ?? string.Empty) : string.Empty
             })
             .ToListAsync();
@@ -49,7 +49,7 @@ public class AuthService : IAuthService
             Nickname = usuario.Nickname,
             NombreCompleto = (usuario.Nombres + " " + usuario.Apellidos).Trim(),
             RolId = usuario.RolId,
-            Rol = usuario.Rol?.NombreRol ?? string.Empty,
+            Rol = usuario.Rol != null ? usuario.Rol.NombreRol : string.Empty,
             Permisos = permisos
         };
     }

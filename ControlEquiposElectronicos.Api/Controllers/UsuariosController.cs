@@ -23,6 +23,17 @@ public class UsuariosController : ControllerBase
         return Ok(usuarios);
     }
 
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<UsuarioDto>> ObtenerPorId(int id)
+    {
+        var usuario = await _usuarioService.ObtenerPorIdAsync(id);
+
+        if (usuario == null)
+            return NotFound(new { mensaje = "El usuario no existe." });
+
+        return Ok(usuario);
+    }
+
     [HttpPost]
     public async Task<ActionResult<UsuarioDto>> Crear(CrearUsuarioDto dto)
     {
@@ -31,7 +42,7 @@ public class UsuariosController : ControllerBase
             var usuario = await _usuarioService.CrearAsync(dto);
 
             return CreatedAtAction(
-                nameof(ObtenerTodos),
+                nameof(ObtenerPorId),
                 new { id = usuario.UsuarioId },
                 usuario);
         }

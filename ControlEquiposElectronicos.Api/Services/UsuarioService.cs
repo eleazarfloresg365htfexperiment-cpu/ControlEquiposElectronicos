@@ -36,22 +36,42 @@ public class UsuarioService : IUsuarioService
             .ToListAsync();
     }
 
+    public async Task<UsuarioDto?> ObtenerPorIdAsync(int id)
+    {
+        return await _context.Usuarios
+            .Include(u => u.Rol)
+            .Where(u => u.UsuarioId == id)
+            .Select(u => new UsuarioDto
+            {
+                UsuarioId = u.UsuarioId,
+                NombreCompleto = (u.Nombres + " " + u.Apellidos).Trim(),
+                Nickname = u.Nickname,
+                Telefono = u.Telefono,
+                Correo = u.Correo,
+                RolId = u.RolId,
+                Rol = u.Rol.NombreRol,
+                Activo = u.Activo,
+                FechaCreacion = u.FechaCreacion,
+                FechaActualizacion = null
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<UsuarioDto> CrearAsync(CrearUsuarioDto dto)
     {
         var nickname = dto.Nickname.Trim();
 
-        var existeNickname = await _context.Usuarios
-            .AnyAsync(u => u.Nickname == nickname);
+        if (string.IsNullOrWhiteSpace(nickname))
+            throw new InvalidOperationException("El nickname es obligatorio.");
+
+        if (string.IsNullOrWhiteSpace(dto.Contrasena))
+            throw new InvalidOperationException("La contraseña es obligatoria.");
 
         var existeUsuario = await _context.Usuarios
             .AnyAsync(u => u.Nickname == nickname || u.NombreUsuario == nickname);
 
         if (existeUsuario)
             throw new InvalidOperationException("Ya existe un usuario con ese nickname o nombre de usuario.");
-
-        if (existeNickname)
-            throw new InvalidOperationException("Ya existe un usuario con ese nickname.");
-
 
         var rolNombre = dto.Rol.Trim().ToLower();
 
@@ -69,9 +89,9 @@ public class UsuarioService : IUsuarioService
             Apellidos = apellidos,
 
             // Importante:
-            // NombreUsuario tiene índice único en la base de datos.
-            // Nickname es el nombre visible/de acceso que estamos usando desde MAUI.
-            // Para evitar duplicados por cadena vacía, ambos deben llenarse.
+            // NombreUsuario tiene índice único en SQL Server.
+            // Nickname es el nombre visible/de acceso usado por MAUI.
+            // Para evitar errores de duplicado por valor vacío, ambos se llenan.
             NombreUsuario = nickname,
             Nickname = nickname,
 
