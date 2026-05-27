@@ -133,4 +133,19 @@ public class EquiposViewModel : BaseViewModel
         foreach (var equipo in filtrados)
             Equipos.Add(equipo);
     }
+    public void ActualizarEstadoVisual(int id, string nuevoEstado)
+    {
+        var equipo = Equipos.FirstOrDefault(e => e.Id == id);
+        if (equipo != null)
+        {
+            var index = Equipos.IndexOf(equipo);
+            equipo.Estado = nuevoEstado;
+            Equipos.RemoveAt(index);
+            Equipos.Insert(index, equipo);
+        }
+
+        var equipoEnLista = _todosLosEquipos.FirstOrDefault(e => e.Id == id);
+        if (equipoEnLista != null)
+            equipoEnLista.Estado = nuevoEstado;
+    }
 }

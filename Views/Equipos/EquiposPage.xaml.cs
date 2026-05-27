@@ -55,18 +55,19 @@ public partial class EquiposPage : ContentPage
         _viewModel.FiltrarPorEstado("mantenimiento");
     }
 
-    private async void OnEditarFilaTapped(object sender, TappedEventArgs e)
+    private async void OnEditarFilaTapped(object sender, EventArgs e)
     {
-        if (e.Parameter is int id)
-            await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={id}");
+        if (sender is BindableObject bindable && bindable.BindingContext is EquipoListadoDto equipo)
+            await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={equipo.Id}");
     }
 
-    private async void OnMasOpcionesTapped(object sender, TappedEventArgs e)
+    private async void OnMasOpcionesTapped(object sender, EventArgs e)
     {
-        if (e.Parameter is not int id) return;
+        if (sender is not BindableObject bindable) return;
+        if (bindable.BindingContext is not EquipoListadoDto equipo) return;
 
         string accion = await DisplayActionSheet(
-            "Opciones del equipo", "Cancelar", null,
+            $"Equipo: {equipo.Codigo}", "Cancelar", null,
             "🔄 Cambiar estado",
             "🏷️ Reclasificar",
             "🗑️ Desactivar");
@@ -77,9 +78,14 @@ public partial class EquiposPage : ContentPage
         {
             string estado = await DisplayActionSheet(
                 "Cambiar estado", "Cancelar", null,
-                "Activo", "En mantenimiento", "Dañado", "Inactivo");
+                "Funcional", "En mantenimiento", "Dañado", "Inactivo");
+
             if (estado != null && estado != "Cancelar")
+            {
+                _viewModel.ActualizarEstadoVisual(equipo.Id, estado);
                 await DisplayAlert("Estado", $"Estado cambiado a {estado}", "OK");
+                await _viewModel.CargarEquiposAsync();
+            }
         }
         else if (accion.Contains("Reclasificar"))
         {
@@ -88,9 +94,13 @@ public partial class EquiposPage : ContentPage
         else if (accion.Contains("Desactivar"))
         {
             bool confirmar = await DisplayAlert("Desactivar",
-                "¿Estás segura de desactivar este equipo?", "Sí", "No");
+                $"¿Estás segura de desactivar {equipo.Codigo}?", "Sí", "No");
             if (confirmar)
+            {
+                _viewModel.ActualizarEstadoVisual(equipo.Id, "Inactivo");
                 await DisplayAlert("Desactivado", "Equipo desactivado correctamente.", "OK");
+                await _viewModel.CargarEquiposAsync();
+            }
         }
     }
 
