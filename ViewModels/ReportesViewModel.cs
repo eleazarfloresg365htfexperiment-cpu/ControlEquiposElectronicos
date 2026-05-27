@@ -1,4 +1,5 @@
-﻿using ControlEquiposElectronicos.DTOs.Reportes;
+﻿using ControlEquiposElectronicos.DTOs.Auditoria;
+using ControlEquiposElectronicos.DTOs.Reportes;
 using ControlEquiposElectronicos.Services.Interfaces;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -8,8 +9,17 @@ namespace ControlEquiposElectronicos.ViewModels;
 public class ReportesViewModel : BaseViewModel
 {
     private readonly IReporteFallaApiService _reporteFallaApiService;
+    private readonly IAuditoriaApiService _auditoriaApiService;
 
     public ObservableCollection<ReporteFallaListadoDto> Reportes { get; set; } = new();
+    public ObservableCollection<AuditoriaDto> Historial { get; set; } = new();
+
+    private bool _mostrarHistorial = false;
+    public bool MostrarHistorial
+    {
+        get => _mostrarHistorial;
+        set { _mostrarHistorial = value; OnPropertyChanged(); }
+    }
 
     private string _busqueda = string.Empty;
     public string Busqueda
@@ -32,17 +42,20 @@ public class ReportesViewModel : BaseViewModel
     public ICommand ExportarExcelCommand { get; }
     public ICommand ExportarPdfCommand { get; }
     public ICommand HistorialCommand { get; }
+    public ICommand CerrarHistorialCommand { get; }
 
-    public ReportesViewModel(IReporteFallaApiService reporteFallaApiService)
+    public ReportesViewModel(IReporteFallaApiService reporteFallaApiService, IAuditoriaApiService auditoriaApiService)
     {
         Title = "Reportes";
         _reporteFallaApiService = reporteFallaApiService;
+        _auditoriaApiService = auditoriaApiService;
 
         EliminarCommand = new Command<ReporteFallaListadoDto>(async (r) => await EliminarAsync(r));
         NuevoReporteCommand = new Command(async () => await Shell.Current.GoToAsync("ReporteFallaFormulario"));
         ExportarExcelCommand = new Command(async () => await Shell.Current.DisplayAlertAsync("Exportar Excel", "Exportación a Excel próximamente disponible.", "OK"));
         ExportarPdfCommand = new Command(async () => await Shell.Current.DisplayAlertAsync("Exportar PDF", "Exportación a PDF próximamente disponible.", "OK"));
-        HistorialCommand = new Command(async () => await Shell.Current.DisplayAlertAsync("Historial", "Módulo de historial próximamente disponible.", "OK"));
+        HistorialCommand = new Command(async () => await CargarHistorialAsync());
+        CerrarHistorialCommand = new Command(() => MostrarHistorial = false);
     }
 
     public async Task CargarReportesAsync()
@@ -56,6 +69,24 @@ public class ReportesViewModel : BaseViewModel
             Reportes.Clear();
             foreach (var r in lista)
                 Reportes.Add(r);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+        finally { IsBusy = false; }
+    }
+
+    private async Task CargarHistorialAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            var lista = await _auditoriaApiService.ObtenerPorModuloAsync("ReportesFalla");
+            Historial.Clear();
+            foreach (var h in lista)
+                Historial.Add(h);
+            MostrarHistorial = true;
         }
         catch (Exception ex)
         {
@@ -87,21 +118,17 @@ public class ReportesViewModel : BaseViewModel
         bool confirmar = await Shell.Current.DisplayAlertAsync(
             "Confirmar eliminación",
             $"¿Deseas eliminar el reporte '{reporte.Titulo}'?",
-            "Sí, eliminar",
-            "Cancelar");
+            "Sí, eliminar", "Cancelar");
 
         if (!confirmar) return;
 
         var resultado = await _reporteFallaApiService.EliminarAsync(reporte.Id);
-
         if (resultado)
         {
             Reportes.Remove(reporte);
             await Shell.Current.DisplayAlertAsync("Éxito", "Reporte eliminado correctamente.", "OK");
         }
         else
-        {
             await Shell.Current.DisplayAlertAsync("Error", "No se pudo eliminar el reporte.", "OK");
-        }
     }
 }

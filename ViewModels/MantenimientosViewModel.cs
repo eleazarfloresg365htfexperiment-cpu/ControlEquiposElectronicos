@@ -1,4 +1,5 @@
-﻿using ControlEquiposElectronicos.DTOs.Mantenimientos;
+﻿using ControlEquiposElectronicos.DTOs.Auditoria;
+using ControlEquiposElectronicos.DTOs.Mantenimientos;
 using ControlEquiposElectronicos.Services.Interfaces;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -8,8 +9,17 @@ namespace ControlEquiposElectronicos.ViewModels;
 public class MantenimientosViewModel : BaseViewModel
 {
     private readonly IMantenimientoApiService _mantenimientoApiService;
+    private readonly IAuditoriaApiService _auditoriaApiService;
 
     public ObservableCollection<MantenimientoListadoDto> Mantenimientos { get; set; } = new();
+    public ObservableCollection<AuditoriaDto> Historial { get; set; } = new();
+
+    private bool _mostrarHistorial = false;
+    public bool MostrarHistorial
+    {
+        get => _mostrarHistorial;
+        set { _mostrarHistorial = value; OnPropertyChanged(); }
+    }
 
     private string _busqueda = string.Empty;
     public string Busqueda
@@ -25,17 +35,20 @@ public class MantenimientosViewModel : BaseViewModel
     public ICommand EditarCommand { get; }
     public ICommand FinalizarCommand { get; }
     public ICommand HistorialCommand { get; }
+    public ICommand CerrarHistorialCommand { get; }
 
-    public MantenimientosViewModel(IMantenimientoApiService mantenimientoApiService)
+    public MantenimientosViewModel(IMantenimientoApiService mantenimientoApiService, IAuditoriaApiService auditoriaApiService)
     {
         Title = "Mantenimientos";
         _mantenimientoApiService = mantenimientoApiService;
+        _auditoriaApiService = auditoriaApiService;
 
         EliminarCommand = new Command<MantenimientoListadoDto>(async (m) => await EliminarAsync(m));
         RegistrarNuevoCommand = new Command(async () => await Shell.Current.GoToAsync("MantenimientoFormulario"));
         EditarCommand = new Command<MantenimientoListadoDto>(async (m) => await EditarAsync(m));
         FinalizarCommand = new Command<MantenimientoListadoDto>(async (m) => await FinalizarAsync(m));
-        HistorialCommand = new Command(async () => await Shell.Current.DisplayAlertAsync("Historial", "Módulo de historial próximamente disponible.", "OK"));
+        HistorialCommand = new Command(async () => await CargarHistorialAsync());
+        CerrarHistorialCommand = new Command(() => MostrarHistorial = false);
     }
 
     public async Task CargarMantenimientosAsync()
@@ -49,6 +62,24 @@ public class MantenimientosViewModel : BaseViewModel
             Mantenimientos.Clear();
             foreach (var m in lista)
                 Mantenimientos.Add(m);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+        finally { IsBusy = false; }
+    }
+
+    private async Task CargarHistorialAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            var lista = await _auditoriaApiService.ObtenerPorModuloAsync("Mantenimientos");
+            Historial.Clear();
+            foreach (var h in lista)
+                Historial.Add(h);
+            MostrarHistorial = true;
         }
         catch (Exception ex)
         {
@@ -76,22 +107,18 @@ public class MantenimientosViewModel : BaseViewModel
         bool confirmar = await Shell.Current.DisplayAlertAsync(
             "Confirmar eliminación",
             $"¿Deseas eliminar el mantenimiento del equipo {mantenimiento.CodigoEquipo}?",
-            "Sí, eliminar",
-            "Cancelar");
+            "Sí, eliminar", "Cancelar");
 
         if (!confirmar) return;
 
         var resultado = await _mantenimientoApiService.EliminarAsync(mantenimiento.Id);
-
         if (resultado)
         {
             Mantenimientos.Remove(mantenimiento);
             await Shell.Current.DisplayAlertAsync("Éxito", "Mantenimiento eliminado correctamente.", "OK");
         }
         else
-        {
             await Shell.Current.DisplayAlertAsync("Error", "No se pudo eliminar el mantenimiento.", "OK");
-        }
     }
 
     private async Task EditarAsync(MantenimientoListadoDto mantenimiento)
@@ -104,8 +131,7 @@ public class MantenimientosViewModel : BaseViewModel
         bool confirmar = await Shell.Current.DisplayAlertAsync(
             "Finalizar mantenimiento",
             $"¿Deseas marcar como completado el mantenimiento del equipo {mantenimiento.CodigoEquipo}?",
-            "Sí, finalizar",
-            "Cancelar");
+            "Sí, finalizar", "Cancelar");
 
         if (!confirmar) return;
 
@@ -119,15 +145,12 @@ public class MantenimientosViewModel : BaseViewModel
         };
 
         var resultado = await _mantenimientoApiService.ActualizarAsync(mantenimiento.Id, dto);
-
         if (resultado)
         {
             await CargarMantenimientosAsync();
             await Shell.Current.DisplayAlertAsync("Éxito", "Mantenimiento finalizado correctamente.", "OK");
         }
         else
-        {
             await Shell.Current.DisplayAlertAsync("Error", "No se pudo finalizar el mantenimiento.", "OK");
-        }
     }
 }

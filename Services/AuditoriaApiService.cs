@@ -12,8 +12,13 @@ public class AuditoriaApiService : IAuditoriaApiService
         _apiService = apiService;
     }
 
-    public async Task<List<HistorialOperacionDto>> ObtenerPorModuloAsync(string modulo)
+    public async Task<List<AuditoriaDto>> ObtenerTodosAsync()
     {
-        return await _apiService.GetAsync<List<HistorialOperacionDto>>($"Auditoria/modulo/{modulo}") ?? new();
+        return await _apiService.GetAsync<List<AuditoriaDto>>("Auditoria") ?? new();
+    }
+
+    public async Task<List<AuditoriaDto>> ObtenerPorModuloAsync(string modulo)
+    {
+        return await _apiService.GetAsync<List<AuditoriaDto>>($"Auditoria/modulo/{modulo}") ?? new();
     }
 }

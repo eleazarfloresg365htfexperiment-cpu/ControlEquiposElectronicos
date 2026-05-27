@@ -63,6 +63,33 @@
 
             </Grid>
 
+            <!-- HISTORIAL -->
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20" IsVisible="{Binding MostrarHistorial}">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Historial de reportes" FontSize="18" FontAttributes="Bold" TextColor="#1A1A2E" VerticalOptions="Center" />
+                        <Button Grid.Column="1" Text="✕ Cerrar" BackgroundColor="#E0E0E0" TextColor="#333" FontSize="12" CornerRadius="8" Command="{Binding CerrarHistorialCommand}" />
+                    </Grid>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#F5A623" HorizontalOptions="Center" />
+                    <Grid ColumnDefinitions="*,120,150" BackgroundColor="#F0F0F0" Padding="10,8">
+                        <Label Grid.Column="0" Text="Descripción" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="1" Text="Usuario" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="2" Text="Fecha" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                    </Grid>
+                    <CollectionView ItemsSource="{Binding Historial}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,120,150" Padding="10,8">
+                                    <Label Grid.Column="0" Text="{Binding Descripcion}" FontSize="12" TextColor="#333" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Usuario}" FontSize="12" TextColor="#333" VerticalOptions="Center" />
+                                    <Label Grid.Column="2" Text="{Binding FechaOperacion, StringFormat='{0:dd/MM/yy HH:mm}'}" FontSize="12" TextColor="#333" VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
             <!-- TABLA -->
             <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20">
                 <VerticalStackLayout Spacing="16">
@@ -70,30 +97,16 @@
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0" Text="Reportes de falla" FontSize="18" FontAttributes="Bold" TextColor="#1A1A2E" VerticalOptions="Center" />
                         <Border Grid.Column="1" BackgroundColor="#E53935" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="0">
-                            <Button Text="+ Nuevo reporte"
-                                    TextColor="White"
-                                    FontAttributes="Bold"
-                                    FontSize="13"
-                                    BackgroundColor="#E53935"
-                                    Command="{Binding NuevoReporteCommand}"
-                                    Padding="14,10"/>
+                            <Button Text="+ Nuevo reporte" TextColor="White" FontAttributes="Bold" FontSize="13" BackgroundColor="#E53935" Command="{Binding NuevoReporteCommand}" Padding="14,10"/>
                         </Border>
                     </Grid>
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,8">
-                            <Entry Placeholder="🔍  Buscar por código..."
-                                   PlaceholderColor="#AAAAAA"
-                                   FontSize="13"
-                                   BackgroundColor="Transparent"
-                                   Text="{Binding Busqueda}" />
+                            <Entry Placeholder="🔍  Buscar por código..." PlaceholderColor="#AAAAAA" TextColor="#1A1A2E" FontSize="13" BackgroundColor="Transparent" Text="{Binding Busqueda}" />
                         </Border>
                         <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
-                            <Picker Title="Todos los estados"
-                                    TitleColor="#AAAAAA"
-                                    FontSize="13"
-                                    BackgroundColor="Transparent"
-                                    SelectedItem="{Binding EstadoFiltro}">
+                            <Picker Title="Todos los estados" TitleColor="#AAAAAA" TextColor="#1A1A2E" FontSize="13" BackgroundColor="Transparent" SelectedItem="{Binding EstadoFiltro}">
                                 <Picker.Items>
                                     <x:String>Abierto</x:String>
                                     <x:String>En revisión</x:String>
@@ -105,39 +118,25 @@
 
                     <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#E53935" HorizontalOptions="Center" />
 
-                    <Grid ColumnDefinitions="50,110,*,110,110,80" BackgroundColor="#F0F0F0" Padding="10,8">
+                    <Grid ColumnDefinitions="50,110,*,110,110" BackgroundColor="#F0F0F0" Padding="10,8">
                         <Label Grid.Column="0" Text="ID" FontAttributes="Bold" FontSize="13" TextColor="#555" />
                         <Label Grid.Column="1" Text="Equipo" FontAttributes="Bold" FontSize="13" TextColor="#555" />
                         <Label Grid.Column="2" Text="Título" FontAttributes="Bold" FontSize="13" TextColor="#555" />
                         <Label Grid.Column="3" Text="Prioridad" FontAttributes="Bold" FontSize="13" TextColor="#555" />
                         <Label Grid.Column="4" Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#555" />
-                        <Label Grid.Column="5" Text="Acción" FontAttributes="Bold" FontSize="13" TextColor="#555" />
                     </Grid>
 
                     <CollectionView ItemsSource="{Binding Reportes}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid ColumnDefinitions="50,110,*,110,110,80" Padding="10,10">
-                                    <Label Grid.Column="0" Text="{Binding Id}" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
-                                    <Label Grid.Column="1" Text="{Binding CodigoEquipo}" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
-                                    <Label Grid.Column="2" Text="{Binding Titulo}" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
-                                    <Label Grid.Column="3" Text="{Binding Prioridad}" FontSize="13" TextColor="#333" VerticalOptions="Center"/>
-                                    <Border Grid.Column="4"
-                                            BackgroundColor="#FDECEA"
-                                            StrokeShape="RoundRectangle 20"
-                                            Stroke="Transparent"
-                                            Padding="10,4"
-                                            HorizontalOptions="Start"
-                                            VerticalOptions="Center">
+                                <Grid ColumnDefinitions="50,110,*,110,110" Padding="10,10">
+                                    <Label Grid.Column="0" Text="{Binding Id}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="{Binding CodigoEquipo}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Label Grid.Column="2" Text="{Binding Titulo}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Label Grid.Column="3" Text="{Binding Prioridad}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Border Grid.Column="4" BackgroundColor="#FDECEA" StrokeShape="RoundRectangle 20" Stroke="Transparent" Padding="10,4" HorizontalOptions="Start" VerticalOptions="Center">
                                         <Label Text="{Binding EstadoReporte}" TextColor="#C62828" FontSize="12" FontAttributes="Bold"/>
                                     </Border>
-                                    <Button Grid.Column="5"
-                                            Text="🗑️"
-                                            FontSize="16"
-                                            BackgroundColor="Transparent"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EliminarCommand}"
-                                            CommandParameter="{Binding .}"
-                                            VerticalOptions="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -148,5 +147,4 @@
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
