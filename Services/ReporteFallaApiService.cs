@@ -16,4 +16,15 @@ public class ReporteFallaApiService : IReporteFallaApiService
     {
         return await _apiService.GetAsync<List<ReporteFallaListadoDto>>("ReportesFalla") ?? new();
     }
+
+    public async Task<bool> CrearAsync(CrearReporteFallaDto dto)
+    {
+        var resultado = await _apiService.PostAsync<CrearReporteFallaDto, ReporteFallaListadoDto>("ReportesFalla", dto);
+        return resultado != null;
+    }
+
+    public async Task<bool> EliminarAsync(int id)
+    {
+        return await _apiService.DeleteAsync($"ReportesFalla/{id}");
+    }
 }

@@ -1,4 +1,6 @@
 ﻿using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Views.Mantenimientos;
+using ControlEquiposElectronicos.Views.Reportes;
 
 namespace ControlEquiposElectronicos;
 
@@ -10,6 +12,10 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
         _sesion = sesion;
+
+        // Registrar rutas de navegación
+        Routing.RegisterRoute("MantenimientoFormulario", typeof(MantenimientoFormularioPage));
+        Routing.RegisterRoute("ReporteFallaFormulario", typeof(ReporteFallaFormularioPage));
 
         ConfigurarMenu();
     }

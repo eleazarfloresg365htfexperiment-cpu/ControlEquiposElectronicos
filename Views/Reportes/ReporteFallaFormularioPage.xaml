@@ -9,98 +9,65 @@
     <ScrollView>
         <VerticalStackLayout Padding="30" Spacing="20">
 
-            <!-- ENCABEZADO -->
             <VerticalStackLayout Spacing="4">
-                <Label Text="Reporte de falla"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       TextColor="#1A1A2E" />
-                <Label Text="Registra una falla técnica detectada en un equipo"
-                       FontSize="14"
-                       TextColor="#666666" />
+                <Label Text="Reporte de falla" FontSize="28" FontAttributes="Bold" TextColor="#1A1A2E" />
+                <Label Text="Registra una falla técnica detectada en un equipo" FontSize="14" TextColor="#666666" />
             </VerticalStackLayout>
 
-            <!-- TARJETA FORMULARIO -->
-            <Border BackgroundColor="White"
-                    StrokeShape="RoundRectangle 12"
-                    Stroke="#E0E0E0"
-                    Padding="24">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="24">
                 <VerticalStackLayout Spacing="18">
 
-                    <!-- Código equipo -->
+                    <!-- ID de equipo -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Código de equipo"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Entry Placeholder="Ej: EQ-001"
+                        <Label Text="ID del equipo" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Entry Placeholder="Ej: 1"
                                    PlaceholderColor="#AAAAAA"
+                                   TextColor="#1A1A2E"
                                    FontSize="14"
-                                   BackgroundColor="Transparent" />
+                                   Keyboard="Numeric"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding EquipoIdTexto}" />
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Categoría -->
+                    <!-- Título -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Categoría del equipo"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,4">
-                            <Picker Title="Seleccionar categoría..."
-                                    TitleColor="#AAAAAA"
-                                    FontSize="14"
-                                    BackgroundColor="Transparent">
-                                <Picker.Items>
-                                    <x:String>Cómputo</x:String>
-                                    <x:String>Red</x:String>
-                                    <x:String>Impresión</x:String>
-                                    <x:String>Electricidad</x:String>
-                                    <x:String>Soporte ambiental</x:String>
-                                </Picker.Items>
-                            </Picker>
+                        <Label Text="Título de la falla" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Entry Placeholder="Ej: Proyector no enciende"
+                                   PlaceholderColor="#AAAAAA"
+                                   TextColor="#1A1A2E"
+                                   FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding Titulo}" />
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Descripción de la falla -->
+                    <!-- Descripción -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Descripción de la falla"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
+                        <Label Text="Descripción de la falla" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
                             <Editor Placeholder="Describe detalladamente la falla detectada..."
                                     PlaceholderColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
                                     FontSize="14"
                                     HeightRequest="100"
-                                    BackgroundColor="Transparent" />
+                                    BackgroundColor="Transparent"
+                                    Text="{Binding Descripcion}" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- Prioridad -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Prioridad"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,4">
+                        <Label Text="Prioridad" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
                             <Picker Title="Seleccionar prioridad..."
                                     TitleColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
                                     FontSize="14"
-                                    BackgroundColor="Transparent">
+                                    BackgroundColor="Transparent"
+                                    SelectedItem="{Binding Prioridad}">
                                 <Picker.Items>
                                     <x:String>Baja</x:String>
                                     <x:String>Media</x:String>
@@ -111,97 +78,44 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Ubicación -->
+                    <!-- Estado -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Ubicación del equipo"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Entry Placeholder="Ej: Aula 101, Laboratorio 2..."
-                                   PlaceholderColor="#AAAAAA"
-                                   FontSize="14"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Fecha -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Fecha de detección"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,4">
-                            <DatePicker Format="dd/MM/yyyy"
-                                        FontSize="14"
-                                        BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Reportado por -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Reportado por"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Entry Placeholder="Nombre de quien reporta"
-                                   PlaceholderColor="#AAAAAA"
-                                   FontSize="14"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Observaciones -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Observaciones adicionales (opcional)"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Editor Placeholder="Información adicional relevante..."
-                                    PlaceholderColor="#AAAAAA"
+                        <Label Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
+                            <Picker Title="Seleccionar estado..."
+                                    TitleColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
                                     FontSize="14"
-                                    HeightRequest="80"
-                                    BackgroundColor="Transparent" />
+                                    BackgroundColor="Transparent"
+                                    SelectedItem="{Binding EstadoReporte}">
+                                <Picker.Items>
+                                    <x:String>Abierto</x:String>
+                                    <x:String>En revisión</x:String>
+                                    <x:String>Cerrado</x:String>
+                                </Picker.Items>
+                            </Picker>
                         </Border>
                     </VerticalStackLayout>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#E53935" HorizontalOptions="Center" />
 
                     <!-- BOTONES -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
-                        <Border Grid.Column="0"
-                                StrokeShape="RoundRectangle 8"
-                                Stroke="#CCCCCC"
-                                BackgroundColor="White"
-                                Padding="0,12">
-                            <Label Text="Cancelar"
-                                   HorizontalOptions="Center"
-                                   FontAttributes="Bold"
-                                   FontSize="14"
-                                   TextColor="#666666" />
+                        <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" BackgroundColor="White" Padding="0">
+                            <Button Text="Cancelar"
+                                    BackgroundColor="White"
+                                    TextColor="#666666"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Command="{Binding CancelarCommand}" />
                         </Border>
-                        <Border Grid.Column="1"
-                                StrokeShape="RoundRectangle 8"
-                                Stroke="Transparent"
-                                BackgroundColor="#E53935"
-                                Padding="0,12">
-                            <Label Text="Enviar reporte"
-                                   HorizontalOptions="Center"
-                                   FontAttributes="Bold"
-                                   FontSize="14"
-                                   TextColor="White" />
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#E53935" Padding="0">
+                            <Button Text="Enviar reporte"
+                                    BackgroundColor="#E53935"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Command="{Binding GuardarCommand}" />
                         </Border>
                     </Grid>
 

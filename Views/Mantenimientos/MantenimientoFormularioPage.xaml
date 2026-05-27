@@ -9,129 +9,80 @@
     <ScrollView>
         <VerticalStackLayout Padding="30" Spacing="20">
 
-            <!-- ENCABEZADO -->
             <VerticalStackLayout Spacing="4">
-                <Label Text="Registrar mantenimiento"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       TextColor="#1A1A2E" />
-                <Label Text="Completa los datos del mantenimiento técnico"
-                       FontSize="14"
-                       TextColor="#666666" />
+                <Label Text="Registrar mantenimiento" FontSize="28" FontAttributes="Bold" TextColor="#1A1A2E" />
+                <Label Text="Completa los datos del mantenimiento técnico" FontSize="14" TextColor="#666666" />
             </VerticalStackLayout>
 
-            <!-- TARJETA FORMULARIO -->
-            <Border BackgroundColor="White"
-                    StrokeShape="RoundRectangle 12"
-                    Stroke="#E0E0E0"
-                    Padding="24">
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="24">
                 <VerticalStackLayout Spacing="18">
 
-                    <!-- Código de equipo -->
+                    <!-- ID de equipo -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Código de equipo"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Entry Placeholder="Ej: EQ-001"
+                        <Label Text="ID del equipo" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Entry Placeholder="Ej: 1"
                                    PlaceholderColor="#AAAAAA"
+                                   TextColor="#1A1A2E"
                                    FontSize="14"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Tipo de mantenimiento -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Tipo de mantenimiento"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,4">
-                            <Picker Title="Seleccionar tipo..."
-                                    TitleColor="#AAAAAA"
-                                    FontSize="14"
-                                    BackgroundColor="Transparent">
-                                <Picker.Items>
-                                    <x:String>Preventivo</x:String>
-                                    <x:String>Correctivo</x:String>
-                                    <x:String>Limpieza</x:String>
-                                </Picker.Items>
-                            </Picker>
+                                   Keyboard="Numeric"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding EquipoIdTexto}" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- Descripción -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Descripción del trabajo realizado"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
+                        <Label Text="Descripción del trabajo" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
                             <Editor Placeholder="Describe el mantenimiento realizado..."
                                     PlaceholderColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
                                     FontSize="14"
                                     HeightRequest="100"
-                                    BackgroundColor="Transparent" />
+                                    BackgroundColor="Transparent"
+                                    Text="{Binding Descripcion}" />
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Técnico responsable -->
+                    <!-- Diagnóstico -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Técnico responsable"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Entry Placeholder="Nombre del técnico"
+                        <Label Text="Diagnóstico (opcional)" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Editor Placeholder="Diagnóstico técnico..."
+                                    PlaceholderColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
+                                    FontSize="14"
+                                    HeightRequest="80"
+                                    BackgroundColor="Transparent"
+                                    Text="{Binding Diagnostico}" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Costo estimado -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Costo estimado (opcional)" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Entry Placeholder="Ej: 150.00"
                                    PlaceholderColor="#AAAAAA"
+                                   TextColor="#1A1A2E"
                                    FontSize="14"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Fecha -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Fecha de mantenimiento"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,4">
-                            <DatePicker Format="dd/MM/yyyy"
-                                        FontSize="14"
-                                        BackgroundColor="Transparent" />
+                                   Keyboard="Numeric"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding CostoEstimado}" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- Estado -->
                     <VerticalStackLayout Spacing="6">
-                        <Label Text="Estado"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,4">
+                        <Label Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
                             <Picker Title="Seleccionar estado..."
                                     TitleColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
                                     FontSize="14"
-                                    BackgroundColor="Transparent">
+                                    BackgroundColor="Transparent"
+                                    SelectedItem="{Binding EstadoMantenimiento}">
                                 <Picker.Items>
                                     <x:String>Pendiente</x:String>
                                     <x:String>En proceso</x:String>
@@ -141,53 +92,26 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- Observaciones -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Observaciones (opcional)"
-                               FontAttributes="Bold"
-                               FontSize="13"
-                               TextColor="#1A1A2E" />
-                        <Border StrokeShape="RoundRectangle 8"
-                                Stroke="#E0E0E0"
-                                BackgroundColor="#FAFAFA"
-                                Padding="12,10">
-                            <Editor Placeholder="Notas adicionales..."
-                                    PlaceholderColor="#AAAAAA"
-                                    FontSize="14"
-                                    HeightRequest="80"
-                                    BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#4F8EF7" HorizontalOptions="Center" />
 
                     <!-- BOTONES -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
-
-                        <!-- Cancelar -->
-                        <Border Grid.Column="0"
-                                StrokeShape="RoundRectangle 8"
-                                Stroke="#CCCCCC"
-                                BackgroundColor="White"
-                                Padding="0,12">
-                            <Label Text="Cancelar"
-                                   HorizontalOptions="Center"
-                                   FontAttributes="Bold"
-                                   FontSize="14"
-                                   TextColor="#666666" />
+                        <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" BackgroundColor="White" Padding="0">
+                            <Button Text="Cancelar"
+                                    BackgroundColor="White"
+                                    TextColor="#666666"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Command="{Binding CancelarCommand}" />
                         </Border>
-
-                        <!-- Guardar -->
-                        <Border Grid.Column="1"
-                                StrokeShape="RoundRectangle 8"
-                                Stroke="Transparent"
-                                BackgroundColor="#4F8EF7"
-                                Padding="0,12">
-                            <Label Text="Guardar registro"
-                                   HorizontalOptions="Center"
-                                   FontAttributes="Bold"
-                                   FontSize="14"
-                                   TextColor="White" />
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#4F8EF7" Padding="0">
+                            <Button Text="Guardar registro"
+                                    BackgroundColor="#4F8EF7"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Command="{Binding GuardarCommand}" />
                         </Border>
-
                     </Grid>
 
                 </VerticalStackLayout>
