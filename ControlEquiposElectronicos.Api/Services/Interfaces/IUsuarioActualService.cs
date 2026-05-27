@@ -3,5 +3,6 @@
 public interface IUsuarioActualService
 {
     int ObtenerUsuarioId();
+
     string? ObtenerDireccionIP();
 }
