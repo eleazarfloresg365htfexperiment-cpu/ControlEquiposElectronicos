@@ -168,4 +168,15 @@ public class EquipoFormularioViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+    public async Task<ControlEquiposElectronicos.DTOs.Equipos.EquipoListadoDto?> ObtenerEquipoPorIdAsync(int id)
+    {
+        try
+        {
+            return await _equipoApiService.ObtenerPorIdAsync(id);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 }

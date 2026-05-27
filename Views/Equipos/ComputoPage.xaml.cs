@@ -39,8 +39,55 @@ public partial class ComputoPage : ContentPage
 
     private async void OnAsignarPeifericoTapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlert("Asignar periférico",
-            "Selecciona una PC de la lista para asignarle un periférico.", "OK");
+        string opcion = await DisplayActionSheet(
+            "Asignar periférico", "Cancelar", null,
+            "Asignar periférico existente",
+            "Registrar y asignar nuevo");
+
+        if (opcion == null || opcion == "Cancelar") return;
+
+        if (opcion == "Asignar periférico existente")
+        {
+            var perifericos = _viewModel.Equipos
+                .Where(e => e.Tipo != "PC")
+                .ToList();
+
+            if (!perifericos.Any())
+            {
+                await DisplayAlert("Sin periféricos",
+                    "No hay periféricos disponibles en el inventario.", "OK");
+                return;
+            }
+
+            var opciones = perifericos.Select(p => $"{p.Codigo} - {p.Nombre}").ToArray();
+
+            string seleccion = await DisplayActionSheet(
+                "Selecciona un periférico", "Cancelar", null, opciones);
+
+            if (seleccion == null || seleccion == "Cancelar") return;
+
+            string pc = await DisplayActionSheet(
+                "Selecciona la PC", "Cancelar", null,
+                _viewModel.Equipos
+                    .Where(e => e.Tipo == "PC")
+                    .Select(p => $"{p.Codigo} - {p.Nombre}")
+                    .ToArray());
+
+            if (pc == null || pc == "Cancelar") return;
+
+            await DisplayAlert("Asignado",
+                $"Periférico {seleccion.Split('-')[0].Trim()} asignado a {pc.Split('-')[0].Trim()} correctamente.\n(Se conectará con la API cuando esté disponible)",
+                "OK");
+        }
+        else if (opcion == "Registrar y asignar nuevo")
+        {
+            string tipo = await DisplayActionSheet(
+                "Tipo de periférico", "Cancelar", null,
+                "Mouse", "Teclado", "Monitor", "Bocina", "Cañonera");
+
+            if (tipo != null && tipo != "Cancelar")
+                await Shell.Current.GoToAsync("RegistrarEquipoPage");
+        }
     }
 
     private async void OnEditarPCTapped(object sender, TappedEventArgs e)

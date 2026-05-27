@@ -52,7 +52,10 @@ public partial class EquiposPage : ContentPage
     private void OnFiltrarInactivosTapped(object sender, EventArgs e)
     {
         _viewModel.TextoBusqueda = string.Empty;
-        _viewModel.FiltrarPorEstado("mantenimiento");
+        var filtrados = _viewModel.ObtenerPorEstados("En mantenimiento", "No funcional", "Dado de baja");
+        _viewModel.Equipos.Clear();
+        foreach (var eq in filtrados)
+            _viewModel.Equipos.Add(eq);
     }
 
     private async void OnEditarFilaTapped(object sender, EventArgs e)
@@ -81,12 +84,8 @@ public partial class EquiposPage : ContentPage
             "Funcional",
             "No funcional",
             "En mantenimiento",
-            "En bodega",
-            "Dado de baja",
-            "Operativo",
-            "Administrativo",
-            "Reasignado");
-
+            "Dado de baja");
+            
             if (estado != null && estado != "Cancelar")
             {
                 _viewModel.ActualizarEstadoVisual(equipo.Id, estado);

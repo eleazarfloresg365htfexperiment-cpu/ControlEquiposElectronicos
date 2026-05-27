@@ -35,15 +35,11 @@ public partial class DetalleEquipoPage : ContentPage
         BtnCambiarEstado.Clicked += async (s, e) =>
         {
             string accion = await DisplayActionSheet(
-                "Cambiar estado", "Cancelar", null,
-                "Funcional",
-                "No funcional",
-                "En mantenimiento",
-                "En bodega",
-                "Dado de baja",
-                "Operativo",
-                "Administrativo",
-                "Reasignado");
+            "Cambiar estado", "Cancelar", null,
+            "Funcional",
+            "No funcional",
+            "En mantenimiento",
+            "Dado de baja");
 
             if (accion != null && accion != "Cancelar")
             {

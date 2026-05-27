@@ -80,6 +80,7 @@ public class EquiposViewModel : BaseViewModel
             var lista = (await _equipoApiService.ObtenerTodosAsync())
             .Where(e => e.Activo)
             .ToList();
+            _todosLosEquipos = lista;
             Equipos.Clear();
             foreach (var equipo in lista)
                 Equipos.Add(equipo);
@@ -127,7 +128,7 @@ public class EquiposViewModel : BaseViewModel
     public void FiltrarPorEstado(string estado)
     {
         var filtrados = _todosLosEquipos
-            .Where(e => e.Estado.Contains(estado, StringComparison.OrdinalIgnoreCase))
+            .Where(e => e.Activo && e.Estado.Contains(estado, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         Equipos.Clear();
@@ -148,5 +149,12 @@ public class EquiposViewModel : BaseViewModel
         var equipoEnLista = _todosLosEquipos.FirstOrDefault(e => e.Id == id);
         if (equipoEnLista != null)
             equipoEnLista.Estado = nuevoEstado;
+    }
+    public List<EquipoListadoDto> ObtenerPorEstados(params string[] estados)
+    {
+        return _todosLosEquipos
+            .Where(e => e.Activo && estados.Any(s =>
+                e.Estado.Contains(s, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
     }
 }
