@@ -51,12 +51,27 @@ public partial class ComputoPage : ContentPage
 
     private async void OnCambiarEstadoPCTapped(object sender, TappedEventArgs e)
     {
+        if (e.Parameter is not int id) return;
+
         string estado = await DisplayActionSheet(
             "Cambiar estado", "Cancelar", null,
-            "Activo", "En mantenimiento", "Dañado", "Inactivo");
+            "Funcional",
+            "No funcional",
+            "En mantenimiento",
+            "En bodega",
+            "Dado de baja",
+            "Operativo",
+            "Administrativo",
+            "Reasignado");
 
-        if (estado != null && estado != "Cancelar")
-            await DisplayAlert("Estado", $"Estado cambiado a {estado}", "OK");
+        if (estado == null || estado == "Cancelar") return;
+
+        var equipo = _viewModel.Equipos.FirstOrDefault(eq => eq.Id == id);
+        if (equipo == null) return;
+
+        _viewModel.ActualizarEstadoVisual(id, estado);
+        await DisplayAlert("Estado", $"Estado cambiado a {estado}", "OK");
+        await _viewModel.CargarEquiposAsync();
     }
 
     private async void OnReclasificarPCTapped(object sender, TappedEventArgs e)

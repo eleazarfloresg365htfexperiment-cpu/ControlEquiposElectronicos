@@ -77,8 +77,15 @@ public partial class EquiposPage : ContentPage
         if (accion.Contains("Cambiar estado"))
         {
             string estado = await DisplayActionSheet(
-                "Cambiar estado", "Cancelar", null,
-                "Funcional", "En mantenimiento", "Dañado", "Inactivo");
+            "Cambiar estado", "Cancelar", null,
+            "Funcional",
+            "No funcional",
+            "En mantenimiento",
+            "En bodega",
+            "Dado de baja",
+            "Operativo",
+            "Administrativo",
+            "Reasignado");
 
             if (estado != null && estado != "Cancelar")
             {

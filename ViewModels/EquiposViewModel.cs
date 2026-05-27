@@ -77,8 +77,9 @@ public class EquiposViewModel : BaseViewModel
         try
         {
             IsBusy = true;
-            var lista = await _equipoApiService.ObtenerTodosAsync();
-            _todosLosEquipos = lista;
+            var lista = (await _equipoApiService.ObtenerTodosAsync())
+            .Where(e => e.Activo)
+            .ToList();
             Equipos.Clear();
             foreach (var equipo in lista)
                 Equipos.Add(equipo);

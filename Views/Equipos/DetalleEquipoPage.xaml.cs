@@ -36,12 +36,18 @@ public partial class DetalleEquipoPage : ContentPage
         {
             string accion = await DisplayActionSheet(
                 "Cambiar estado", "Cancelar", null,
-                "Activo", "En mantenimiento", "Dañado", "Inactivo");
+                "Funcional",
+                "No funcional",
+                "En mantenimiento",
+                "En bodega",
+                "Dado de baja",
+                "Operativo",
+                "Administrativo",
+                "Reasignado");
 
             if (accion != null && accion != "Cancelar")
             {
                 await _viewModel.CambiarEstadoAsync(accion);
-                await _viewModel.CargarEquipoAsync(_equipoId);
                 await DisplayAlert("Éxito", $"Estado cambiado a {accion}", "OK");
             }
         };
@@ -63,6 +69,10 @@ public partial class DetalleEquipoPage : ContentPage
                 {
                     await DisplayAlert("Éxito", "Equipo desactivado correctamente.", "OK");
                     await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se pudo desactivar el equipo.", "OK");
                 }
             }
         };
