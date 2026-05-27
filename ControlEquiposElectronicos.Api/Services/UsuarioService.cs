@@ -43,8 +43,15 @@ public class UsuarioService : IUsuarioService
         var existeNickname = await _context.Usuarios
             .AnyAsync(u => u.Nickname == nickname);
 
+        var existeUsuario = await _context.Usuarios
+            .AnyAsync(u => u.Nickname == nickname || u.NombreUsuario == nickname);
+
+        if (existeUsuario)
+            throw new InvalidOperationException("Ya existe un usuario con ese nickname o nombre de usuario.");
+
         if (existeNickname)
             throw new InvalidOperationException("Ya existe un usuario con ese nickname.");
+
 
         var rolNombre = dto.Rol.Trim().ToLower();
 
@@ -60,7 +67,14 @@ public class UsuarioService : IUsuarioService
         {
             Nombres = nombres,
             Apellidos = apellidos,
+
+            // Importante:
+            // NombreUsuario tiene índice único en la base de datos.
+            // Nickname es el nombre visible/de acceso que estamos usando desde MAUI.
+            // Para evitar duplicados por cadena vacía, ambos deben llenarse.
+            NombreUsuario = nickname,
             Nickname = nickname,
+
             PasswordHash = dto.Contrasena.Trim(),
             Telefono = dto.Telefono?.Trim(),
             Correo = dto.Correo?.Trim(),

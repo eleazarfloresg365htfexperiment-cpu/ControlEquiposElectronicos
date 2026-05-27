@@ -22,7 +22,7 @@ public class AuthService : IAuthService
         var usuario = await _context.Usuarios
             .Include(u => u.Rol)
             .FirstOrDefaultAsync(u =>
-                u.Nickname == nickname &&
+               (u.Nickname == nickname || u.NombreUsuario == nickname) &&
                 u.PasswordHash == contrasena &&
                 u.Activo);
 
@@ -39,7 +39,7 @@ public class AuthService : IAuthService
                 PermisoId = rp.Permiso.Id,
                 Modulo = rp.Permiso.Modulo,
                 Accion = rp.Permiso.Accion,
-                Descripcion = rp.Permiso != null ? rp.Permiso.Descripcion : string.Empty
+                Descripcion = rp.Permiso != null ? (rp.Permiso.Descripcion ?? string.Empty) : string.Empty
             })
             .ToListAsync();
 
