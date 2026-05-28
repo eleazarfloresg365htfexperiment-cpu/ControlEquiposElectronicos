@@ -30,10 +30,8 @@ namespace ControlEquiposElectronicos
             builder.Services.AddTransient<AppShell>();
 #endif
 
-            // Service HTTP base
             builder.Services.AddSingleton<IApiService, ApiService>();
 
-            // Services por módulo
             builder.Services.AddSingleton<IEquipoApiService, EquipoApiService>();
             builder.Services.AddSingleton<IChecklistApiService, ChecklistApiService>();
             builder.Services.AddSingleton<IMantenimientoApiService, MantenimientoApiService>();
@@ -41,20 +39,18 @@ namespace ControlEquiposElectronicos
             builder.Services.AddSingleton<IUsuarioApiService, UsuarioApiService>();
             builder.Services.AddSingleton<ICatalogoApiService, CatalogoApiService>();
             builder.Services.AddSingleton<IAuditoriaApiService, AuditoriaApiService>();
+            builder.Services.AddSingleton<IExportService, ExportService>();
 
-            // ViewModels y Pages - Módulo Mantenimientos
             builder.Services.AddTransient<MantenimientosViewModel>();
             builder.Services.AddTransient<MantenimientosPage>();
             builder.Services.AddTransient<MantenimientoFormularioViewModel>();
             builder.Services.AddTransient<MantenimientoFormularioPage>();
 
-            // ViewModels y Pages - Módulo Reportes
             builder.Services.AddTransient<ReportesViewModel>();
             builder.Services.AddTransient<ReportesPage>();
             builder.Services.AddTransient<ReporteFallaFormularioViewModel>();
             builder.Services.AddTransient<ReporteFallaFormularioPage>();
 
-            // ViewModels y Pages - Módulo Consultas
             builder.Services.AddTransient<ConsultasViewModel>();
             builder.Services.AddTransient<ConsultasPage>();
 

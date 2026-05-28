@@ -10,6 +10,7 @@ public class ReportesViewModel : BaseViewModel
 {
     private readonly IReporteFallaApiService _reporteFallaApiService;
     private readonly IAuditoriaApiService _auditoriaApiService;
+    private readonly IExportService _exportService;
 
     public ObservableCollection<ReporteFallaListadoDto> Reportes { get; set; } = new();
     public ObservableCollection<AuditoriaDto> Historial { get; set; } = new();
@@ -44,16 +45,20 @@ public class ReportesViewModel : BaseViewModel
     public ICommand HistorialCommand { get; }
     public ICommand CerrarHistorialCommand { get; }
 
-    public ReportesViewModel(IReporteFallaApiService reporteFallaApiService, IAuditoriaApiService auditoriaApiService)
+    public ReportesViewModel(
+        IReporteFallaApiService reporteFallaApiService,
+        IAuditoriaApiService auditoriaApiService,
+        IExportService exportService)
     {
         Title = "Reportes";
         _reporteFallaApiService = reporteFallaApiService;
         _auditoriaApiService = auditoriaApiService;
+        _exportService = exportService;
 
         EliminarCommand = new Command<ReporteFallaListadoDto>(async (r) => await EliminarAsync(r));
         NuevoReporteCommand = new Command(async () => await Shell.Current.GoToAsync("ReporteFallaFormulario"));
-        ExportarExcelCommand = new Command(async () => await Shell.Current.DisplayAlertAsync("Exportar Excel", "Exportación a Excel próximamente disponible.", "OK"));
-        ExportarPdfCommand = new Command(async () => await Shell.Current.DisplayAlertAsync("Exportar PDF", "Exportación a PDF próximamente disponible.", "OK"));
+        ExportarExcelCommand = new Command(async () => await ExportarExcelAsync());
+        ExportarPdfCommand = new Command(async () => await ExportarPdfAsync());
         HistorialCommand = new Command(async () => await CargarHistorialAsync());
         CerrarHistorialCommand = new Command(() => MostrarHistorial = false);
     }
@@ -73,6 +78,78 @@ public class ReportesViewModel : BaseViewModel
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+        finally { IsBusy = false; }
+    }
+
+    private async Task ExportarExcelAsync()
+    {
+        if (IsBusy) return;
+
+        var datos = Reportes.ToList();
+        if (datos.Count == 0)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Sin datos",
+                "No hay reportes para exportar.",
+                "OK");
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            string ruta = await _exportService.ExportarReportesExcelAsync(datos);
+            bool abrir = await Shell.Current.DisplayAlertAsync(
+                "Excel generado",
+                $"Archivo guardado en:\n{ruta}",
+                "Abrir", "Cerrar");
+
+            if (abrir)
+                await Launcher.OpenAsync(new OpenFileRequest
+                {
+                    File = new ReadOnlyFile(ruta)
+                });
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Error al exportar", ex.Message, "OK");
+        }
+        finally { IsBusy = false; }
+    }
+
+    private async Task ExportarPdfAsync()
+    {
+        if (IsBusy) return;
+
+        var datos = Reportes.ToList();
+        if (datos.Count == 0)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Sin datos",
+                "No hay reportes para exportar.",
+                "OK");
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            string ruta = await _exportService.ExportarReportesPdfAsync(datos);
+            bool abrir = await Shell.Current.DisplayAlertAsync(
+                "PDF generado",
+                $"Archivo guardado en:\n{ruta}",
+                "Abrir", "Cerrar");
+
+            if (abrir)
+                await Launcher.OpenAsync(new OpenFileRequest
+                {
+                    File = new ReadOnlyFile(ruta)
+                });
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Error al exportar", ex.Message, "OK");
         }
         finally { IsBusy = false; }
     }
@@ -126,6 +203,7 @@ public class ReportesViewModel : BaseViewModel
         if (resultado)
         {
             Reportes.Remove(reporte);
+            _todosLosReportes.Remove(reporte);
             await Shell.Current.DisplayAlertAsync("Éxito", "Reporte eliminado correctamente.", "OK");
         }
         else
