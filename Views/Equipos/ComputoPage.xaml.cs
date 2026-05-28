@@ -1,4 +1,5 @@
-﻿using ControlEquiposElectronicos.ViewModels;
+﻿using ControlEquiposElectronicos.DTOs.Equipos;
+using ControlEquiposElectronicos.ViewModels;
 
 namespace ControlEquiposElectronicos.Views.Equipos;
 
@@ -12,8 +13,6 @@ public partial class ComputoPage : ContentPage
         _viewModel = viewModel;
         BindingContext = _viewModel;
 
-        BtnRegistrarPC.Clicked += async (s, e) =>
-            await Shell.Current.GoToAsync("RegistrarEquipoPage");
     }
 
     protected override async void OnAppearing()
@@ -39,54 +38,75 @@ public partial class ComputoPage : ContentPage
 
     private async void OnAsignarPeifericoTapped(object sender, TappedEventArgs e)
     {
-        string opcion = await DisplayActionSheet(
-            "Asignar periférico", "Cancelar", null,
-            "Asignar periférico existente",
-            "Registrar y asignar nuevo");
+        var pcs = _viewModel.Equipos
+            .Where(eq => eq.Tipo.Equals("PC", StringComparison.OrdinalIgnoreCase))
+            .ToList();
 
-        if (opcion == null || opcion == "Cancelar") return;
-
-        if (opcion == "Asignar periférico existente")
+        if (!pcs.Any())
         {
-            var perifericos = _viewModel.Equipos
-                .Where(e => e.Tipo != "PC")
-                .ToList();
-
-            if (!perifericos.Any())
-            {
-                await DisplayAlert("Sin periféricos",
-                    "No hay periféricos disponibles en el inventario.", "OK");
-                return;
-            }
-
-            var opciones = perifericos.Select(p => $"{p.Codigo} - {p.Nombre}").ToArray();
-
-            string seleccion = await DisplayActionSheet(
-                "Selecciona un periférico", "Cancelar", null, opciones);
-
-            if (seleccion == null || seleccion == "Cancelar") return;
-
-            string pc = await DisplayActionSheet(
-                "Selecciona la PC", "Cancelar", null,
-                _viewModel.Equipos
-                    .Where(e => e.Tipo == "PC")
-                    .Select(p => $"{p.Codigo} - {p.Nombre}")
-                    .ToArray());
-
-            if (pc == null || pc == "Cancelar") return;
-
-            await DisplayAlert("Asignado",
-                $"Periférico {seleccion.Split('-')[0].Trim()} asignado a {pc.Split('-')[0].Trim()} correctamente.\n(Se conectará con la API cuando esté disponible)",
-                "OK");
+            await DisplayAlert("Sin PCs", "No hay PCs registradas en el sistema.", "OK");
+            return;
         }
-        else if (opcion == "Registrar y asignar nuevo")
-        {
-            string tipo = await DisplayActionSheet(
-                "Tipo de periférico", "Cancelar", null,
-                "Mouse", "Teclado", "Monitor", "Bocina", "Cañonera");
 
-            if (tipo != null && tipo != "Cancelar")
-                await Shell.Current.GoToAsync("RegistrarEquipoPage");
+        string seleccionPc = await DisplayActionSheet(
+            "Selecciona la PC", "Cancelar", null,
+            pcs.Select(p => $"{p.Codigo} - {p.Nombre}").ToArray());
+
+        if (seleccionPc == null || seleccionPc == "Cancelar") return;
+
+        var pcSeleccionada = pcs.FirstOrDefault(p => $"{p.Codigo} - {p.Nombre}" == seleccionPc);
+        if (pcSeleccionada == null) return;
+
+        var perifericos = _viewModel.Equipos
+            .Where(eq => !eq.Tipo.Equals("PC", StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (!perifericos.Any())
+        {
+            await DisplayAlert("Sin periféricos",
+                "No hay periféricos registrados en el inventario.", "OK");
+            return;
+        }
+
+        string seleccionPer = await DisplayActionSheet(
+            "Selecciona el periférico", "Cancelar", null,
+            perifericos.Select(p => $"{p.Codigo} - {p.Nombre} ({p.Tipo})").ToArray());
+
+        if (seleccionPer == null || seleccionPer == "Cancelar") return;
+
+        var perifericoSeleccionado = perifericos
+            .FirstOrDefault(p => $"{p.Codigo} - {p.Nombre} ({p.Tipo})" == seleccionPer);
+        if (perifericoSeleccionado == null) return;
+
+        string obs = await DisplayPromptAsync(
+            "Observaciones",
+            "Escribe una nota (opcional):",
+            placeholder: "Ej. Inicio de semestre 2026",
+            maxLength: 200,
+            accept: "Asignar",
+            cancel: "Cancelar") ?? string.Empty;
+
+        try
+        {
+            var dto = new AsignarPerifericoDto
+            {
+                EquipoPrincipalId = pcSeleccionada.Id,
+                PerifericoId = perifericoSeleccionado.Id,
+                Observaciones = obs
+            };
+
+            var resultado = await _viewModel.AsignarPerifericoAsync(dto);
+
+            if (resultado != null)
+                await DisplayAlert("✅ Asignado",
+                    $"{perifericoSeleccionado.Nombre} asignado a {pcSeleccionada.Nombre} correctamente.", "OK");
+            else
+                await DisplayAlert("Error",
+                    "No se pudo registrar la asignación. Verifica que no esté ya asignado.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
         }
     }
 
@@ -105,20 +125,16 @@ public partial class ComputoPage : ContentPage
             "Funcional",
             "No funcional",
             "En mantenimiento",
-            "En bodega",
-            "Dado de baja",
-            "Operativo",
-            "Administrativo",
-            "Reasignado");
+            "Dado de baja");
 
         if (estado == null || estado == "Cancelar") return;
 
-        var equipo = _viewModel.Equipos.FirstOrDefault(eq => eq.Id == id);
-        if (equipo == null) return;
+        var guardado = await _viewModel.CambiarEstadoEquipoAsync(id, estado);
 
-        _viewModel.ActualizarEstadoVisual(id, estado);
-        await DisplayAlert("Estado", $"Estado cambiado a {estado}", "OK");
-        await _viewModel.CargarEquiposAsync();
+        if (guardado)
+            await DisplayAlert("✅ Éxito", $"Estado cambiado a {estado}", "OK");
+        else
+            await DisplayAlert("Error", "No se pudo guardar el estado en el servidor.", "OK");
     }
 
     private async void OnReclasificarPCTapped(object sender, TappedEventArgs e)

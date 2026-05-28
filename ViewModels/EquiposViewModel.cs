@@ -128,7 +128,7 @@ public class EquiposViewModel : BaseViewModel
     public void FiltrarPorEstado(string estado)
     {
         var filtrados = _todosLosEquipos
-            .Where(e => e.Activo && e.Estado.Contains(estado, StringComparison.OrdinalIgnoreCase))
+            .Where(e => e.Activo && e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         Equipos.Clear();
@@ -156,5 +156,60 @@ public class EquiposViewModel : BaseViewModel
             .Where(e => e.Activo && estados.Any(s =>
                 e.Estado.Contains(s, StringComparison.OrdinalIgnoreCase)))
             .ToList();
+    }
+    public async Task<EquipoPerifericoDto?> AsignarPerifericoAsync(AsignarPerifericoDto dto)
+    {
+        try
+        {
+            return await _equipoApiService.AsignarPerifericoAsync(dto);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    public async Task<bool> CambiarEstadoEquipoAsync(int id, string nuevoEstado)
+    {
+        try
+        {
+            IsBusy = true;
+            var estados = await _catalogoApiService.ObtenerEstadosEquipoAsync();
+            var estado = estados.FirstOrDefault(e =>
+                e.Nombre.Contains(nuevoEstado, StringComparison.OrdinalIgnoreCase));
+
+            if (estado == null) return false;
+
+            var equipo = _todosLosEquipos.FirstOrDefault(e => e.Id == id);
+            if (equipo == null) return false;
+
+            var dto = new ActualizarEquipoDto
+            {
+                Codigo = equipo.Codigo,
+                Nombre = equipo.Nombre,
+                Marca = equipo.Marca ?? string.Empty,
+                Modelo = equipo.Modelo ?? string.Empty,
+                NumeroSerie = equipo.NumeroSerie ?? string.Empty,
+                Observaciones = equipo.Observaciones ?? string.Empty,
+                CategoriaEquipoId = equipo.CategoriaEquipoId,
+                TipoEquipoId = equipo.TipoEquipoId,
+                EstadoEquipoId = estado.Id,
+                UbicacionId = equipo.UbicacionId,
+                Activo = true
+            };
+
+            var resultado = await _equipoApiService.ActualizarAsync(id, dto);
+            if (resultado)
+                ActualizarEstadoVisual(id, nuevoEstado);
+
+            return resultado;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }
