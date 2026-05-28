@@ -102,18 +102,6 @@
                     CornerRadius="8"
                     Margin="0,8,0,0" />
 
-                <!-- Texto inferior -->
-                <Label
-                    Text="¿Olvidaste tu contraseña?"
-                    FontSize="12"
-                    TextColor="{StaticResource Primary}"
-                    HorizontalOptions="Center"
-                    Margin="0,4,0,0">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnOlvidasteContrasenaTapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-
                 <!-- Enlace de registro -->
                 <Label
                     Text="¿No tienes cuenta? Regístrate"

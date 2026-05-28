@@ -45,15 +45,11 @@ public partial class ConfiguracionPage : ContentPage
         await Shell.Current.GoToAsync("RegistroUsuario");
     }
 
-    private async void OnCerrarSesionClicked(object? sender, EventArgs e)
+    private async void OnGestionarRolesUsuarioClicked(object? sender, EventArgs e)
     {
-        bool confirmar = await DisplayAlert("Cerrar sesión",
-            "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
-
-        if (!confirmar)
-            return;
-
-        _sesion.CerrarSesion();
-        Application.Current!.Windows[0].Page = new LoginPage(_sesion);
+        // Por ahora muestra un aviso; cuando exista el endpoint de la API se conecta aquí
+        await DisplayAlert("Gestionar roles por usuario",
+            "Próximamente: aquí podrás cambiar el rol asignado a cada usuario.",
+            "Entendido");
     }
 }

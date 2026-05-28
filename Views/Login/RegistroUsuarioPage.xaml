@@ -93,7 +93,7 @@
                     </VerticalStackLayout>
 
                     <!-- Rol -->
-                    <VerticalStackLayout Spacing="6">
+                    <VerticalStackLayout x:Name="SeccionRol" Spacing="6">
                         <Label Text="Rol" FontSize="13" TextColor="{StaticResource Gray500}" />
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                             <Button Grid.Column="0"

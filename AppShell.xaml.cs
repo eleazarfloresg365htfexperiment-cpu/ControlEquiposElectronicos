@@ -16,31 +16,36 @@ public partial class AppShell : Shell
 
         MostrarUsuario();
         ConfigurarMenu();
-        AgregarBotonCerrarSesion();
     }
 
-    // Botón de "Cerrar sesión" en la barra superior, visible para TODOS los roles
-    private void AgregarBotonCerrarSesion()
+    // Al tocar el área del usuario en la barra lateral, muestra/oculta el mini-menú
+    private void OnMenuUsuarioTapped(object? sender, TappedEventArgs e)
     {
-        var cerrarSesion = new ToolbarItem
-        {
-            Text = "Cerrar sesión",
-            IconImageSource = new FontImageSource
-            {
-                FontFamily = "FontAwesome",
-                Glyph = "\uf2f5",
-                Color = Colors.White
-            },
-            Order = ToolbarItemOrder.Primary,
-            Priority = 0
-        };
-
-        cerrarSesion.Clicked += OnCerrarSesionGlobal;
-        ToolbarItems.Add(cerrarSesion);
+        MenuUsuarioDesplegable.IsVisible = !MenuUsuarioDesplegable.IsVisible;
+        // La flecha cambia: ▾ cuando está cerrado, ▴ cuando está abierto
+        FlechaMenuLabel.Text = MenuUsuarioDesplegable.IsVisible ? "\u25B4" : "\u25BE";
     }
 
-    private async void OnCerrarSesionGlobal(object? sender, EventArgs e)
+    private async void OnMiPerfilTapped(object? sender, TappedEventArgs e)
     {
+        // Cerrar el menú primero
+        MenuUsuarioDesplegable.IsVisible = false;
+        FlechaMenuLabel.Text = "\u25BE";
+
+        var usuario = _sesion.UsuarioActual;
+        if (usuario == null) return;
+
+        await DisplayAlert("Mi perfil",
+            $"Nombre: {usuario.Nombre}\nRol: {usuario.Rol}",
+            "Cerrar");
+    }
+
+    private async void OnCerrarSesionTapped(object? sender, TappedEventArgs e)
+    {
+        // Cerrar el menú primero
+        MenuUsuarioDesplegable.IsVisible = false;
+        FlechaMenuLabel.Text = "\u25BE";
+
         bool confirmar = await DisplayAlert("Cerrar sesión",
             "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
 

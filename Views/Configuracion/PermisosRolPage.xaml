@@ -9,6 +9,17 @@
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="20">
 
+            <!-- Botón volver -->
+            <Button Text="← Volver"
+                    Clicked="OnVolverClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    HorizontalOptions="Start"
+                    Padding="0"
+                    HeightRequest="32" />
+
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 12"
                     Stroke="{StaticResource Gray200}"

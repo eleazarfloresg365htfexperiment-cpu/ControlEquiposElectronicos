@@ -7,16 +7,28 @@ public partial class RegistroUsuarioPage : ContentPage
 {
     private readonly IUsuarioApiService _usuarioApi;
     private string _rolSeleccionado = string.Empty;
+    private readonly bool _permiteElegirRol;
 
-    public RegistroUsuarioPage()
+    // permiteElegirRol = true  -> abierto por admin (desde Configuración): muestra botones de rol
+    // permiteElegirRol = false -> auto-registro (desde el login): sin rol, se asigna "Consulta"
+    public RegistroUsuarioPage(bool permiteElegirRol = true)
     {
         InitializeComponent();
         _usuarioApi = IPlatformApplication.Current!.Services.GetRequiredService<IUsuarioApiService>();
+        _permiteElegirRol = permiteElegirRol;
+
+        // Si es auto-registro desde el login, ocultar la selección de rol
+        SeccionRol.IsVisible = _permiteElegirRol;
+
+        if (!_permiteElegirRol)
+        {
+            // Rol por defecto para quien se auto-registra; el admin lo cambia después
+            _rolSeleccionado = "Consulta";
+        }
     }
 
     private void OnRolAdministrador(object? sender, EventArgs e)
     {
-        // La API guarda el rol como "Administrador"
         _rolSeleccionado = "Administrador";
         MarcarRol(BtnAdministrador, BtnTecnico);
     }
@@ -46,14 +58,16 @@ public partial class RegistroUsuarioPage : ContentPage
         var contrasena = ContrasenaEntry.Text ?? string.Empty;
         var rol = _rolSeleccionado;
 
-        // Validación: campos obligatorios
+        // Validación: campos obligatorios (el rol solo se valida si el usuario puede elegirlo)
         if (string.IsNullOrWhiteSpace(nombre) ||
             string.IsNullOrWhiteSpace(nickname) ||
             string.IsNullOrWhiteSpace(contrasena) ||
             string.IsNullOrWhiteSpace(rol))
         {
-            await DisplayAlert("Datos incompletos",
-                "Por favor completa el nombre, usuario, contraseña y selecciona un rol.", "Entendido");
+            var mensaje = _permiteElegirRol
+                ? "Por favor completa el nombre, usuario, contraseña y selecciona un rol."
+                : "Por favor completa el nombre, usuario y contraseña.";
+            await DisplayAlert("Datos incompletos", mensaje, "Entendido");
             return;
         }
 
@@ -64,7 +78,6 @@ public partial class RegistroUsuarioPage : ContentPage
             return;
         }
 
-        // Armar el usuario para enviar a la API
         var nuevoUsuario = new CrearUsuarioDto
         {
             NombreCompleto = nombre,
@@ -76,17 +89,17 @@ public partial class RegistroUsuarioPage : ContentPage
             Correo = string.IsNullOrWhiteSpace(correo) ? null : correo
         };
 
-        // Llamar a la API
         bool exito = await _usuarioApi.CrearAsync(nuevoUsuario);
 
         if (exito)
         {
-            // Mostramos "Técnico" con tilde al usuario aunque internamente sea "Tecnico"
             var rolMostrar = rol == "Tecnico" ? "Técnico" : rol;
 
-            await DisplayAlert("Usuario registrado",
-                $"El usuario \"{nickname}\" ({rolMostrar}) fue registrado correctamente.",
-                "Entendido");
+            string mensajeExito = _permiteElegirRol
+                ? $"El usuario \"{nickname}\" ({rolMostrar}) fue registrado correctamente."
+                : $"El usuario \"{nickname}\" fue registrado correctamente. Un administrador te asignará los permisos.";
+
+            await DisplayAlert("Usuario registrado", mensajeExito, "Entendido");
 
             // Limpiar el formulario
             NombreEntry.Text = string.Empty;
@@ -95,11 +108,15 @@ public partial class RegistroUsuarioPage : ContentPage
             TelefonoEntry.Text = string.Empty;
             ContrasenaEntry.Text = string.Empty;
             ActivoSwitch.IsToggled = true;
-            _rolSeleccionado = string.Empty;
-            BtnAdministrador.BackgroundColor = Color.FromArgb("#F0F0F0");
-            BtnAdministrador.TextColor = Color.FromArgb("#1F1F1F");
-            BtnTecnico.BackgroundColor = Color.FromArgb("#F0F0F0");
-            BtnTecnico.TextColor = Color.FromArgb("#1F1F1F");
+
+            if (_permiteElegirRol)
+            {
+                _rolSeleccionado = string.Empty;
+                BtnAdministrador.BackgroundColor = Color.FromArgb("#F0F0F0");
+                BtnAdministrador.TextColor = Color.FromArgb("#1F1F1F");
+                BtnTecnico.BackgroundColor = Color.FromArgb("#F0F0F0");
+                BtnTecnico.TextColor = Color.FromArgb("#1F1F1F");
+            }
         }
         else
         {
@@ -111,14 +128,12 @@ public partial class RegistroUsuarioPage : ContentPage
 
     private async void OnVolverClicked(object? sender, EventArgs e)
     {
-        // Si se abrió como modal (desde el login), cerrarla como modal
         if (Navigation.ModalStack.Count > 0)
         {
             await Navigation.PopModalAsync();
         }
         else
         {
-            // Si se abrió desde el Shell (Configuración), volver con navegación del Shell
             await Shell.Current.GoToAsync("..");
         }
     }

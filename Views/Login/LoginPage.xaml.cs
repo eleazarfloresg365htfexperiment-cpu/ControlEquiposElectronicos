@@ -61,15 +61,9 @@ public partial class LoginPage : ContentPage
         Application.Current!.Windows[0].Page = new AppShell(_sesion);
     }
 
-    private async void OnOlvidasteContrasenaTapped(object? sender, TappedEventArgs e)
-    {
-        await DisplayAlert("Recuperar contraseña",
-            "Para restablecer tu contraseña, contacta al administrador al siguiente número: +502 1234-5678",
-            "Entendido");
-    }
-
     private async void OnRegistrarseTapped(object? sender, TappedEventArgs e)
     {
-        await Navigation.PushModalAsync(new RegistroUsuarioPage());
+        // false = auto-registro: no permite elegir rol (se asigna Consulta)
+        await Navigation.PushModalAsync(new RegistroUsuarioPage(false));
     }
 }

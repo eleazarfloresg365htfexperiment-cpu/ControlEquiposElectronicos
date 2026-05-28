@@ -49,4 +49,9 @@ public partial class PermisosRolPage : ContentPage
             "La sincronización con el servidor se conectará cuando la API esté disponible.",
             "Entendido");
     }
+
+    private async void OnVolverClicked(object? sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }

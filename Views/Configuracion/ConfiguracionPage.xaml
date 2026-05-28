@@ -110,17 +110,15 @@
                                 FontAttributes="Bold"
                                 HeightRequest="46"
                                 CornerRadius="8" />
+                        <Button Text="Gestionar roles por usuario"
+                                Clicked="OnGestionarRolesUsuarioClicked"
+                                BackgroundColor="{StaticResource Secondary}"
+                                TextColor="{StaticResource Primary}"
+                                FontAttributes="Bold"
+                                HeightRequest="46"
+                                CornerRadius="8" />
                     </VerticalStackLayout>
                 </Border>
-
-                <!-- Cerrar sesión -->
-                <Button Text="Cerrar sesión"
-                        Clicked="OnCerrarSesionClicked"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        HeightRequest="48"
-                        CornerRadius="8" />
 
             </VerticalStackLayout>
 
