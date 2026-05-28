@@ -1,15 +1,61 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ControlEquiposElectronicos.Views.Checklist.HistorialChecklistPage"
-    Title="Historial de checklist">
+    Title="Historial checklist"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Historial de checklist"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="14">
+            <Label Text="Historial de checklist"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Gray900}" />
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               HorizontalOptions="Center"
+                               Color="{StaticResource Primary}" />
+
+            <CollectionView ItemsSource="{Binding Historial}">
+                <CollectionView.EmptyView>
+                    <Border BackgroundColor="White"
+                            Stroke="{StaticResource Gray200}"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="16">
+                        <Label Text="No hay historial registrado."
+                               TextColor="{StaticResource Gray500}" />
+                    </Border>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                                Stroke="{StaticResource Gray200}"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="16"
+                                Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Ubicacion}"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Gray900}" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding EstadoChecklist}"
+                                           TextColor="{StaticResource Primary}"
+                                           FontAttributes="Bold" />
+                                </Grid>
+                                <Label Text="{Binding Tecnico, StringFormat='Técnico: {0}'}"
+                                       TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding FechaInicio, StringFormat='Inicio: {0:dd/MM/yyyy HH:mm}'}"
+                                       TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding FechaFinalizacion, StringFormat='Fin: {0:dd/MM/yyyy HH:mm}'}"
+                                       TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

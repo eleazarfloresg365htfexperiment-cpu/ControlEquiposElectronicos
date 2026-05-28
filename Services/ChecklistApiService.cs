@@ -24,12 +24,26 @@ public class ChecklistApiService : IChecklistApiService
 
     public async Task<PrepararChecklistUbicacionDto?> PrepararPorUbicacionAsync(int ubicacionId)
     {
-        return await _apiService.GetAsync<PrepararChecklistUbicacionDto>($"ChecklistTecnico/preparar/ubicacion/{ubicacionId}");
+        var resultado = await _apiService.GetAsync<PrepararChecklistUbicacionDto>($"ChecklistTecnico/preparar/ubicacion/{ubicacionId}");
+        if (resultado != null)
+            return resultado;
+
+        // Compatibilidad con variantes de ruta en diferentes despliegues de API.
+        return await _apiService.GetAsync<PrepararChecklistUbicacionDto>($"ChecklistTecnico/ubicacion/{ubicacionId}/preparar");
     }
 
     public async Task<ChecklistTecnicoDto?> IniciarAsync(IniciarChecklistTecnicoDto dto)
     {
-        return await _apiService.PostAsync<IniciarChecklistTecnicoDto, ChecklistTecnicoDto>("ChecklistTecnico/iniciar", dto);
+        var (checklist, _) = await IniciarConDetalleAsync(dto);
+        return checklist;
+    }
+
+    public async Task<(ChecklistTecnicoDto? Checklist, string? ErrorMessage)> IniciarConDetalleAsync(
+        IniciarChecklistTecnicoDto dto)
+    {
+        return await _apiService.PostWithErrorAsync<IniciarChecklistTecnicoDto, ChecklistTecnicoDto>(
+            "ChecklistTecnico/iniciar",
+            dto);
     }
 
     public async Task<bool> GuardarAvanceAsync(int id, GuardarChecklistTecnicoDto dto)
@@ -45,5 +59,15 @@ public class ChecklistApiService : IChecklistApiService
     public async Task<List<PlantillaChecklistDto>> ObtenerPlantillasAsync()
     {
         return await _apiService.GetAsync<List<PlantillaChecklistDto>>("PlantillasChecklist") ?? new();
+    }
+
+    public async Task<PlantillaChecklistDto?> CrearPlantillaAsync(CrearPlantillaChecklistDto dto)
+    {
+        return await _apiService.PostAsync<CrearPlantillaChecklistDto, PlantillaChecklistDto>("PlantillasChecklist", dto);
+    }
+
+    public async Task<PlantillaChecklistItemDto?> AgregarItemPlantillaAsync(int plantillaId, CrearPlantillaChecklistItemDto dto)
+    {
+        return await _apiService.PostAsync<CrearPlantillaChecklistItemDto, PlantillaChecklistItemDto>($"PlantillasChecklist/{plantillaId}/items", dto);
     }
 }

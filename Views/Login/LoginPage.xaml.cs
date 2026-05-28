@@ -67,4 +67,9 @@ public partial class LoginPage : ContentPage
             "Para restablecer tu contraseña, contacta al administrador al siguiente número: +502 1234-5678",
             "Entendido");
     }
+
+    private async void OnRegistrarseTapped(object? sender, TappedEventArgs e)
+    {
+        await Navigation.PushModalAsync(new RegistroUsuarioPage());
+    }
 }

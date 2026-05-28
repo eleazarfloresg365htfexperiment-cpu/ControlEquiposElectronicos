@@ -1,4 +1,4 @@
-﻿using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Services;
 
 namespace ControlEquiposElectronicos;
 
@@ -16,6 +16,39 @@ public partial class AppShell : Shell
 
         MostrarUsuario();
         ConfigurarMenu();
+        AgregarBotonCerrarSesion();
+    }
+
+    // Botón de "Cerrar sesión" en la barra superior, visible para TODOS los roles
+    private void AgregarBotonCerrarSesion()
+    {
+        var cerrarSesion = new ToolbarItem
+        {
+            Text = "Cerrar sesión",
+            IconImageSource = new FontImageSource
+            {
+                FontFamily = "FontAwesome",
+                Glyph = "\uf2f5",
+                Color = Colors.White
+            },
+            Order = ToolbarItemOrder.Primary,
+            Priority = 0
+        };
+
+        cerrarSesion.Clicked += OnCerrarSesionGlobal;
+        ToolbarItems.Add(cerrarSesion);
+    }
+
+    private async void OnCerrarSesionGlobal(object? sender, EventArgs e)
+    {
+        bool confirmar = await DisplayAlert("Cerrar sesión",
+            "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
+
+        if (!confirmar)
+            return;
+
+        _sesion.CerrarSesion();
+        Application.Current!.Windows[0].Page = new Views.Login.LoginPage(_sesion);
     }
 
     private void MostrarUsuario()

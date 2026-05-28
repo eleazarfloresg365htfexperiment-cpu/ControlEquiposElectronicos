@@ -3,13 +3,178 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ControlEquiposElectronicos.Views.Checklist.ChecklistPage"
-    Title="Checklist técnico">
+    Title="Checklist técnico"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Checklist técnico"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label
+                        Text="Checklist Técnico"
+                        FontSize="40"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource Gray900}" />
+                    <Label
+                        Text="Supervisa el estado técnico de los equipos por ubicación"
+                        FontSize="13"
+                        TextColor="{StaticResource Gray500}" />
+                </VerticalStackLayout>
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+                <Border
+                    Grid.Column="1"
+                    BackgroundColor="White"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="14,10">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Border
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            StrokeThickness="0"
+                            BackgroundColor="{StaticResource Gray100}"
+                            StrokeShape="RoundRectangle 15" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label x:Name="NombreUsuarioLabel"
+                                   Text="Usuario"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray900}" />
+                            <Label x:Name="RolUsuarioLabel"
+                                   Text="Rol"
+                                   FontSize="12"
+                                   TextColor="{StaticResource Gray500}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Border WidthRequest="42" HeightRequest="42" StrokeThickness="0" BackgroundColor="#3F7AE0" StrokeShape="RoundRectangle 12">
+                            <Label Text="&#xf00c;" FontFamily="FontAwesome" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="{Binding EquiposRevisadosHoy}" FontAttributes="Bold" FontSize="32" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Equipos revisados hoy" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Border WidthRequest="42" HeightRequest="42" StrokeThickness="0" BackgroundColor="#22B95A" StrokeShape="RoundRectangle 12">
+                            <Label Text="&#xf15b;" FontFamily="FontAwesome" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="{Binding ChecklistsCompletados}" FontAttributes="Bold" FontSize="32" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Checklist completados" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Border WidthRequest="42" HeightRequest="42" StrokeThickness="0" BackgroundColor="#F2A400" StrokeShape="RoundRectangle 12">
+                            <Label Text="&#xf071;" FontFamily="FontAwesome" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="{Binding ProblemasDetectados}" FontAttributes="Bold" FontSize="32" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Problemas detectados" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="3" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Border WidthRequest="42" HeightRequest="42" StrokeThickness="0" BackgroundColor="#E24B4A" StrokeShape="RoundRectangle 12">
+                            <Label Text="&#xf252;" FontFamily="FontAwesome" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="{Binding EquiposPendientes}" FontAttributes="Bold" FontSize="32" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Equipos pendientes" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="18">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNuevoChecklistTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Border WidthRequest="62" HeightRequest="62" StrokeThickness="0" BackgroundColor="#3F7AE0" StrokeShape="RoundRectangle 20">
+                            <Label Text="&#xf0ea;" FontFamily="FontAwesome" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Nuevo Checklist" FontAttributes="Bold" FontSize="34" HorizontalTextAlignment="Center" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Iniciar una nueva revisión técnica por ubicación." HorizontalTextAlignment="Center" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="18">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPlantillasTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Border WidthRequest="62" HeightRequest="62" StrokeThickness="0" BackgroundColor="#22B95A" StrokeShape="RoundRectangle 20">
+                            <Label Text="&#xf15b;" FontFamily="FontAwesome" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Plantillas" FontAttributes="Bold" FontSize="34" HorizontalTextAlignment="Center" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Administrar aspectos y plantillas de revisión." HorizontalTextAlignment="Center" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="18">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Border WidthRequest="62" HeightRequest="62" StrokeThickness="0" BackgroundColor="#F2A400" StrokeShape="RoundRectangle 20">
+                            <Label Text="&#xf017;" FontFamily="FontAwesome" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Historial" FontAttributes="Bold" FontSize="34" HorizontalTextAlignment="Center" TextColor="{StaticResource Gray900}" />
+                        <Label Text="Consultar revisiones y problemas detectados." HorizontalTextAlignment="Center" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Border BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 14" Padding="18">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Estado de revisiones" FontSize="40" FontAttributes="Bold" TextColor="{StaticResource Gray900}" />
+                        <Button Grid.Column="1"
+                                Text="+ Nuevo checklist"
+                                Clicked="OnNuevoChecklistClicked"
+                                BackgroundColor="#3A36D6"
+                                TextColor="White"
+                                CornerRadius="14"
+                                Padding="18,10" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="2*,*,*,*" Padding="12,10" BackgroundColor="#EEF0F8">
+                        <Label Text="Ubicación" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray900}" />
+                        <Label Grid.Column="1" Text="Equipos" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray900}" />
+                        <Label Grid.Column="2" Text="Responsable" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray900}" />
+                        <Label Grid.Column="3" Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray900}" />
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding EstadoRevisiones}">
+                        <CollectionView.EmptyView>
+                            <Label Text="Sin revisiones registradas." TextColor="{StaticResource Gray500}" />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="2*,*,*,*" Padding="12,10">
+                                    <Label Text="{Binding Ubicacion}" TextColor="{StaticResource Gray900}" />
+                                    <Label Grid.Column="1" Text="{Binding Equipos}" TextColor="{StaticResource Gray900}" />
+                                    <Label Grid.Column="2" Text="{Binding Responsable}" TextColor="{StaticResource Gray900}" />
+                                    <Border Grid.Column="3"
+                                            StrokeThickness="0"
+                                            Padding="10,4"
+                                            BackgroundColor="#22B95A"
+                                            StrokeShape="RoundRectangle 12"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding Estado}" TextColor="White" FontAttributes="Bold" FontSize="12" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               HorizontalOptions="Center"
+                               Color="{StaticResource Primary}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

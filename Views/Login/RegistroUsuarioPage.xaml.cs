@@ -111,6 +111,15 @@ public partial class RegistroUsuarioPage : ContentPage
 
     private async void OnVolverClicked(object? sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("..");
+        // Si se abrió como modal (desde el login), cerrarla como modal
+        if (Navigation.ModalStack.Count > 0)
+        {
+            await Navigation.PopModalAsync();
+        }
+        else
+        {
+            // Si se abrió desde el Shell (Configuración), volver con navegación del Shell
+            await Shell.Current.GoToAsync("..");
+        }
     }
 }
