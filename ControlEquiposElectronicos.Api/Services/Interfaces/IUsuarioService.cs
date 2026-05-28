@@ -9,4 +9,6 @@ public interface IUsuarioService
     Task<UsuarioDto?> ObtenerPorIdAsync(int id);
 
     Task<UsuarioDto> CrearAsync(CrearUsuarioDto dto);
+
+    Task<UsuarioDto?> CambiarRolAsync(int id, ActualizarRolUsuarioDto dto);
 }
