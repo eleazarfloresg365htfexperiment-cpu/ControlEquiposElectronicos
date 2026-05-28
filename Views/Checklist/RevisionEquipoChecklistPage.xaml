@@ -1,169 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.RevisionEquipoChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.RevisionEquipoChecklistPage"
-    Title="Revisión de equipo"
-    BackgroundColor="{StaticResource Gray100}">
-
-    <ContentPage.Resources>
-        <Style x:Key="ChecklistEntry" TargetType="Entry">
-            <Setter Property="TextColor" Value="{StaticResource Gray900}" />
-            <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
-        </Style>
-        <Style x:Key="ChecklistEditor" TargetType="Editor">
-            <Setter Property="TextColor" Value="{StaticResource Gray900}" />
-            <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
-        </Style>
-        <Style x:Key="ChecklistPicker" TargetType="Picker">
-            <Setter Property="TextColor" Value="{StaticResource Gray900}" />
-            <Setter Property="TitleColor" Value="{StaticResource Gray500}" />
-        </Style>
-    </ContentPage.Resources>
+    xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Checklist"
+    x:DataType="vm:RevisionEquipoChecklistViewModel"
+    Title="{Binding Title}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="14">
-            <Label Text="Revisión de checklist"
-                   FontSize="26"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Gray900}" />
+        <VerticalStackLayout Padding="16" Spacing="12">
 
-            <Border BackgroundColor="White"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeShape="RoundRectangle 12"
-                    Padding="14">
-                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
-                    <Label Text="{Binding Ubicacion, StringFormat='Ubicación: {0}'}"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Label Grid.Column="1"
-                           Text="{Binding EstadoChecklist}"
-                           TextColor="{StaticResource Primary}"
-                           FontAttributes="Bold" />
-                    <Label Grid.Row="1"
-                           Text="{Binding Tecnico, StringFormat='Técnico: {0}'}"
-                           TextColor="{StaticResource Gray500}" />
-                    <Label Grid.Row="2"
-                           Text="{Binding ChecklistId, StringFormat='Checklist: #{0}'}"
-                           TextColor="{StaticResource Gray500}" />
-                </Grid>
-            </Border>
+            <Label Text="{Binding EncabezadoEquipo}" FontSize="20" FontAttributes="Bold" />
+            <Label Text="Marca el estado de cada aspecto de revisión." FontSize="13" TextColor="Gray" />
 
-            <Picker Title="Selecciona un equipo"
-                    Style="{StaticResource ChecklistPicker}"
-                    ItemsSource="{Binding Equipos}"
-                    ItemDisplayBinding="{Binding NombreEquipo}"
-                    SelectedItem="{Binding EquipoSeleccionado}" />
+            <Editor Placeholder="Observaciones del equipo"
+                    Text="{Binding ObservacionesEquipo}"
+                    AutoSize="TextChanges"
+                    MinimumHeightRequest="70" />
 
-            <Border BackgroundColor="White"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeShape="RoundRectangle 12"
-                    Padding="14">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="{Binding EquipoSeleccionado.NombreEquipo}"
-                           FontAttributes="Bold"
-                           FontSize="16"
-                           TextColor="{StaticResource Gray900}" />
-                    <Label Text="{Binding EquipoSeleccionado.CodigoEquipo, StringFormat='Código: {0}'}"
-                           TextColor="{StaticResource Gray500}" />
-                    <Label Text="{Binding EquipoSeleccionado.TipoEquipo, StringFormat='Tipo: {0}'}"
-                           TextColor="{StaticResource Gray500}" />
-                    <Label Text="{Binding EquipoSeleccionado.PlantillaChecklist, StringFormat='Plantilla: {0}'}"
-                           TextColor="{StaticResource Primary}" />
-
-                    <Label Text="Resultado general"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Picker Style="{StaticResource ChecklistPicker}"
-                            ItemsSource="{Binding EstadosDisponibles}"
-                            SelectedItem="{Binding EquipoSeleccionado.ResultadoGeneral}" />
-
-                    <Label Text="Observaciones del equipo"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Editor Text="{Binding EquipoSeleccionado.ObservacionesEquipo}"
-                            Style="{StaticResource ChecklistEditor}"
-                            AutoSize="TextChanges"
-                            HeightRequest="80" />
-                </VerticalStackLayout>
-            </Border>
-
-            <CollectionView ItemsSource="{Binding EquipoSeleccionado.Detalles}">
-                <CollectionView.EmptyView>
-                    <Border BackgroundColor="White"
-                            Stroke="{StaticResource Gray200}"
-                            StrokeShape="RoundRectangle 10"
-                            Padding="12">
-                        <Label Text="Este equipo no tiene aspectos para revisar."
-                               TextColor="{StaticResource Gray500}" />
-                    </Border>
-                </CollectionView.EmptyView>
+            <CollectionView ItemsSource="{Binding Aspectos}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BackgroundColor="White"
-                                Stroke="{StaticResource Gray200}"
-                                StrokeShape="RoundRectangle 12"
-                                Padding="12"
-                                Margin="0,0,0,10">
+                    <DataTemplate x:DataType="vm:AspectoRevisionItem">
+                        <Border Padding="12" Margin="0,0,0,10" StrokeThickness="1" Stroke="{StaticResource Gray200}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
                             <VerticalStackLayout Spacing="6">
-                                <Label Text="{Binding Item}"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
-                                <Label Text="{Binding Descripcion}"
-                                       FontSize="12"
-                                       TextColor="{StaticResource Gray500}" />
-                                <Picker Style="{StaticResource ChecklistPicker}"
-                                        ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EstadosDisponibles}"
+                                <Label Text="{Binding Nombre}" FontAttributes="Bold" />
+                                <Label Text="{Binding Descripcion}" FontSize="12" TextColor="Gray" />
+                                <Picker Title="Estado de revisión"
+                                        ItemsSource="{Binding EstadosDisponibles}"
                                         SelectedItem="{Binding EstadoRevision}" />
-                                <Entry Text="{Binding Observacion}"
-                                       Style="{StaticResource ChecklistEntry}"
-                                       Placeholder="Observación del aspecto" />
+                                <Entry Placeholder="Observación (opcional)"
+                                       Text="{Binding Observacion}" />
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Border BackgroundColor="White"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeShape="RoundRectangle 12"
-                    Padding="14">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Observaciones generales"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Editor Text="{Binding ObservacionesGenerales}"
-                            Style="{StaticResource ChecklistEditor}"
-                            AutoSize="TextChanges"
-                            HeightRequest="90" />
-                    <HorizontalStackLayout Spacing="8">
-                        <Switch IsToggled="{Binding CrearReportesAutomaticos}" />
-                        <Label Text="Crear reportes automáticos al finalizar"
-                               VerticalOptions="Center"
-                               TextColor="{StaticResource Gray900}" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Border>
+            <Label Text="{Binding MensajeError}" TextColor="IndianRed" IsVisible="{Binding TieneError}" />
+            <Label Text="{Binding MensajeInfo}" TextColor="DarkGreen" IsVisible="{Binding TieneInfo}" />
 
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                <Button Grid.Column="0"
-                        Text="Guardar avance"
-                        Clicked="OnGuardarAvanceClicked"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White"
-                        CornerRadius="10" />
-                <Button Grid.Column="1"
-                        Text="Finalizar checklist"
-                        Clicked="OnFinalizarClicked"
-                        BackgroundColor="#1D7A46"
-                        TextColor="White"
-                        CornerRadius="10" />
-            </Grid>
+            <Button Text="Guardar avance" Command="{Binding GuardarAvanceCommand}" />
+            <Button Text="Volver sin guardar" Command="{Binding VolverCommand}" />
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}"
-                               HorizontalOptions="Center"
-                               Color="{StaticResource Primary}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

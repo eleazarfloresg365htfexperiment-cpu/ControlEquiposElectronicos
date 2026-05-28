@@ -27,6 +27,14 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <Color x:Key="ChecklistHeader">#1E3A5F</Color>
+    <Color x:Key="ChecklistBlue">#4A61DD</Color>
+    <Color x:Key="ChecklistGreen">#27AE60</Color>
+    <Color x:Key="ChecklistOrange">#F2994A</Color>
+    <Color x:Key="ChecklistRed">#EB5757</Color>
+    <Color x:Key="ChecklistCardBg">#FFFFFF</Color>
+    <Color x:Key="ChecklistPageBg">#F4F6FB</Color>
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>

@@ -18,5 +18,8 @@ public class ChecklistTecnicoDto
 
     public bool Activo { get; set; }
 
+    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaActualizacion { get; set; }
+
     public List<ChecklistTecnicoEquipoDto> EquiposRevisados { get; set; } = new();
 }

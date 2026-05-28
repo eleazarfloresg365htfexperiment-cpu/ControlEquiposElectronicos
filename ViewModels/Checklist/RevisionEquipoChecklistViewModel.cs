@@ -1,209 +1,24 @@
-using ControlEquiposElectronicos.ViewModels;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using ControlEquiposElectronicos.DTOs.Checklist;
+using ControlEquiposElectronicos.Helpers;
 using ControlEquiposElectronicos.Services.Interfaces;
-using System.Collections.ObjectModel;
 
 namespace ControlEquiposElectronicos.ViewModels.Checklist;
 
-public class RevisionEquipoChecklistViewModel : BaseViewModel
+public class AspectoRevisionItem : BaseViewModel
 {
-    private readonly IChecklistApiService _checklistApiService;
-    private ChecklistTecnicoDto? _checklist;
-    private EquipoRevisionItemViewModel? _equipoSeleccionado;
-    private bool _crearReportesAutomaticos = true;
-
-    public ObservableCollection<EquipoRevisionItemViewModel> Equipos { get; } = new();
-    public List<string> EstadosDisponibles { get; } = new() { "Correcto", "Con problema", "No aplica", "No revisado" };
-
-    public int ChecklistId => _checklist?.Id ?? 0;
-    public string Ubicacion => _checklist?.Ubicacion ?? string.Empty;
-    public string Tecnico => _checklist?.Tecnico ?? string.Empty;
-    public string EstadoChecklist => _checklist?.EstadoChecklist ?? "Pendiente";
-
-    public string? ObservacionesGenerales
-    {
-        get => _checklist?.ObservacionesGenerales;
-        set
-        {
-            if (_checklist == null)
-                return;
-
-            _checklist.ObservacionesGenerales = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public EquipoRevisionItemViewModel? EquipoSeleccionado
-    {
-        get => _equipoSeleccionado;
-        set
-        {
-            _equipoSeleccionado = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool CrearReportesAutomaticos
-    {
-        get => _crearReportesAutomaticos;
-        set
-        {
-            _crearReportesAutomaticos = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public RevisionEquipoChecklistViewModel(IChecklistApiService checklistApiService)
-    {
-        _checklistApiService = checklistApiService;
-        Title = "Revisión de equipo";
-    }
-
-    public async Task<bool> CargarChecklistAsync(int checklistId)
-    {
-        if (IsBusy)
-            return false;
-
-        try
-        {
-            IsBusy = true;
-            _checklist = await _checklistApiService.ObtenerPorIdAsync(checklistId);
-
-            Equipos.Clear();
-            if (_checklist == null)
-                return false;
-
-            foreach (var equipo in _checklist.EquiposRevisados.OrderBy(e => e.NombreEquipo))
-            {
-                Equipos.Add(new EquipoRevisionItemViewModel(equipo));
-            }
-
-            EquipoSeleccionado = Equipos.FirstOrDefault();
-
-            OnPropertyChanged(nameof(ChecklistId));
-            OnPropertyChanged(nameof(Ubicacion));
-            OnPropertyChanged(nameof(Tecnico));
-            OnPropertyChanged(nameof(EstadoChecklist));
-            OnPropertyChanged(nameof(ObservacionesGenerales));
-
-            return true;
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-
-    public async Task<bool> GuardarAvanceAsync()
-    {
-        if (_checklist == null || IsBusy)
-            return false;
-
-        try
-        {
-            IsBusy = true;
-            var dto = new GuardarChecklistTecnicoDto
-            {
-                ObservacionesGenerales = ObservacionesGenerales,
-                Equipos = Equipos.Select(e => e.ToDto()).ToList()
-            };
-
-            return await _checklistApiService.GuardarAvanceAsync(_checklist.Id, dto);
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-
-    public async Task<bool> FinalizarAsync()
-    {
-        if (_checklist == null || IsBusy)
-            return false;
-
-        try
-        {
-            IsBusy = true;
-            return await _checklistApiService.FinalizarAsync(_checklist.Id, new FinalizarChecklistTecnicoDto
-            {
-                ObservacionesGenerales = ObservacionesGenerales,
-                CrearReportesFallaAutomaticos = CrearReportesAutomaticos
-            });
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-}
-
-public class EquipoRevisionItemViewModel : BaseViewModel
-{
-    public int ChecklistTecnicoEquipoId { get; set; }
-    public string CodigoEquipo { get; set; } = string.Empty;
-    public string NombreEquipo { get; set; } = string.Empty;
-    public string TipoEquipo { get; set; } = string.Empty;
-    public string PlantillaChecklist { get; set; } = string.Empty;
-    public ObservableCollection<DetalleRevisionItemViewModel> Detalles { get; } = new();
-
-    private string _resultadoGeneral = "No revisado";
-    public string ResultadoGeneral
-    {
-        get => _resultadoGeneral;
-        set
-        {
-            _resultadoGeneral = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private string? _observacionesEquipo;
-    public string? ObservacionesEquipo
-    {
-        get => _observacionesEquipo;
-        set
-        {
-            _observacionesEquipo = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public EquipoRevisionItemViewModel(ChecklistTecnicoEquipoDto equipo)
-    {
-        ChecklistTecnicoEquipoId = equipo.Id;
-        CodigoEquipo = equipo.CodigoEquipo;
-        NombreEquipo = equipo.NombreEquipo;
-        TipoEquipo = equipo.TipoEquipo;
-        PlantillaChecklist = equipo.PlantillaChecklist;
-        ResultadoGeneral = string.IsNullOrWhiteSpace(equipo.ResultadoGeneral) ? "No revisado" : equipo.ResultadoGeneral;
-        ObservacionesEquipo = equipo.ObservacionesEquipo;
-
-        foreach (var detalle in equipo.Detalles.OrderBy(d => d.Orden))
-        {
-            Detalles.Add(new DetalleRevisionItemViewModel(detalle));
-        }
-    }
-
-    public GuardarChecklistEquipoDto ToDto()
-    {
-        return new GuardarChecklistEquipoDto
-        {
-            ChecklistTecnicoEquipoId = ChecklistTecnicoEquipoId,
-            ResultadoGeneral = ResultadoGeneral,
-            ObservacionesEquipo = ObservacionesEquipo,
-            Detalles = Detalles.Select(d => d.ToDto()).ToList()
-        };
-    }
-}
-
-public class DetalleRevisionItemViewModel : BaseViewModel
-{
-    public int ChecklistTecnicoDetalleId { get; set; }
-    public string Item { get; set; } = string.Empty;
-    public string? Descripcion { get; set; }
-    public bool EsObligatorio { get; set; }
-
     private string _estadoRevision = "No revisado";
+    private string? _observacion;
+
+    public int ChecklistTecnicoDetalleId { get; init; }
+    public string Nombre { get; init; } = string.Empty;
+    public string? Descripcion { get; init; }
+    public bool EsObligatorio { get; init; }
+    public int Orden { get; init; }
+
+    public IReadOnlyList<string> EstadosDisponibles { get; } = ChecklistEstados.Revision;
+
     public string EstadoRevision
     {
         get => _estadoRevision;
@@ -214,7 +29,6 @@ public class DetalleRevisionItemViewModel : BaseViewModel
         }
     }
 
-    private string? _observacion;
     public string? Observacion
     {
         get => _observacion;
@@ -224,24 +38,229 @@ public class DetalleRevisionItemViewModel : BaseViewModel
             OnPropertyChanged();
         }
     }
+}
 
-    public DetalleRevisionItemViewModel(ChecklistTecnicoDetalleDto detalle)
+public class RevisionEquipoChecklistViewModel : BaseViewModel, IQueryAttributable
+{
+    private readonly IChecklistApiService _checklistApiService;
+
+    private int _checklistId;
+    private int _checklistTecnicoEquipoId;
+    private string _codigoEquipo = string.Empty;
+    private string _nombreEquipo = string.Empty;
+    private string? _observacionesEquipo;
+    private string? _mensajeError;
+    private string? _mensajeInfo;
+
+    public RevisionEquipoChecklistViewModel(IChecklistApiService checklistApiService)
     {
-        ChecklistTecnicoDetalleId = detalle.Id;
-        Item = detalle.Item;
-        Descripcion = detalle.DescripcionItem;
-        EsObligatorio = detalle.EsObligatorio;
-        EstadoRevision = string.IsNullOrWhiteSpace(detalle.EstadoRevision) ? "No revisado" : detalle.EstadoRevision;
-        Observacion = detalle.Observacion;
+        _checklistApiService = checklistApiService;
+        Title = "Revisión de equipo";
+        Aspectos = new ObservableCollection<AspectoRevisionItem>();
+        GuardarAvanceCommand = new AsyncRelayCommand(GuardarAvanceAsync);
+        VolverCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
     }
 
-    public GuardarChecklistDetalleDto ToDto()
+    public ObservableCollection<AspectoRevisionItem> Aspectos { get; }
+
+    public string CodigoEquipo
     {
-        return new GuardarChecklistDetalleDto
+        get => _codigoEquipo;
+        set
         {
-            ChecklistTecnicoDetalleId = ChecklistTecnicoDetalleId,
-            EstadoRevision = EstadoRevision,
-            Observacion = Observacion
-        };
+            _codigoEquipo = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(EncabezadoEquipo));
+        }
+    }
+
+    public string NombreEquipo
+    {
+        get => _nombreEquipo;
+        set
+        {
+            _nombreEquipo = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(EncabezadoEquipo));
+        }
+    }
+
+    public string EncabezadoEquipo => $"{CodigoEquipo} — {NombreEquipo}";
+
+    public string? ObservacionesEquipo
+    {
+        get => _observacionesEquipo;
+        set
+        {
+            _observacionesEquipo = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string? MensajeError
+    {
+        get => _mensajeError;
+        set
+        {
+            _mensajeError = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TieneError));
+        }
+    }
+
+    public string? MensajeInfo
+    {
+        get => _mensajeInfo;
+        set
+        {
+            _mensajeInfo = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TieneInfo));
+        }
+    }
+
+    public bool TieneError => !string.IsNullOrWhiteSpace(MensajeError);
+    public bool TieneInfo => !string.IsNullOrWhiteSpace(MensajeInfo);
+
+    public ICommand GuardarAvanceCommand { get; }
+    public ICommand VolverCommand { get; }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.TryGetValue("ChecklistId", out var checklistId) &&
+            int.TryParse(checklistId?.ToString(), out var idChecklist))
+        {
+            _checklistId = idChecklist;
+        }
+
+        if (query.TryGetValue("ChecklistTecnicoEquipoId", out var equipoId) &&
+            int.TryParse(equipoId?.ToString(), out var idEquipo))
+        {
+            _checklistTecnicoEquipoId = idEquipo;
+        }
+    }
+
+    public async Task CargarAsync()
+    {
+        if (_checklistId <= 0 || _checklistTecnicoEquipoId <= 0)
+        {
+            MensajeError = "Parámetros de navegación inválidos.";
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+            MensajeError = null;
+            Aspectos.Clear();
+
+            var checklist = await _checklistApiService.ObtenerPorIdAsync(_checklistId);
+            if (checklist == null)
+            {
+                MensajeError = "No se encontró el checklist.";
+                return;
+            }
+
+            var equipo = checklist.EquiposRevisados
+                .FirstOrDefault(e => e.Id == _checklistTecnicoEquipoId);
+
+            if (equipo == null)
+            {
+                MensajeError = "El equipo no pertenece a este checklist.";
+                return;
+            }
+
+            CodigoEquipo = equipo.CodigoEquipo;
+            NombreEquipo = equipo.NombreEquipo;
+            ObservacionesEquipo = equipo.ObservacionesEquipo;
+            Title = EncabezadoEquipo;
+
+            foreach (var detalle in equipo.Detalles.OrderBy(d => d.Orden))
+            {
+                Aspectos.Add(new AspectoRevisionItem
+                {
+                    ChecklistTecnicoDetalleId = detalle.Id,
+                    Nombre = detalle.Item,
+                    Descripcion = detalle.DescripcionItem,
+                    EsObligatorio = detalle.EsObligatorio,
+                    Orden = detalle.Orden,
+                    EstadoRevision = detalle.EstadoRevision,
+                    Observacion = detalle.Observacion
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"Error al cargar revisión: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task GuardarAvanceAsync()
+    {
+        if (_checklistId <= 0 || _checklistTecnicoEquipoId <= 0)
+            return;
+
+        var obligatoriosPendientes = Aspectos
+            .Where(a => a.EsObligatorio && a.EstadoRevision == "No revisado")
+            .Select(a => a.Nombre)
+            .ToList();
+
+        if (obligatoriosPendientes.Any())
+        {
+            MensajeError = "Revisa los aspectos obligatorios pendientes: " +
+                           string.Join(", ", obligatoriosPendientes);
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+            MensajeError = null;
+            MensajeInfo = null;
+
+            var estados = Aspectos.Select(a => a.EstadoRevision);
+            var resultado = ChecklistEstados.CalcularResultadoGeneral(estados);
+
+            var dto = new GuardarChecklistTecnicoDto
+            {
+                Equipos =
+                {
+                    new GuardarChecklistEquipoDto
+                    {
+                        ChecklistTecnicoEquipoId = _checklistTecnicoEquipoId,
+                        ResultadoGeneral = resultado,
+                        ObservacionesEquipo = ObservacionesEquipo,
+                        Detalles = Aspectos.Select(a => new GuardarChecklistDetalleDto
+                        {
+                            ChecklistTecnicoDetalleId = a.ChecklistTecnicoDetalleId,
+                            EstadoRevision = a.EstadoRevision,
+                            Observacion = a.Observacion
+                        }).ToList()
+                    }
+                }
+            };
+
+            var guardado = await _checklistApiService.GuardarAvanceAsync(_checklistId, dto);
+            if (!guardado)
+            {
+                MensajeError = "No se pudo guardar el avance.";
+                return;
+            }
+
+            MensajeInfo = "Avance guardado correctamente.";
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"Error al guardar: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

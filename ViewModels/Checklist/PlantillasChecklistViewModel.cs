@@ -1,54 +1,63 @@
-using ControlEquiposElectronicos.ViewModels;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using ControlEquiposElectronicos.DTOs.Checklist;
-using ControlEquiposElectronicos.DTOs.Catalogos;
+using ControlEquiposElectronicos.Helpers;
 using ControlEquiposElectronicos.Services.Interfaces;
-using System.Collections.ObjectModel;
 
 namespace ControlEquiposElectronicos.ViewModels.Checklist;
+
+public class PlantillaChecklistItem
+{
+    public int Id { get; init; }
+    public string Nombre { get; init; } = string.Empty;
+    public string? Descripcion { get; init; }
+    public string TipoEquipo { get; init; } = string.Empty;
+    public string? CategoriaEquipo { get; init; }
+    public bool Activo { get; init; }
+    public int TotalAspectos { get; init; }
+    public ObservableCollection<PlantillaAspectoItem> Aspectos { get; init; } = new();
+}
+
+public class PlantillaAspectoItem
+{
+    public string Nombre { get; init; } = string.Empty;
+    public string? Descripcion { get; init; }
+    public int Orden { get; init; }
+    public bool EsObligatorio { get; init; }
+    public string ObligatorioTexto => EsObligatorio ? "Obligatorio" : "Opcional";
+}
 
 public class PlantillasChecklistViewModel : BaseViewModel
 {
     private readonly IChecklistApiService _checklistApiService;
-    private readonly ICatalogoApiService _catalogoApiService;
+    private string? _mensajeError;
 
-    public ObservableCollection<PlantillaChecklistDto> Plantillas { get; } = new();
-    public ObservableCollection<CatalogoItemDto> TiposEquipo { get; } = new();
-
-    private string _nombreNuevaPlantilla = string.Empty;
-    private string _descripcionNuevaPlantilla = string.Empty;
-    private string _aspectosTexto = string.Empty;
-    private CatalogoItemDto? _tipoEquipoSeleccionado;
-
-    public string NombreNuevaPlantilla
-    {
-        get => _nombreNuevaPlantilla;
-        set { _nombreNuevaPlantilla = value; OnPropertyChanged(); }
-    }
-
-    public string DescripcionNuevaPlantilla
-    {
-        get => _descripcionNuevaPlantilla;
-        set { _descripcionNuevaPlantilla = value; OnPropertyChanged(); }
-    }
-
-    public string AspectosTexto
-    {
-        get => _aspectosTexto;
-        set { _aspectosTexto = value; OnPropertyChanged(); }
-    }
-
-    public CatalogoItemDto? TipoEquipoSeleccionado
-    {
-        get => _tipoEquipoSeleccionado;
-        set { _tipoEquipoSeleccionado = value; OnPropertyChanged(); }
-    }
-
-    public PlantillasChecklistViewModel(IChecklistApiService checklistApiService, ICatalogoApiService catalogoApiService)
+    public PlantillasChecklistViewModel(IChecklistApiService checklistApiService)
     {
         _checklistApiService = checklistApiService;
-        _catalogoApiService = catalogoApiService;
         Title = "Plantillas de checklist";
+        Plantillas = new ObservableCollection<PlantillaChecklistItem>();
+        CargarCommand = new AsyncRelayCommand(CargarAsync);
+        VolverCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
     }
+
+    public ObservableCollection<PlantillaChecklistItem> Plantillas { get; }
+
+    public string? MensajeError
+    {
+        get => _mensajeError;
+        set
+        {
+            _mensajeError = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TieneError));
+        }
+    }
+
+    public bool TieneError => !string.IsNullOrWhiteSpace(MensajeError);
+
+    public ICommand CargarCommand { get; }
+    public ICommand VolverCommand { get; }
 
     public async Task CargarAsync()
     {
@@ -58,77 +67,42 @@ public class PlantillasChecklistViewModel : BaseViewModel
         try
         {
             IsBusy = true;
+            MensajeError = null;
             Plantillas.Clear();
 
-            var datos = await _checklistApiService.ObtenerPlantillasAsync();
-            foreach (var plantilla in datos.OrderBy(p => p.Nombre))
+            var plantillas = await _checklistApiService.ObtenerPlantillasAsync();
+            foreach (var plantilla in plantillas.OrderBy(p => p.TipoEquipo).ThenBy(p => p.Nombre))
             {
-                Plantillas.Add(plantilla);
-            }
-
-            if (TiposEquipo.Count == 0)
-            {
-                var tipos = await _catalogoApiService.ObtenerTiposEquipoAsync();
-                foreach (var tipo in tipos.Where(t => t.Activo))
+                var item = new PlantillaChecklistItem
                 {
-                    TiposEquipo.Add(tipo);
+                    Id = plantilla.Id,
+                    Nombre = plantilla.Nombre,
+                    Descripcion = plantilla.Descripcion,
+                    TipoEquipo = plantilla.TipoEquipo,
+                    CategoriaEquipo = plantilla.CategoriaEquipo,
+                    Activo = plantilla.Activo,
+                    TotalAspectos = plantilla.Items.Count(i => i.Activo)
+                };
+
+                foreach (var aspecto in plantilla.Items
+                             .Where(i => i.Activo)
+                             .OrderBy(i => i.Orden))
+                {
+                    item.Aspectos.Add(new PlantillaAspectoItem
+                    {
+                        Nombre = aspecto.Nombre,
+                        Descripcion = aspecto.Descripcion,
+                        Orden = aspecto.Orden,
+                        EsObligatorio = aspecto.EsObligatorio
+                    });
                 }
+
+                Plantillas.Add(item);
             }
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-
-    public async Task<(bool Ok, string Mensaje)> CrearPlantillaAsync()
-    {
-        if (string.IsNullOrWhiteSpace(NombreNuevaPlantilla))
-            return (false, "Ingresa el nombre de la plantilla.");
-
-        if (TipoEquipoSeleccionado == null)
-            return (false, "Selecciona un tipo de equipo.");
-
-        var aspectos = AspectosTexto
-            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        if (aspectos.Count == 0)
-            return (false, "Ingresa al menos un aspecto (uno por línea).");
-
-        try
-        {
-            IsBusy = true;
-            var nuevaPlantilla = await _checklistApiService.CrearPlantillaAsync(new CrearPlantillaChecklistDto
-            {
-                Nombre = NombreNuevaPlantilla.Trim(),
-                Descripcion = string.IsNullOrWhiteSpace(DescripcionNuevaPlantilla) ? null : DescripcionNuevaPlantilla.Trim(),
-                TipoEquipoId = TipoEquipoSeleccionado.Id
-            });
-
-            if (nuevaPlantilla == null)
-                return (false, "La API no devolvió la plantilla creada.");
-
-            var orden = 1;
-            foreach (var aspecto in aspectos)
-            {
-                await _checklistApiService.AgregarItemPlantillaAsync(nuevaPlantilla.Id, new CrearPlantillaChecklistItemDto
-                {
-                    Nombre = aspecto,
-                    Orden = orden++,
-                    EsObligatorio = true
-                });
-            }
-
-            LimpiarFormulario();
-            await CargarAsync();
-            return (true, "Plantilla creada correctamente.");
         }
         catch (Exception ex)
         {
-            return (false, $"No se pudo crear la plantilla: {ex.Message}");
+            MensajeError = $"No se pudieron cargar las plantillas: {ex.Message}";
         }
         finally
         {
@@ -136,11 +110,4 @@ public class PlantillasChecklistViewModel : BaseViewModel
         }
     }
 
-    private void LimpiarFormulario()
-    {
-        NombreNuevaPlantilla = string.Empty;
-        DescripcionNuevaPlantilla = string.Empty;
-        AspectosTexto = string.Empty;
-        TipoEquipoSeleccionado = null;
-    }
 }

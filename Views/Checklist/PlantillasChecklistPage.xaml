@@ -1,123 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.PlantillasChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.PlantillasChecklistPage"
-    Title="Plantillas checklist"
-    BackgroundColor="{StaticResource Gray100}">
+    Title="Plantillas de checklist">
 
-    <ContentPage.Resources>
-        <Style x:Key="ChecklistEntry" TargetType="Entry">
-            <Setter Property="TextColor" Value="{StaticResource Gray900}" />
-            <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
-        </Style>
-        <Style x:Key="ChecklistEditor" TargetType="Editor">
-            <Setter Property="TextColor" Value="{StaticResource Gray900}" />
-            <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
-        </Style>
-        <Style x:Key="ChecklistPicker" TargetType="Picker">
-            <Setter Property="TextColor" Value="{StaticResource Gray900}" />
-            <Setter Property="TitleColor" Value="{StaticResource Gray500}" />
-        </Style>
-    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12">
+        <Label x:Name="MensajeErrorLabel"
+               Grid.Row="0"
+               TextColor="IndianRed"
+               IsVisible="False" />
 
-    <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="14">
-            <Grid ColumnDefinitions="*,Auto">
-                <Label Text="Plantillas de checklist"
-                   FontSize="26"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Gray900}" />
-                <Button Grid.Column="1"
-                        Text="+ Crear plantilla"
-                        Clicked="OnCrearPlantillaClicked"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White"
-                        CornerRadius="12"
-                        Padding="16,8" />
-            </Grid>
+        <CollectionView x:Name="PlantillasCollection"
+                        Grid.Row="1" />
 
-            <Border BackgroundColor="White"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeShape="RoundRectangle 12"
-                    Padding="14">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="Nueva plantilla"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Entry Placeholder="Nombre de la plantilla"
-                           Style="{StaticResource ChecklistEntry}"
-                           Text="{Binding NombreNuevaPlantilla}" />
-                    <Editor Placeholder="Descripción (opcional)"
-                            Style="{StaticResource ChecklistEditor}"
-                            Text="{Binding DescripcionNuevaPlantilla}"
-                            AutoSize="TextChanges"
-                            HeightRequest="70" />
-                    <Picker Title="Tipo de equipo"
-                            Style="{StaticResource ChecklistPicker}"
-                            ItemsSource="{Binding TiposEquipo}"
-                            ItemDisplayBinding="{Binding Nombre}"
-                            SelectedItem="{Binding TipoEquipoSeleccionado}" />
-                    <Editor Placeholder="Aspectos (uno por línea)"
-                            Style="{StaticResource ChecklistEditor}"
-                            Text="{Binding AspectosTexto}"
-                            AutoSize="TextChanges"
-                            HeightRequest="120" />
-                </VerticalStackLayout>
-            </Border>
+        <Button Grid.Row="2"
+                Text="Volver"
+                Clicked="OnVolverClicked" />
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}"
-                               HorizontalOptions="Center"
-                               Color="{StaticResource Primary}" />
-
-            <CollectionView ItemsSource="{Binding Plantillas}">
-                <CollectionView.EmptyView>
-                    <Border BackgroundColor="White"
-                            Stroke="{StaticResource Gray200}"
-                            StrokeShape="RoundRectangle 10"
-                            Padding="16">
-                        <Label Text="No hay plantillas disponibles."
-                               TextColor="{StaticResource Gray500}" />
-                    </Border>
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BackgroundColor="White"
-                                Stroke="{StaticResource Gray200}"
-                                StrokeShape="RoundRectangle 12"
-                                Padding="16"
-                                Margin="0,0,0,10">
-                            <VerticalStackLayout Spacing="6">
-                                <Label Text="{Binding Nombre}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
-                                <Label Text="{Binding TipoEquipo, StringFormat='Tipo equipo: {0}'}"
-                                       TextColor="{StaticResource Gray500}" />
-                                <Label Text="{Binding Descripcion}"
-                                       TextColor="{StaticResource Gray500}" />
-
-                                <Label Text="Aspectos"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}"
-                                       Margin="0,4,0,0" />
-                                <CollectionView ItemsSource="{Binding Items}">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <HorizontalStackLayout Spacing="8" Margin="0,2,0,0">
-                                                <Label Text="•"
-                                                       TextColor="{StaticResource Primary}" />
-                                                <Label Text="{Binding Nombre}" TextColor="{StaticResource Gray900}" />
-                                            </HorizontalStackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </VerticalStackLayout>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
+        <ActivityIndicator x:Name="CargandoIndicator"
+                           Grid.Row="1"
+                           IsRunning="False"
+                           IsVisible="False"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+    </Grid>
 </ContentPage>

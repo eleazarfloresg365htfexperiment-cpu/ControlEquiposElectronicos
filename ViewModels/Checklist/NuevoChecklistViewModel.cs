@@ -1,64 +1,104 @@
-﻿using ControlEquiposElectronicos.DTOs.Catalogos;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using ControlEquiposElectronicos.DTOs.Catalogos;
 using ControlEquiposElectronicos.DTOs.Checklist;
+using ControlEquiposElectronicos.Helpers;
 using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Services.Interfaces;
-using System.Collections.ObjectModel;
-using System.Text.Json;
 
 namespace ControlEquiposElectronicos.ViewModels.Checklist;
 
-public class NuevoChecklistViewModel : BaseViewModel
+public class EquipoChecklistCardItem
 {
-    private readonly ICatalogoApiService _catalogoApiService;
+    public int ChecklistTecnicoEquipoId { get; init; }
+    public int EquipoId { get; init; }
+    public string CodigoEquipo { get; init; } = string.Empty;
+    public string NombreEquipo { get; init; } = string.Empty;
+    public string TipoEquipo { get; init; } = string.Empty;
+    public string ResultadoGeneral { get; init; } = string.Empty;
+    public string ProgresoAspectos { get; init; } = string.Empty;
+    public Color EstadoColor { get; init; } = Colors.Gray;
+}
+
+public class NuevoChecklistViewModel : BaseViewModel, IQueryAttributable
+{
     private readonly IChecklistApiService _checklistApiService;
-    private readonly SesionService _sesion;
+    private readonly ICatalogoApiService _catalogoApiService;
+    private readonly SesionService _sesionService;
 
     private CatalogoItemDto? _ubicacionSeleccionada;
+    private PrepararChecklistUbicacionDto? _preparacion;
+    private ChecklistTecnicoDto? _checklistActivo;
     private string? _observacionesGenerales;
-    private string _tecnicoId = string.Empty;
-    private string _tecnicoNombre = "—";
-    private string _resumenPreparacion = string.Empty;
-    private string _motivoIniciarDeshabilitado = string.Empty;
-    private bool _ubicacionPreparada;
-    private bool _puedeIniciar;
+    private string? _mensajeError;
+    private string? _mensajeInfo;
+    private int? _checklistIdPendiente;
 
-    public ObservableCollection<CatalogoItemDto> Ubicaciones { get; } = new();
-    public ObservableCollection<EquipoChecklistPreparadoDto> EquiposPreparados { get; } = new();
+    public NuevoChecklistViewModel(
+        IChecklistApiService checklistApiService,
+        ICatalogoApiService catalogoApiService,
+        SesionService sesionService)
+    {
+        _checklistApiService = checklistApiService;
+        _catalogoApiService = catalogoApiService;
+        _sesionService = sesionService;
+        Title = "Nuevo checklist";
+
+        Ubicaciones = new ObservableCollection<CatalogoItemDto>();
+        EquiposPreview = new ObservableCollection<EquipoChecklistPreparadoDto>();
+        EquiposCards = new ObservableCollection<EquipoChecklistCardItem>();
+
+        CargarUbicacionesCommand = new AsyncRelayCommand(CargarUbicacionesAsync);
+        PrepararCommand = new AsyncRelayCommand(PrepararAsync, () => UbicacionSeleccionada != null && !ChecklistIniciado);
+        IniciarCommand = new AsyncRelayCommand(IniciarAsync, () => Preparacion != null && !ChecklistIniciado);
+        AbrirEquipoCommand = new AsyncRelayCommand<EquipoChecklistCardItem>(AbrirEquipoAsync);
+        FinalizarCommand = new AsyncRelayCommand(FinalizarAsync, () => ChecklistIniciado);
+        VolverCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
+    }
+
+    public ObservableCollection<CatalogoItemDto> Ubicaciones { get; }
+    public ObservableCollection<EquipoChecklistPreparadoDto> EquiposPreview { get; }
+    public ObservableCollection<EquipoChecklistCardItem> EquiposCards { get; }
 
     public CatalogoItemDto? UbicacionSeleccionada
     {
         get => _ubicacionSeleccionada;
         set
         {
-            if (_ubicacionSeleccionada == value)
-                return;
-
             _ubicacionSeleccionada = value;
-            ReiniciarPreparacion();
             OnPropertyChanged();
             OnPropertyChanged(nameof(PuedePreparar));
-            OnPropertyChanged(nameof(PasoActualTexto));
+            (PrepararCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
+            (IniciarCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
         }
     }
 
-    public string TecnicoId
+    public PrepararChecklistUbicacionDto? Preparacion
     {
-        get => _tecnicoId;
-        private set
+        get => _preparacion;
+        set
         {
-            _tecnicoId = value;
+            _preparacion = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(PuedeIniciar));
+            OnPropertyChanged(nameof(ResumenPreparacion));
+            OnPropertyChanged(nameof(MostrarPreparacion));
+            (IniciarCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
         }
     }
 
-    public string TecnicoNombre
+    public ChecklistTecnicoDto? ChecklistActivo
     {
-        get => _tecnicoNombre;
-        private set
+        get => _checklistActivo;
+        set
         {
-            _tecnicoNombre = value;
+            _checklistActivo = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(ChecklistIniciado));
+            OnPropertyChanged(nameof(MostrarSeleccionUbicacion));
+            OnPropertyChanged(nameof(TituloChecklistActivo));
+            (PrepararCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
+            (IniciarCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
+            (FinalizarCommand as AsyncRelayCommand)?.RaiseCanExecuteChanged();
         }
     }
 
@@ -72,265 +112,310 @@ public class NuevoChecklistViewModel : BaseViewModel
         }
     }
 
-    public string ResumenPreparacion
+    public string? MensajeError
     {
-        get => _resumenPreparacion;
-        private set
+        get => _mensajeError;
+        set
         {
-            _resumenPreparacion = value;
+            _mensajeError = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(MostrarResumenPreparacion));
+            OnPropertyChanged(nameof(TieneError));
         }
     }
 
-    public bool MostrarResumenPreparacion => _ubicacionPreparada && !string.IsNullOrWhiteSpace(ResumenPreparacion);
-
-    public int TotalEquipos { get; private set; }
-    public int EquiposConPlantilla { get; private set; }
-
-    public PrepararChecklistUbicacionDto? DatosPreparados { get; private set; }
-
-    public bool PuedePreparar => UbicacionSeleccionada != null && !IsBusy;
-
-    public bool PuedeIniciar
+    public string? MensajeInfo
     {
-        get => _puedeIniciar;
-        private set
+        get => _mensajeInfo;
+        set
         {
-            _puedeIniciar = value;
+            _mensajeInfo = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(TieneInfo));
         }
     }
 
-    public string MotivoIniciarDeshabilitado
+    public bool TieneError => !string.IsNullOrWhiteSpace(MensajeError);
+    public bool TieneInfo => !string.IsNullOrWhiteSpace(MensajeInfo);
+    public bool ChecklistIniciado => ChecklistActivo != null;
+    public bool MostrarSeleccionUbicacion => !ChecklistIniciado;
+    public bool MostrarPreparacion => Preparacion != null && !ChecklistIniciado;
+    public bool PuedePreparar => UbicacionSeleccionada != null && !ChecklistIniciado;
+
+    public string ResumenPreparacion =>
+        Preparacion == null
+            ? string.Empty
+            : $"{Preparacion.TotalEquipos} equipos en {Preparacion.Ubicacion}";
+
+    public string TituloChecklistActivo =>
+        ChecklistActivo == null
+            ? string.Empty
+            : $"Checklist #{ChecklistActivo.Id} — {ChecklistActivo.Ubicacion}";
+
+    public ICommand CargarUbicacionesCommand { get; }
+    public ICommand PrepararCommand { get; }
+    public ICommand IniciarCommand { get; }
+    public ICommand AbrirEquipoCommand { get; }
+    public ICommand FinalizarCommand { get; }
+    public ICommand VolverCommand { get; }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        get => _motivoIniciarDeshabilitado;
-        private set
+        if (query.TryGetValue("ChecklistId", out var value) &&
+            int.TryParse(value?.ToString(), out var checklistId))
         {
-            _motivoIniciarDeshabilitado = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(MostrarMotivoIniciarDeshabilitado));
+            _checklistIdPendiente = checklistId;
         }
     }
 
-    public bool MostrarMotivoIniciarDeshabilitado =>
-        _ubicacionPreparada && !PuedeIniciar && !string.IsNullOrWhiteSpace(MotivoIniciarDeshabilitado);
-
-    public bool TieneEquiposPreparados => EquiposPreparados.Count > 0;
-
-    private static bool EquipoListoParaIniciar(EquipoChecklistPreparadoDto equipo) =>
-        equipo.ListoParaIniciar;
-
-    public string PasoActualTexto =>
-        !_ubicacionPreparada
-            ? "Paso 1 de 2: elige la ubicación y pulsa «Ver equipos de la ubicación»."
-            : EquiposConPlantilla > 0
-                ? "Paso 2 de 2: revisa la lista y pulsa «Iniciar checklist» para comenzar la revisión."
-                : "No hay equipos con plantilla en esta ubicación. Crea plantillas antes de iniciar.";
-
-    public NuevoChecklistViewModel(
-        ICatalogoApiService catalogoApiService,
-        IChecklistApiService checklistApiService,
-        SesionService sesion)
+    public async Task InicializarAsync()
     {
-        _catalogoApiService = catalogoApiService;
-        _checklistApiService = checklistApiService;
-        _sesion = sesion;
-        Title = "Nuevo checklist";
+        await CargarUbicacionesAsync();
+
+        if (_checklistIdPendiente.HasValue)
+            await CargarChecklistActivoAsync(_checklistIdPendiente.Value);
     }
 
-    public void InicializarDesdeSesion()
+    private async Task CargarUbicacionesAsync()
     {
-        if (_sesion.UsuarioActual == null)
+        if (IsBusy)
             return;
-
-        TecnicoNombre = _sesion.UsuarioActual.Nombre;
-
-        if (_sesion.UsuarioActual.UsuarioId > 0)
-        {
-            TecnicoId = _sesion.UsuarioActual.UsuarioId.ToString();
-            ActualizarEstadoIniciar();
-            return;
-        }
-
-        TecnicoId = string.Empty;
-        TecnicoNombre = $"{TecnicoNombre} (vuelve a iniciar sesión)";
-        ActualizarEstadoIniciar();
-    }
-
-    public async Task CargarCatalogosAsync()
-    {
-        if (Ubicaciones.Count > 0)
-            return;
-
-        var ubicaciones = await _catalogoApiService.ObtenerUbicacionesAsync();
-        Ubicaciones.Clear();
-        foreach (var ubicacion in ubicaciones.Where(u => u.Activo))
-        {
-            Ubicaciones.Add(ubicacion);
-        }
-    }
-
-    public async Task<(bool Ok, string Mensaje)> PrepararAsync()
-    {
-        if (UbicacionSeleccionada == null || IsBusy)
-            return (false, "Selecciona una ubicación primero.");
 
         try
         {
             IsBusy = true;
-            DatosPreparados = await _checklistApiService.PrepararPorUbicacionAsync(UbicacionSeleccionada.Id);
+            MensajeError = null;
+            Ubicaciones.Clear();
 
-            EquiposPreparados.Clear();
-            if (DatosPreparados == null)
-            {
-                ReiniciarPreparacion();
-                return (false, "No se pudo conectar con la API o la ubicación no existe.");
-            }
-
-            foreach (var equipo in DatosPreparados.Equipos.OrderBy(e => e.NombreEquipo))
-            {
-                EquiposPreparados.Add(equipo);
-            }
-
-            TotalEquipos = DatosPreparados.TotalEquipos;
-            EquiposConPlantilla = DatosPreparados.Equipos.Count(EquipoListoParaIniciar);
-            var sinPlantilla = TotalEquipos - EquiposConPlantilla;
-
-            _ubicacionPreparada = true;
-            ResumenPreparacion =
-                $"{TotalEquipos} equipo(s) en {DatosPreparados.Ubicacion}. " +
-                $"{EquiposConPlantilla} listo(s) para checklist" +
-                (sinPlantilla > 0 ? $" · {sinPlantilla} sin plantilla (no se incluirán al iniciar)." : ".");
-
-            OnPropertyChanged(nameof(TotalEquipos));
-            OnPropertyChanged(nameof(EquiposConPlantilla));
-            OnPropertyChanged(nameof(TieneEquiposPreparados));
-            OnPropertyChanged(nameof(PasoActualTexto));
-            ActualizarEstadoIniciar();
-
-            if (TotalEquipos == 0)
-                return (false, "Esta ubicación no tiene equipos activos registrados.");
-
-            if (EquiposConPlantilla == 0)
-                return (false, "Hay equipos, pero ninguno tiene plantilla con aspectos activos. Revisa «Plantillas».");
-
-            return (true, ResumenPreparacion);
+            var ubicaciones = await _catalogoApiService.ObtenerUbicacionesAsync();
+            foreach (var ubicacion in ubicaciones.Where(u => u.Activo).OrderBy(u => u.Nombre))
+                Ubicaciones.Add(ubicacion);
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"No se pudieron cargar ubicaciones: {ex.Message}";
         }
         finally
         {
             IsBusy = false;
-            OnPropertyChanged(nameof(PuedePreparar));
-            ActualizarEstadoIniciar();
         }
     }
 
-    public async Task<(ChecklistTecnicoDto? Checklist, string? Error)> IniciarConDetalleAsync()
+    private async Task PrepararAsync()
     {
-        ActualizarEstadoIniciar();
-
         if (UbicacionSeleccionada == null)
-            return (null, "Selecciona una ubicación.");
-
-        if (!_ubicacionPreparada)
-            return (null, "Primero pulsa «Ver equipos de la ubicación».");
-
-        if (!int.TryParse(TecnicoId, out var tecnicoId) || tecnicoId <= 0)
-            return (null, "No hay técnico válido. Cierra sesión y vuelve a entrar.");
-
-        if (EquiposConPlantilla == 0)
-            return (null, MotivoIniciarDeshabilitado);
+            return;
 
         try
         {
             IsBusy = true;
-            ActualizarEstadoIniciar();
+            MensajeError = null;
+            MensajeInfo = null;
+            EquiposPreview.Clear();
+            Preparacion = null;
 
-            var (checklist, error) = await _checklistApiService.IniciarConDetalleAsync(new IniciarChecklistTecnicoDto
+            var preparado = await _checklistApiService.PrepararPorUbicacionAsync(UbicacionSeleccionada.Id);
+            if (preparado == null)
+            {
+                MensajeError = "No se pudo preparar el checklist para la ubicación seleccionada.";
+                return;
+            }
+
+            Preparacion = preparado;
+            foreach (var equipo in preparado.Equipos)
+                EquiposPreview.Add(equipo);
+
+            var sinPlantilla = preparado.Equipos.Count(e => !e.TienePlantilla);
+            MensajeInfo = sinPlantilla > 0
+                ? $"Se encontraron {preparado.TotalEquipos} equipos. {sinPlantilla} no tienen plantilla y no se incluirán al iniciar."
+                : $"Listo para iniciar con {preparado.Equipos.Count(e => e.TienePlantilla)} equipos con plantilla.";
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"Error al preparar: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task IniciarAsync()
+    {
+        if (UbicacionSeleccionada == null)
+            return;
+
+        var tecnicoId = _sesionService.UsuarioActual?.UsuarioId ?? 0;
+        if (tecnicoId <= 0)
+        {
+            MensajeError = "No hay un técnico en sesión. Vuelve a iniciar sesión.";
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+            MensajeError = null;
+
+            var dto = new IniciarChecklistTecnicoDto
             {
                 UbicacionId = UbicacionSeleccionada.Id,
                 TecnicoId = tecnicoId,
                 ObservacionesGenerales = ObservacionesGenerales
-            });
+            };
 
-            if (checklist != null)
-                return (checklist, null);
+            var checklist = await _checklistApiService.IniciarAsync(dto);
+            if (checklist == null)
+            {
+                MensajeError = "No se pudo iniciar el checklist. Verifica plantillas activas en la ubicación.";
+                return;
+            }
 
-            return (null, ExtraerMensajeApi(error));
+            ChecklistActivo = checklist;
+            ActualizarTarjetasEquipos();
+            MensajeInfo = $"Checklist iniciado con {checklist.EquiposRevisados.Count} equipos.";
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"Error al iniciar: {ex.Message}";
         }
         finally
         {
             IsBusy = false;
-            ActualizarEstadoIniciar();
         }
     }
 
-    private void ActualizarEstadoIniciar()
+    private async Task CargarChecklistActivoAsync(int checklistId)
     {
-        if (!_ubicacionPreparada)
+        try
         {
-            PuedeIniciar = false;
-            MotivoIniciarDeshabilitado = string.Empty;
-            return;
-        }
+            IsBusy = true;
+            MensajeError = null;
 
-        if (!int.TryParse(TecnicoId, out var tecnicoId) || tecnicoId <= 0)
+            var checklist = await _checklistApiService.ObtenerPorIdAsync(checklistId);
+            if (checklist == null)
+            {
+                MensajeError = "El checklist no existe.";
+                return;
+            }
+
+            if (checklist.EstadoChecklist != "En proceso")
+            {
+                MensajeError = "Este checklist ya no está en proceso.";
+                return;
+            }
+
+            ChecklistActivo = checklist;
+            ObservacionesGenerales = checklist.ObservacionesGenerales;
+            ActualizarTarjetasEquipos();
+            Title = TituloChecklistActivo;
+        }
+        catch (Exception ex)
         {
-            PuedeIniciar = false;
-            MotivoIniciarDeshabilitado = "Vuelve a iniciar sesión para cargar tu ID de técnico.";
-            return;
+            MensajeError = $"Error al cargar checklist: {ex.Message}";
         }
-
-        if (EquiposConPlantilla == 0)
+        finally
         {
-            PuedeIniciar = false;
-            MotivoIniciarDeshabilitado =
-                "Ningún equipo tiene plantilla con aspectos. Agrega aspectos en «Plantillas» o elige otra ubicación.";
-            return;
+            IsBusy = false;
         }
-
-        if (IsBusy)
-        {
-            PuedeIniciar = false;
-            MotivoIniciarDeshabilitado = "Espera a que termine la operación…";
-            return;
-        }
-
-        PuedeIniciar = true;
-        MotivoIniciarDeshabilitado = string.Empty;
     }
 
-    private static string ExtraerMensajeApi(string? raw)
+    private void ActualizarTarjetasEquipos()
     {
-        if (string.IsNullOrWhiteSpace(raw))
-            return "La API no respondió al iniciar el checklist.";
+        EquiposCards.Clear();
+        if (ChecklistActivo == null)
+            return;
+
+        foreach (var equipo in ChecklistActivo.EquiposRevisados)
+        {
+            EquiposCards.Add(new EquipoChecklistCardItem
+            {
+                ChecklistTecnicoEquipoId = equipo.Id,
+                EquipoId = equipo.EquipoId,
+                CodigoEquipo = equipo.CodigoEquipo,
+                NombreEquipo = equipo.NombreEquipo,
+                TipoEquipo = equipo.TipoEquipo,
+                ResultadoGeneral = equipo.ResultadoGeneral,
+                ProgresoAspectos = ChecklistEstados.ResumenProgresoEquipo(
+                    equipo.Detalles.Select(d => d.EstadoRevision)),
+                EstadoColor = ColorForResultado(equipo.ResultadoGeneral)
+            });
+        }
+    }
+
+    private static Color ColorForResultado(string resultado) => resultado switch
+    {
+        "Revisado correctamente" => Colors.Green,
+        "Revisado con problemas" => Colors.Red,
+        "Revisado con observaciones" => Colors.Orange,
+        "No revisado" => Colors.Gray,
+        _ => Colors.SteelBlue
+    };
+
+    private async Task AbrirEquipoAsync(EquipoChecklistCardItem? card)
+    {
+        if (card == null || ChecklistActivo == null)
+            return;
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(Views.Checklist.RevisionEquipoChecklistPage)}" +
+            $"?ChecklistId={ChecklistActivo.Id}" +
+            $"&ChecklistTecnicoEquipoId={card.ChecklistTecnicoEquipoId}");
+    }
+
+    public async Task RecargarChecklistActivoAsync()
+    {
+        if (ChecklistActivo == null)
+            return;
+
+        await CargarChecklistActivoAsync(ChecklistActivo.Id);
+    }
+
+    private async Task FinalizarAsync()
+    {
+        if (ChecklistActivo == null)
+            return;
+
+        var confirmar = await Shell.Current.DisplayAlertAsync(
+            "Finalizar checklist",
+            "¿Deseas finalizar el checklist? Se crearán reportes de falla automáticos por aspectos con problema.",
+            "Sí, finalizar",
+            "Cancelar");
+
+        if (!confirmar)
+            return;
 
         try
         {
-            using var doc = JsonDocument.Parse(raw);
-            if (doc.RootElement.TryGetProperty("mensaje", out var mensaje))
-                return mensaje.GetString() ?? raw;
+            IsBusy = true;
+            MensajeError = null;
+
+            var dto = new FinalizarChecklistTecnicoDto
+            {
+                ObservacionesGenerales = ObservacionesGenerales,
+                CrearReportesFallaAutomaticos = true
+            };
+
+            var ok = await _checklistApiService.FinalizarAsync(ChecklistActivo.Id, dto);
+            if (!ok)
+            {
+                MensajeError = "No se pudo finalizar el checklist.";
+                return;
+            }
+
+            await Shell.Current.DisplayAlertAsync(
+                "Checklist finalizado",
+                "El checklist se cerró correctamente.",
+                "Aceptar");
+
+            await Shell.Current.GoToAsync("..");
         }
-        catch
+        catch (Exception ex)
         {
-            // usar texto crudo
+            MensajeError = $"Error al finalizar: {ex.Message}";
         }
-
-        return raw.Length > 280 ? raw[..280] + "…" : raw;
-    }
-
-    private void ReiniciarPreparacion()
-    {
-        DatosPreparados = null;
-        _ubicacionPreparada = false;
-        ResumenPreparacion = string.Empty;
-        EquiposPreparados.Clear();
-        TotalEquipos = 0;
-        EquiposConPlantilla = 0;
-        OnPropertyChanged(nameof(TieneEquiposPreparados));
-        OnPropertyChanged(nameof(PasoActualTexto));
-        OnPropertyChanged(nameof(TotalEquipos));
-        OnPropertyChanged(nameof(EquiposConPlantilla));
-        ActualizarEstadoIniciar();
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

@@ -1,4 +1,4 @@
-using ControlEquiposElectronicos.Services.Interfaces;
+﻿using ControlEquiposElectronicos.Helpers;
 using ControlEquiposElectronicos.ViewModels.Checklist;
 
 namespace ControlEquiposElectronicos.Views.Checklist;
@@ -7,13 +7,12 @@ public partial class HistorialChecklistPage : ContentPage
 {
     private readonly HistorialChecklistViewModel _viewModel;
 
-    public HistorialChecklistPage()
+    public HistorialChecklistPage() : this(ServiceHelper.GetRequiredService<HistorialChecklistViewModel>()) { }
+
+    public HistorialChecklistPage(HistorialChecklistViewModel viewModel)
     {
         InitializeComponent();
-
-        var services = IPlatformApplication.Current!.Services;
-        var checklistApi = services.GetRequiredService<IChecklistApiService>();
-        _viewModel = new HistorialChecklistViewModel(checklistApi);
+        _viewModel = viewModel;
         BindingContext = _viewModel;
     }
 
@@ -22,4 +21,8 @@ public partial class HistorialChecklistPage : ContentPage
         base.OnAppearing();
         await _viewModel.CargarAsync();
     }
+
+    private async void OnVolverClicked(object? sender, EventArgs e) =>
+        await Shell.Current.GoToAsync("..");
+
 }

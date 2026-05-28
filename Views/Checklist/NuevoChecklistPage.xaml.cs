@@ -1,61 +1,49 @@
-﻿using ControlEquiposElectronicos.Services;
-using ControlEquiposElectronicos.Services.Interfaces;
+﻿using ControlEquiposElectronicos.Helpers;
 using ControlEquiposElectronicos.ViewModels.Checklist;
 
 namespace ControlEquiposElectronicos.Views.Checklist;
 
-public partial class NuevoChecklistPage : ContentPage
+public partial class NuevoChecklistPage : ContentPage, IQueryAttributable
 {
     private readonly NuevoChecklistViewModel _viewModel;
 
-    public NuevoChecklistPage()
+    public NuevoChecklistPage() : this(ServiceHelper.GetRequiredService<NuevoChecklistViewModel>()) { }
+
+    public NuevoChecklistPage(NuevoChecklistViewModel viewModel)
     {
         InitializeComponent();
-
-        var services = IPlatformApplication.Current!.Services;
-        var checklistApi = services.GetRequiredService<IChecklistApiService>();
-        var catalogoApi = services.GetRequiredService<ICatalogoApiService>();
-        var sesion = services.GetRequiredService<SesionService>();
-
-        _viewModel = new NuevoChecklistViewModel(catalogoApi, checklistApi, sesion);
+        _viewModel = viewModel;
         BindingContext = _viewModel;
     }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query) =>
+        _viewModel.ApplyQueryAttributes(query);
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.InicializarDesdeSesion();
-        await _viewModel.CargarCatalogosAsync();
+
+        if (_viewModel.ChecklistIniciado)
+            await _viewModel.RecargarChecklistActivoAsync();
+        else
+            await _viewModel.InicializarAsync();
     }
 
-    private async void OnPrepararClicked(object? sender, EventArgs e)
+    private async void OnEquipoSeleccionado(object? sender, SelectionChangedEventArgs e)
     {
-        var (ok, mensaje) = await _viewModel.PrepararAsync();
-        if (!ok)
-        {
-            await DisplayAlertAsync("No se pudo preparar", mensaje, "Entendido");
+        if (e.CurrentSelection.FirstOrDefault() is not EquipoChecklistCardItem card)
             return;
-        }
 
-        await DisplayAlertAsync("Ubicación lista",
-            mensaje,
-            "Continuar");
+        if (sender is CollectionView collectionView)
+            collectionView.SelectedItem = null;
+
+        if (_viewModel.ChecklistActivo != null)
+        {
+            await Shell.Current.GoToAsync(
+                $"{nameof(RevisionEquipoChecklistPage)}" +
+                $"?ChecklistId={_viewModel.ChecklistActivo.Id}" +
+                $"&ChecklistTecnicoEquipoId={card.ChecklistTecnicoEquipoId}");
+        }
     }
 
-    private async void OnIniciarClicked(object? sender, EventArgs e)
-    {
-        var (checklist, error) = await _viewModel.IniciarConDetalleAsync();
-
-        if (checklist == null)
-        {
-            await DisplayAlertAsync("No se pudo iniciar", error ?? "Error desconocido.", "Entendido");
-            return;
-        }
-
-        await DisplayAlertAsync("Checklist iniciado",
-            $"Revisión #{checklist.Id} creada para {checklist.Ubicacion}.",
-            "Continuar");
-
-        await Shell.Current.GoToAsync($"RevisionEquipoChecklist?checklistId={checklist.Id}");
-    }
 }
