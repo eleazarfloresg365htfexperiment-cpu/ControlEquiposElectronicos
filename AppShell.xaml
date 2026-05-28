@@ -9,31 +9,63 @@
     xmlns:reportes="clr-namespace:ControlEquiposElectronicos.Views.Reportes"
     xmlns:usuarios="clr-namespace:ControlEquiposElectronicos.Views.Usuarios"
     xmlns:config="clr-namespace:ControlEquiposElectronicos.Views.Configuracion"
-    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBehavior="Locked"
+    Shell.NavBarIsVisible="False"
+    FlyoutBackgroundColor="#512BD4"
     Title="Control de Equipos CPC">
 
+    <Shell.FlyoutHeader>
+        <Grid Padding="20,30,20,20" BackgroundColor="#512BD4">
+            <VerticalStackLayout Spacing="4">
+                <Border BackgroundColor="#7F77DD" StrokeThickness="0" StrokeShape="RoundRectangle 12" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start">
+                    <Label Text="CPC" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+                <Label Text="Admin CPC" FontSize="15" FontAttributes="Bold" TextColor="White" Margin="0,8,0,0"/>
+                <Label Text="Administrador" FontSize="12" TextColor="#C4B5FD"/>
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
     <FlyoutItem Title="Dashboard" Route="Dashboard">
-        <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}" />
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf015;" Color="White" Size="18"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Equipos" Route="Equipos">
-        <ShellContent ContentTemplate="{DataTemplate equipos:EquiposPage}" />
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf108;" Color="White" Size="18"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate equipos:EquiposPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Mantenimientos" Route="Mantenimientos">
-        <ShellContent ContentTemplate="{DataTemplate mantenimientos:MantenimientosPage}" />
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf0ad;" Color="White" Size="18"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate mantenimientos:MantenimientosPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Reportes" Route="Reportes">
-        <ShellContent ContentTemplate="{DataTemplate reportes:ReportesPage}" />
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf15c;" Color="White" Size="18"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate reportes:ReportesPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Usuarios" Route="Usuarios">
-        <ShellContent ContentTemplate="{DataTemplate usuarios:UsuariosPage}" />
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf0c0;" Color="White" Size="18"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate usuarios:UsuariosPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Configuración" Route="Configuracion">
-        <ShellContent ContentTemplate="{DataTemplate config:ConfiguracionPage}" />
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf013;" Color="White" Size="18"/>
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate config:ConfiguracionPage}"/>
     </FlyoutItem>
-    
+
 </Shell>

@@ -103,6 +103,9 @@
 	  <MauiXaml Update="Views\Dashboard\DashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Equipos\AuditoriaPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Equipos\EquiposPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

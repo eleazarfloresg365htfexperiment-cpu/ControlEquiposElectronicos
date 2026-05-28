@@ -4,26 +4,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Gestión de Equipos"
+    Shell.NavBarIsVisible="False"
     BackgroundColor="#F8F9FB">
 
     <Grid RowDefinitions="Auto,Auto,Auto,*">
 
         <Grid Grid.Row="0" Padding="28,18,28,14" BackgroundColor="White" ColumnDefinitions="*,Auto">
             <VerticalStackLayout Grid.Column="0" Spacing="2">
+                <Label Text="Gestión de Equipos" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
                 <Label Text="Administra la información de los equipos de la academia" FontSize="13" TextColor="#9AA3BE"/>
             </VerticalStackLayout>
-            <Border Grid.Column="1" BackgroundColor="#F0F2F7" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 40" Padding="8,6,16,6">
-                <HorizontalStackLayout Spacing="10">
-                    <Border BackgroundColor="#3D2DB5" StrokeThickness="0" StrokeShape="RoundRectangle 20" WidthRequest="36" HeightRequest="36">
-                        <Label Text="👤" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    </Border>
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="1">
-                        <Label Text="Suarlin" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
-                        <Label Text="Técnico" FontSize="11" TextColor="#9AA3BE"/>
-                    </VerticalStackLayout>
-                    <Label Text="▾" FontSize="12" TextColor="#9AA3BE" VerticalOptions="Center"/>
-                </HorizontalStackLayout>
-            </Border>
         </Grid>
 
         <Grid Grid.Row="1" BackgroundColor="White" Padding="28,16">
@@ -34,8 +24,8 @@
                         <TapGestureRecognizer Tapped="OnRegistrarEquipoTapped"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="8">
-                        <Border BackgroundColor="#4285F4" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
-                            <Label Text="➕" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Border BackgroundColor="#378ADD" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf067;" FontSize="26" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
                         <Label Text="Registrar nuevo equipo" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                         <Label Text="Agregar un nuevo equipo al inventario" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
@@ -47,8 +37,8 @@
                         <TapGestureRecognizer Tapped="OnActualizarListaTapped"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="8">
-                        <Border BackgroundColor="#34A853" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
-                            <Label Text="🔄" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Border BackgroundColor="#639922" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf021;" FontSize="26" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
                         <Label Text="Actualizar lista" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
                         <Label Text="Recargar todos los equipos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
@@ -60,8 +50,8 @@
                         <TapGestureRecognizer Tapped="OnVerComputoTapped"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="8">
-                        <Border BackgroundColor="#EA4335" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
-                            <Label Text="💻" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Border BackgroundColor="#E24B4A" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf108;" FontSize="26" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
                         <Label Text="Cómputo" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
                         <Label Text="Ver PCs y periféricos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
@@ -73,8 +63,8 @@
                         <TapGestureRecognizer Tapped="OnFiltrarActivosTapped"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="8">
-                        <Border BackgroundColor="#9C27B0" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
-                            <Label Text="✅" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Border BackgroundColor="#7F77DD" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf00c;" FontSize="26" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
                         <Label Text="Ver activos" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
                         <Label Text="Filtrar solo equipos activos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
@@ -86,11 +76,24 @@
                         <TapGestureRecognizer Tapped="OnFiltrarInactivosTapped"/>
                     </Border.GestureRecognizers>
                     <VerticalStackLayout Spacing="8">
-                        <Border BackgroundColor="#FBBC04" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
-                            <Label Text="⚠️" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Border BackgroundColor="#BA7517" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf071;" FontSize="26" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                         </Border>
                         <Label Text="Ver en mantenimiento" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                         <Label Text="Equipos en mantenimiento o dañados" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20,16" WidthRequest="170">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAuditoriaTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="#512BD4" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="64" HeightRequest="64" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf46d;" FontSize="26" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Auditoría" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Historial de acciones" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
@@ -99,8 +102,8 @@
 
         <Grid Grid.Row="2" Padding="28,14,28,14" ColumnDefinitions="*,Auto" BackgroundColor="#F8F9FB">
             <Label Grid.Column="0" Text="Listado de equipos" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
-            <Button Grid.Column="1" Text="➕ Registrar nuevo equipo"
-                    BackgroundColor="#4285F4" TextColor="White"
+            <Button Grid.Column="1" Text="+ Registrar nuevo equipo"
+                    BackgroundColor="#512BD4" TextColor="White"
                     CornerRadius="10" FontSize="13" Padding="16,10"
                     Clicked="OnRegistrarEquipoTapped"/>
         </Grid>
@@ -111,7 +114,7 @@
                 <HorizontalStackLayout Grid.Row="0" Padding="18,12" Spacing="10">
                     <Border BackgroundColor="#F8F9FB" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,8" WidthRequest="200">
                         <HorizontalStackLayout Spacing="8">
-                            <Label Text="🔍" FontSize="13" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                            <Label FontFamily="FontAwesome" Text="&#xf002;" FontSize="13" TextColor="#9AA3BE" VerticalOptions="Center"/>
                             <Entry Text="{Binding TextoBusqueda}" Placeholder="Buscar equipo" FontSize="13" BackgroundColor="Transparent" VerticalOptions="Center" WidthRequest="160"/>
                         </HorizontalStackLayout>
                     </Border>
@@ -152,13 +155,13 @@
                                         <Border.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="OnEditarFilaTapped" CommandParameter="{Binding Id}"/>
                                         </Border.GestureRecognizers>
-                                        <Label Text="✏️" FontSize="14" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label FontFamily="FontAwesome" Text="&#xf044;" FontSize="13" TextColor="#1E40AF" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     </Border>
                                     <Border BackgroundColor="#F0F2F7" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="32" HeightRequest="32">
                                         <Border.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="OnMasOpcionesTapped" CommandParameter="{Binding Id}"/>
                                         </Border.GestureRecognizers>
-                                        <Label Text="⋯" FontSize="14" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Label FontFamily="FontAwesome" Text="&#xf141;" FontSize="13" TextColor="#5A6282" HorizontalOptions="Center" VerticalOptions="Center"/>
                                     </Border>
                                 </HorizontalStackLayout>
                             </Grid>

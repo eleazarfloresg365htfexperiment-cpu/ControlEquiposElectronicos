@@ -117,4 +117,8 @@ public partial class EquiposPage : ContentPage
         ListaEquipos.SelectedItem = null;
         await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={equipo.Id}");
     }
+    private async void OnAuditoriaTapped(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("AuditoriaPage");
+    }
 }

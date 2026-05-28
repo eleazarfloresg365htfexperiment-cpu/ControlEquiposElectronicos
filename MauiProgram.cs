@@ -1,4 +1,5 @@
 ﻿using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Views.Equipos;
 using Microsoft.Extensions.Logging;
 
 namespace ControlEquiposElectronicos
@@ -14,6 +15,7 @@ namespace ControlEquiposElectronicos
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("fa-solid-900.ttf", "FontAwesome");
                 });
 
 #if DEBUG
@@ -41,6 +43,7 @@ namespace ControlEquiposElectronicos
             builder.Services.AddTransient<ControlEquiposElectronicos.Views.Equipos.RegistrarEquipoPage>();
             builder.Services.AddTransient<ControlEquiposElectronicos.Views.Equipos.DetalleEquipoPage>();
             builder.Services.AddTransient<ControlEquiposElectronicos.Views.Equipos.ComputoPage>();
+            builder.Services.AddTransient<AuditoriaPage>();
 
             return builder.Build();
         }
