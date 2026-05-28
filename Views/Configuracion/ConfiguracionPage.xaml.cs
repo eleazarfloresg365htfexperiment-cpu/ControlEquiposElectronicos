@@ -47,9 +47,6 @@ public partial class ConfiguracionPage : ContentPage
 
     private async void OnGestionarRolesUsuarioClicked(object? sender, EventArgs e)
     {
-        // Por ahora muestra un aviso; cuando exista el endpoint de la API se conecta aquí
-        await DisplayAlert("Gestionar roles por usuario",
-            "Próximamente: aquí podrás cambiar el rol asignado a cada usuario.",
-            "Entendido");
+        await Shell.Current.GoToAsync("RolesUsuario");
     }
 }

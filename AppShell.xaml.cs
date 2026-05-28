@@ -13,6 +13,7 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
         Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
+        Routing.RegisterRoute("RolesUsuario", typeof(Views.Configuracion.RolesUsuarioPage));
 
         MostrarUsuario();
         ConfigurarMenu();
