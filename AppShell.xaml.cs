@@ -1,4 +1,4 @@
-﻿using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Services;
 
 namespace ControlEquiposElectronicos;
 
@@ -13,6 +13,10 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
         Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
+        Routing.RegisterRoute("NuevoChecklist", typeof(Views.Checklist.NuevoChecklistPage));
+        Routing.RegisterRoute("RevisionEquipoChecklist", typeof(Views.Checklist.RevisionEquipoChecklistPage));
+        Routing.RegisterRoute("HistorialChecklist", typeof(Views.Checklist.HistorialChecklistPage));
+        Routing.RegisterRoute("PlantillasChecklist", typeof(Views.Checklist.PlantillasChecklistPage));
 
         MostrarUsuario();
         ConfigurarMenu();
@@ -29,6 +33,14 @@ public partial class AppShell : Shell
 
     private void ConfigurarMenu()
     {
+        // Si la sesión no trae permisos (ambiente de pruebas), se muestra el menú completo.
+        if (_sesion.UsuarioActual == null || _sesion.UsuarioActual.Permisos.Count == 0)
+        {
+            foreach (var item in Items)
+                item.IsVisible = true;
+            return;
+        }
+
         foreach (var item in Items)
         {
             item.IsVisible = item.Title switch
@@ -36,6 +48,7 @@ public partial class AppShell : Shell
                 "Dashboard" => _sesion.TienePermiso("Dashboard.Ver"),
                 "Equipos" => _sesion.TienePermiso("Equipos.Ver"),
                 "Mantenimientos" => _sesion.TienePermiso("Mantenimientos.Ver"),
+                "Checklist" => _sesion.TienePermiso("Checklist.Ver"),
                 "Reportes" => _sesion.TienePermiso("Reportes.Ver"),
                 "Usuarios" => _sesion.TienePermiso("Usuarios.Ver"),
                 "Configuración" => _sesion.TienePermiso("Configuracion.Ver"),

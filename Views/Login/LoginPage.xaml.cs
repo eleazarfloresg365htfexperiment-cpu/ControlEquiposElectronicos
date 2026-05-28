@@ -51,6 +51,7 @@ public partial class LoginPage : ContentPage
 
         var usuarioSesion = new UsuarioSesionDto
         {
+            UsuarioId = respuesta.UsuarioId,
             Nombre = respuesta.NombreCompleto,
             Rol = respuesta.Rol,
             Permisos = permisosTexto

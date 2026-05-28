@@ -43,18 +43,32 @@ public class ApiService : IApiService
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string endpoint, TRequest data)
     {
+        var (response, _) = await PostWithErrorAsync<TRequest, TResponse>(endpoint, data);
+        return response;
+    }
+
+    public async Task<(TResponse? Response, string? ErrorMessage)> PostWithErrorAsync<TRequest, TResponse>(
+        string endpoint,
+        TRequest data)
+    {
         try
         {
             var response = await _httpClient.PostAsJsonAsync(endpoint, data, _jsonOptions);
 
             if (!response.IsSuccessStatusCode)
-                return default;
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                return (default, string.IsNullOrWhiteSpace(errorBody)
+                    ? $"Error HTTP {(int)response.StatusCode}"
+                    : errorBody);
+            }
 
-            return await response.Content.ReadFromJsonAsync<TResponse>(_jsonOptions);
+            var result = await response.Content.ReadFromJsonAsync<TResponse>(_jsonOptions);
+            return (result, null);
         }
-        catch
+        catch (Exception ex)
         {
-            return default;
+            return (default, $"No se pudo conectar con la API: {ex.Message}");
         }
     }
 
