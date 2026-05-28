@@ -6,11 +6,13 @@ namespace ControlEquiposElectronicos.Views.Login;
 public partial class LoginPage : ContentPage
 {
     private readonly SesionService _sesion;
+    private readonly IAuthService _authService;
 
     public LoginPage(SesionService sesion)
     {
         InitializeComponent();
         _sesion = sesion;
+        _authService = IPlatformApplication.Current!.Services.GetRequiredService<IAuthService>();
     }
 
     private async void OnLoginClicked(object? sender, EventArgs e)
@@ -26,20 +28,32 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        // Login simulado (mientras se conecta el AuthService real con la API)
+        // Llamar a la API para validar las credenciales
+        var respuesta = await _authService.LoginAsync(usuario, contrasena);
+
+        // Si la API devuelve null, las credenciales son incorrectas
+        if (respuesta == null)
+        {
+            await DisplayAlert("Acceso denegado",
+                "Usuario o contraseña incorrectos. Por favor verifica tus datos e intenta de nuevo.",
+                "Entendido");
+            ContrasenaEntry.Text = string.Empty;
+            return;
+        }
+
+        // Login exitoso: armar la sesión con los datos reales del usuario
+        // Convertir los permisos al formato "Modulo.Accion" que usa la app
+        var permisosTexto = new List<string>();
+        foreach (var p in respuesta.Permisos)
+        {
+            permisosTexto.Add($"{p.Modulo}.{p.Accion}");
+        }
+
         var usuarioSesion = new UsuarioSesionDto
         {
-            Nombre = "Admin CPC",
-            Rol = "Administrador",
-            Permisos = new List<string>
-            {
-                "Dashboard.Ver",
-                "Equipos.Ver",
-                "Mantenimientos.Ver",
-                "Reportes.Ver",
-                "Usuarios.Ver",
-                "Configuracion.Ver"
-            }
+            Nombre = respuesta.NombreCompleto,
+            Rol = respuesta.Rol,
+            Permisos = permisosTexto
         };
 
         _sesion.IniciarSesion(usuarioSesion);
@@ -54,4 +68,3 @@ public partial class LoginPage : ContentPage
             "Entendido");
     }
 }
- 

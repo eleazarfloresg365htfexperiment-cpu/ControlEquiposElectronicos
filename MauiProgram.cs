@@ -26,6 +26,7 @@ namespace ControlEquiposElectronicos
 
             // Sesión y navegación
             builder.Services.AddSingleton<SesionService>();
+            builder.Services.AddSingleton<ControlEquiposElectronicos.Services.IAuthService, ControlEquiposElectronicos.Services.AuthService>();
             builder.Services.AddTransient<AppShell>();
 
             // Services por módulo
@@ -40,4 +41,4 @@ namespace ControlEquiposElectronicos
             return builder.Build();
         }
     }
-}
+} 

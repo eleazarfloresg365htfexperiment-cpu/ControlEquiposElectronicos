@@ -12,7 +12,7 @@
             <!-- Tarjetas de resumen -->
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
 
-                <Border Grid.Column="0"
+                <Border x:Name="TarjetaEquipos" Grid.Column="0"
                         BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -35,7 +35,7 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Column="1"
+                <Border x:Name="TarjetaMantenimientos" Grid.Column="1"
                         BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -58,7 +58,7 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Column="2"
+                <Border x:Name="TarjetaReportes" Grid.Column="2"
                         BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -96,7 +96,7 @@
 
             <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="16">
 
-                <Border Grid.Row="0" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <Border x:Name="AccesoEquipos" Grid.Row="0" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnEquiposTapped" />
                     </Border.GestureRecognizers>
@@ -111,7 +111,7 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <Border x:Name="AccesoMantenimientos" Grid.Row="0" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnMantenimientosTapped" />
                     </Border.GestureRecognizers>
@@ -126,7 +126,7 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <Border x:Name="AccesoReportes" Grid.Row="0" Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnReportesTapped" />
                     </Border.GestureRecognizers>
@@ -141,7 +141,7 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <Border x:Name="AccesoUsuarios" Grid.Row="1" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnUsuariosTapped" />
                     </Border.GestureRecognizers>
@@ -156,7 +156,7 @@
                     </Grid>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <Border x:Name="AccesoConfiguracion" Grid.Row="1" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnConfiguracionTapped" />
                     </Border.GestureRecognizers>
