@@ -50,6 +50,34 @@
                         </Border>
                     </VerticalStackLayout>
 
+                    <!-- Correo -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Correo electrónico" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
+                            <Entry x:Name="CorreoEntry"
+                                   Placeholder="Ej. jperez@cpc.com"
+                                   Keyboard="Email"
+                                   TextColor="{StaticResource Gray900}"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   HeightRequest="44"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Teléfono -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Teléfono" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
+                            <Entry x:Name="TelefonoEntry"
+                                   Placeholder="Ej. 1234-5678"
+                                   Keyboard="Telephone"
+                                   TextColor="{StaticResource Gray900}"
+                                   PlaceholderColor="{StaticResource Gray400}"
+                                   HeightRequest="44"
+                                   BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
                     <!-- Contraseña -->
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Contraseña" FontSize="13" TextColor="{StaticResource Gray500}" />
