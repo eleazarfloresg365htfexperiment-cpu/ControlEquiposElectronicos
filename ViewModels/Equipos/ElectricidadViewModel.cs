@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Net.Http.Json;
 
 namespace ControlEquiposElectronicos.ViewModels.Equipos;
 
@@ -10,6 +11,14 @@ public class ElectricidadViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     void OnPropertyChanged([CallerMemberName] string name = "") =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+    private readonly HttpClient _http;
+
+    public ElectricidadViewModel()
+    {
+        _http = new HttpClient { BaseAddress = new Uri("https://localhost:7212/") };
+        CargarDatos();
+    }
 
     private string _busquedaTexto = string.Empty;
     public string BusquedaTexto
@@ -32,16 +41,47 @@ public class ElectricidadViewModel : INotifyPropertyChanged
         set { _totalMantenimientos = value; OnPropertyChanged(); }
     }
 
-    public ObservableCollection<object> ListaUps { get; } = new();
+    private bool _cargando;
+    public bool Cargando
+    {
+        get => _cargando;
+        set { _cargando = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<EquipoItem> ListaUps { get; } = new();
+
+    async void CargarDatos()
+    {
+        try
+        {
+            Cargando = true;
+            var equipos = await _http.GetFromJsonAsync<List<EquipoItem>>("api/Equipos");
+            if (equipos != null)
+            {
+                ListaUps.Clear();
+                var ups = equipos.Where(e => e.TipoEquipo == "UPS").ToList();
+                foreach (var e in ups)
+                    ListaUps.Add(e);
+                TotalUps = ups.Count;
+            }
+        }
+        catch
+        {
+            // API no disponible aún
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
 
     public ICommand RegistrarUpsCommand => new Command(async () =>
-        await Shell.Current.DisplayAlert("Electricidad", "Registrar UPS - próximamente", "OK"));
+        await Shell.Current.GoToAsync("RegistrarEquipoPage?tipo=UPS"));
 
     public ICommand RegistrarMantenimientoCommand => new Command(async () =>
-        await Shell.Current.DisplayAlert("Electricidad", "Registrar mantenimiento - próximamente", "OK"));
+        await Shell.Current.DisplayAlert("Mantenimiento", "Registrar mantenimiento - próximamente", "OK"));
 
-    public ICommand BuscarCommand => new Command(async () =>
-        await Shell.Current.DisplayAlert("Buscar", $"Buscando: {BusquedaTexto}", "OK"));
+    public ICommand BuscarCommand => new Command(CargarDatos);
 
     public ICommand VerHistorialCommand => new Command(async (item) =>
         await Shell.Current.DisplayAlert("Historial", "Ver historial del UPS", "OK"));
@@ -49,10 +89,5 @@ public class ElectricidadViewModel : INotifyPropertyChanged
     public ICommand ReportarFallaCommand => new Command(async (item) =>
         await Shell.Current.DisplayAlert("Falla", "Reportar falla eléctrica", "OK"));
 
-    public ICommand ActualizarCommand => new Command(() =>
-    {
-        ListaUps.Clear();
-        TotalUps = 0;
-        TotalMantenimientos = 0;
-    });
+    public ICommand ActualizarCommand => new Command(CargarDatos);
 }
