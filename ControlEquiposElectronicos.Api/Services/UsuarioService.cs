@@ -1,5 +1,6 @@
 ﻿using ControlEquiposElectronicos.Api.Data;
 using ControlEquiposElectronicos.Api.DTOs.Usuarios;
+using ControlEquiposElectronicos.Api.Entities.Auditoria;
 using ControlEquiposElectronicos.Api.Entities.Seguridad;
 using ControlEquiposElectronicos.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,14 @@ namespace ControlEquiposElectronicos.Api.Services;
 public class UsuarioService : IUsuarioService
 {
     private readonly AppDbContext _context;
+    private readonly IUsuarioActualService _usuarioActualService;
 
-    public UsuarioService(AppDbContext context)
+    public UsuarioService(
+        AppDbContext context,
+        IUsuarioActualService usuarioActualService)
     {
         _context = context;
+        _usuarioActualService = usuarioActualService;
     }
 
     public async Task<List<UsuarioDto>> ObtenerTodosAsync()
@@ -88,10 +93,8 @@ public class UsuarioService : IUsuarioService
             Nombres = nombres,
             Apellidos = apellidos,
 
-            // Importante:
             // NombreUsuario tiene índice único en SQL Server.
             // Nickname es el nombre visible/de acceso usado por MAUI.
-            // Para evitar errores de duplicado por valor vacío, ambos se llenan.
             NombreUsuario = nickname,
             Nickname = nickname,
 
@@ -106,6 +109,8 @@ public class UsuarioService : IUsuarioService
         _context.Usuarios.Add(usuario);
         await _context.SaveChangesAsync();
 
+        await RegistrarAuditoriaCreacionUsuarioAsync(usuario, rol);
+
         return new UsuarioDto
         {
             UsuarioId = usuario.UsuarioId,
@@ -119,6 +124,32 @@ public class UsuarioService : IUsuarioService
             FechaCreacion = usuario.FechaCreacion,
             FechaActualizacion = null
         };
+    }
+
+    private async Task RegistrarAuditoriaCreacionUsuarioAsync(Usuario usuario, Rol rol)
+    {
+        var fechaLocal = DateTime.Now;
+
+        var historial = new HistorialOperacion
+        {
+            UsuarioId = _usuarioActualService.ObtenerUsuarioId(),
+            Accion = "Creación de usuario",
+            Modulo = "Usuarios",
+            TablaAfectada = "Usuarios",
+            RegistroId = usuario.UsuarioId,
+            Descripcion =
+                $"Se creó el usuario '{usuario.Nickname}' " +
+                $"con nombre completo '{(usuario.Nombres + " " + usuario.Apellidos).Trim()}', " +
+                $"rol '{rol.NombreRol}', " +
+                $"estado '{(usuario.Activo ? "Activo" : "Inactivo")}', " +
+                $"el día {fechaLocal:dd/MM/yyyy} a las {fechaLocal:HH:mm:ss}.",
+            DireccionIP = _usuarioActualService.ObtenerDireccionIP(),
+            FechaOperacion = DateTime.UtcNow
+        };
+
+        _context.HistorialOperaciones.Add(historial);
+
+        await _context.SaveChangesAsync();
     }
 
     private static (string Nombres, string Apellidos) SepararNombreCompleto(string nombreCompleto)
