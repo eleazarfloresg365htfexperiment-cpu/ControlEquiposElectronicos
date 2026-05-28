@@ -35,5 +35,20 @@
     <FlyoutItem Title="Configuración" Route="Configuracion">
         <ShellContent ContentTemplate="{DataTemplate config:ConfiguracionPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="🌐 Red" Route="Red">
+        <ShellContent ContentTemplate="{DataTemplate equipos:RedPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="🖨️ Impresión" Route="Impresion">
+        <ShellContent ContentTemplate="{DataTemplate equipos:ImpresionPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="⚡ Electricidad" Route="Electricidad">
+        <ShellContent ContentTemplate="{DataTemplate equipos:ElectricidadPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="🌿 Soporte Ambiental" Route="SoporteAmbiental">
+        <ShellContent ContentTemplate="{DataTemplate equipos:SoporteAmbientalPage}" />
+    </FlyoutItem>
 
 </Shell>
