@@ -5,7 +5,6 @@
              x:Class="ControlEquiposElectronicos.Views.Equipos.SoporteAmbientalPage"
              Title="Soporte Ambiental" BackgroundColor="#F4F6F9">
 
-<<<<<<< HEAD
     <ContentPage.BindingContext>
         <vm:SoporteAmbientalViewModel />
     </ContentPage.BindingContext>
@@ -139,28 +138,3 @@
     </Grid>
 </ContentPage>
     
-=======
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-
-            <Label Text="Modulo Soporte Ambiental"
-                   FontSize="30"
-                   FontAttributes="Bold"/>
-
-            <Button Text="Registrar Ambientador"
-                    Clicked="OnRegistrarAmbientador"/>
-
-            <Button Text="Registrar Soporte"
-                    Clicked="OnRegistrarSoporte"/>
-
-            <Button Text="Editar Detalle"
-                    Clicked="OnEditarDetalle"/>
-
-            <Button Text="Reportar Problema"
-                    Clicked="OnReportarProblema"/>
-
-        </VerticalStackLayout>
-    </ScrollView>
-
-</ContentPage>
->>>>>>> origin/pablo-inicio-de-sesion

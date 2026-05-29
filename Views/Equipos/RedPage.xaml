@@ -6,7 +6,6 @@
              Title="Infraestructura de Red"
              BackgroundColor="#F4F6F9">
 
-<<<<<<< HEAD
     <ContentPage.BindingContext>
         <vm:RedViewModel />
     </ContentPage.BindingContext>
@@ -168,32 +167,6 @@
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
-=======
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-
-            <Label Text="Modulo Red"
-                   FontSize="30"
-                   FontAttributes="Bold"/>
-
-            <Button Text="Registrar Router"
-                    Clicked="OnRegistrarRouter"/>
-
-            <Button Text="Registrar Switch"
-                    Clicked="OnRegistrarSwitch"/>
-
-            <Button Text="Registrar Puerto"
-                    Clicked="OnRegistrarPuerto"/>
-
-            <Button Text="Ver Historial"
-                    Clicked="OnVerHistorial"/>
-
-            <Button Text="Reportar Falla"
-                    Clicked="OnReportarFalla"/>
-
-        </VerticalStackLayout>
-    </ScrollView>
-
->>>>>>> origin/pablo-inicio-de-sesion
 </ContentPage>
+    
     

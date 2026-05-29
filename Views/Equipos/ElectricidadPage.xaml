@@ -5,7 +5,6 @@
              x:Class="ControlEquiposElectronicos.Views.Equipos.ElectricidadPage"
              Title="Electricidad y UPS" BackgroundColor="#F4F6F9">
 
-<<<<<<< HEAD
     <ContentPage.BindingContext>
         <vm:ElectricidadViewModel />
     </ContentPage.BindingContext>
@@ -133,32 +132,3 @@
         </ScrollView>
     </Grid>
 </ContentPage>
-    
-=======
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-
-            <Label Text="Modulo Electricidad"
-                   FontSize="30"
-                   FontAttributes="Bold"/>
-
-            <Button Text="Registrar UPS"
-                    Clicked="OnRegistrarUPS"/>
-
-            <Button Text="Registrar Bateria"
-                    Clicked="OnRegistrarBateria"/>
-
-            <Button Text="Registrar Aire Acondicionado"
-                    Clicked="OnRegistrarAire"/>
-
-            <Button Text="Registrar BTU"
-                    Clicked="OnRegistrarBTU"/>
-
-            <Button Text="Ver Servicios"
-                    Clicked="OnVerServicios"/>
-
-        </VerticalStackLayout>
-    </ScrollView>
-
-</ContentPage>
->>>>>>> origin/pablo-inicio-de-sesion
