@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:helpers="clr-namespace:ControlEquiposElectronicos.Helpers"
     Title="Detalle del Equipo"
+    Shell.NavBarIsVisible="False"
     BackgroundColor="#F8F9FB">
 
     <ContentPage.Resources>
@@ -31,7 +32,10 @@
 
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="18">
                         <VerticalStackLayout Spacing="0">
-                            <Label Text="💻Información general" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E" Margin="0,0,0,12"/>
+                            <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
+                                <Label FontFamily="FontAwesome" Text="&#xf108;" FontSize="13" TextColor="#378ADD" VerticalOptions="Center"/>
+                                <Label Text="Información general" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                            </HorizontalStackLayout>
 
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Código" FontSize="12" TextColor="#9AA3BE"/>
@@ -78,7 +82,10 @@
 
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="18">
                         <VerticalStackLayout Spacing="0">
-                            <Label Text="📍 Ubicación y estado" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E" Margin="0,0,0,12"/>
+                            <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
+                                <Label FontFamily="FontAwesome" Text="&#xf3c5;" FontSize="13" TextColor="#E24B4A" VerticalOptions="Center"/>
+                                <Label Text="Ubicación y estado" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                            </HorizontalStackLayout>
 
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Ubicación" FontSize="12" TextColor="#9AA3BE"/>
@@ -102,10 +109,12 @@
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Grid.Column="1" Spacing="10" WidthRequest="200">
-
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="16">
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="🛠️ Acciones" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E" Margin="0,0,0,4"/>
+                            <HorizontalStackLayout Spacing="8" Margin="0,0,0,4">
+                                <Label FontFamily="FontAwesome" Text="&#xf0ad;" FontSize="13" TextColor="#1E2A6E" VerticalOptions="Center"/>
+                                <Label Text="Acciones" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                            </HorizontalStackLayout>
 
                             <Button Text="✏ Editar información"
                                     BackgroundColor="#DBEAFE" TextColor="#1E40AF"
@@ -117,7 +126,7 @@
                                     CornerRadius="9" FontSize="12" Padding="10"
                                     x:Name="BtnCambiarEstado"/>
 
-                            <Button Text="🏷️Reclasificar"
+                            <Button Text="🏷️ Reclasificar"
                                     BackgroundColor="#EDE9FE" TextColor="#5B21B6"
                                     CornerRadius="9" FontSize="12" Padding="10"
                                     x:Name="BtnReclasificar"/>

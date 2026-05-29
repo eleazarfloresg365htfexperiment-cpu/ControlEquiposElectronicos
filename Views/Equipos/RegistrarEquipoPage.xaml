@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Registrar Equipo"
+    Shell.NavBarIsVisible="False"
     BackgroundColor="#F8F9FB">
 
     <ScrollView>
@@ -108,7 +109,7 @@
                     </VerticalStackLayout>
 
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0,8,0,0">
-                        <Button Grid.Column="0" Text="🗑️ Limpiar"
+                        <Button Grid.Column="0" Text="Limpiar"
                                 BackgroundColor="#F0F2F7" TextColor="#5A6282"
                                 CornerRadius="8" FontSize="13"
                                 x:Name="BtnLimpiar"/>
@@ -117,8 +118,8 @@
                                 CornerRadius="8" FontSize="13"
                                 BorderColor="#E2E6F0" BorderWidth="1"
                                 x:Name="BtnCancelar"/>
-                        <Button Grid.Column="2" Text="Guardar ➜"
-                                BackgroundColor="#1E2A6E" TextColor="White"
+                        <Button Grid.Column="2" Text="Guardar"
+                                BackgroundColor="#512BD4" TextColor="White"
                                 CornerRadius="8" FontSize="13"
                                 x:Name="BtnGuardar"/>
                     </Grid>
@@ -128,5 +129,4 @@
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
