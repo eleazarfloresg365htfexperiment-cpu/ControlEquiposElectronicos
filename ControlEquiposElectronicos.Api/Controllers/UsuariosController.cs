@@ -51,4 +51,22 @@ public class UsuariosController : ControllerBase
             return BadRequest(new { mensaje = ex.Message });
         }
     }
+
+    [HttpPatch("{id:int}/rol")]
+    public async Task<ActionResult<UsuarioDto>> CambiarRol(int id, ActualizarRolUsuarioDto dto)
+    {
+        try
+        {
+            var usuario = await _usuarioService.CambiarRolAsync(id, dto);
+
+            if (usuario == null)
+                return NotFound(new { mensaje = "El usuario no existe." });
+
+            return Ok(usuario);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensaje = ex.Message });
+        }
+    }
 }

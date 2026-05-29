@@ -1,15 +1,132 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Equipos.RegistrarEquipoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Equipos.RegistrarEquipoPage"
-    Title="Registrar equipo">
+    Title="Registrar Equipo"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F8F9FB">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Registrar equipo"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <VerticalStackLayout Spacing="2">
+                <Label Text="Registrar nuevo equipo" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                <Label Text="Completa los datos del nuevo dispositivo" FontSize="13" TextColor="#9AA3BE"/>
+            </VerticalStackLayout>
+
+            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="20">
+                <VerticalStackLayout Spacing="16">
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Código *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,9">
+                                <Entry Text="{Binding Codigo}" Placeholder="EQ-001" FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Nombre *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,9">
+                                <Entry Text="{Binding Nombre}" Placeholder="Dell OptiPlex 7090" FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Marca *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,9">
+                                <Entry Text="{Binding Marca}" Placeholder="Dell, HP, Lenovo..." FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Modelo" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,9">
+                                <Entry Text="{Binding Modelo}" Placeholder="OptiPlex 7090" FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Número de serie" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                        <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,9">
+                            <Entry Text="{Binding NumeroSerie}" Placeholder="SN-XXXXXXXXX" FontSize="13" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Categoría *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="4,2">
+                                <Picker ItemsSource="{Binding Categorias}"
+                                        SelectedItem="{Binding CategoriaSeleccionada}"
+                                        ItemDisplayBinding="{Binding Nombre}"
+                                        Title="Seleccionar..."
+                                        FontSize="13"/>
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Tipo *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="4,2">
+                                <Picker ItemsSource="{Binding Tipos}"
+                                        SelectedItem="{Binding TipoSeleccionado}"
+                                        ItemDisplayBinding="{Binding Nombre}"
+                                        Title="Seleccionar..."
+                                        FontSize="13"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Ubicación *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="4,2">
+                                <Picker ItemsSource="{Binding Ubicaciones}"
+                                        SelectedItem="{Binding UbicacionSeleccionada}"
+                                        ItemDisplayBinding="{Binding Nombre}"
+                                        Title="Seleccionar..."
+                                        FontSize="13"/>
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Estado *" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                            <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="4,2">
+                                <Picker ItemsSource="{Binding Estados}"
+                                        SelectedItem="{Binding EstadoSeleccionado}"
+                                        ItemDisplayBinding="{Binding Nombre}"
+                                        Title="Seleccionar..."
+                                        FontSize="13"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Observaciones" FontSize="12" FontAttributes="Bold" TextColor="#5A6282"/>
+                        <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,9">
+                            <Editor Text="{Binding Observaciones}" Placeholder="Notas adicionales..." FontSize="13" HeightRequest="80" BackgroundColor="Transparent"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0,8,0,0">
+                        <Button Grid.Column="0" Text="Limpiar"
+                                BackgroundColor="#F0F2F7" TextColor="#5A6282"
+                                CornerRadius="8" FontSize="13"
+                                x:Name="BtnLimpiar"/>
+                        <Button Grid.Column="1" Text="Cancelar"
+                                BackgroundColor="White" TextColor="#5A6282"
+                                CornerRadius="8" FontSize="13"
+                                BorderColor="#E2E6F0" BorderWidth="1"
+                                x:Name="BtnCancelar"/>
+                        <Button Grid.Column="2" Text="Guardar"
+                                BackgroundColor="#512BD4" TextColor="White"
+                                CornerRadius="8" FontSize="13"
+                                x:Name="BtnGuardar"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

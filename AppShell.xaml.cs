@@ -1,4 +1,5 @@
 using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Views.Equipos;
 
 namespace ControlEquiposElectronicos;
 
@@ -17,6 +18,12 @@ public partial class AppShell : Shell
 
         MostrarUsuario();
         ConfigurarMenu();
+
+        // Rutas de navegación - Equipos (Suarlin)
+        Routing.RegisterRoute("RegistrarEquipoPage", typeof(Views.Equipos.RegistrarEquipoPage));
+        Routing.RegisterRoute("DetalleEquipoPage", typeof(Views.Equipos.DetalleEquipoPage));
+        Routing.RegisterRoute("ComputoPage", typeof(Views.Equipos.ComputoPage));
+        Routing.RegisterRoute("AuditoriaPage", typeof(AuditoriaPage));
     }
 
     // Al tocar el área del usuario en la barra lateral, muestra/oculta el mini-menú
