@@ -1,15 +1,128 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Reportes.ReporteFallaFormularioPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Reportes.ReporteFallaFormularioPage"
-    Title="Reporte de falla">
+    Title="Reporte de falla"
+    BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Reporte de falla"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Reporte de falla" FontSize="28" FontAttributes="Bold" TextColor="#1A1A2E" />
+                <Label Text="Registra una falla técnica detectada en un equipo" FontSize="14" TextColor="#666666" />
+            </VerticalStackLayout>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="24">
+                <VerticalStackLayout Spacing="18">
+
+                    <!-- ID de equipo -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="ID del equipo" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Entry Placeholder="Ej: 1"
+                                   PlaceholderColor="#AAAAAA"
+                                   TextColor="#1A1A2E"
+                                   FontSize="14"
+                                   Keyboard="Numeric"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding EquipoIdTexto}" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Título -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Título de la falla" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Entry Placeholder="Ej: Proyector no enciende"
+                                   PlaceholderColor="#AAAAAA"
+                                   TextColor="#1A1A2E"
+                                   FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding Titulo}" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Descripción -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Descripción de la falla" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,10">
+                            <Editor Placeholder="Describe detalladamente la falla detectada..."
+                                    PlaceholderColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
+                                    FontSize="14"
+                                    HeightRequest="100"
+                                    BackgroundColor="Transparent"
+                                    Text="{Binding Descripcion}" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Prioridad -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Prioridad" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
+                            <Picker Title="Seleccionar prioridad..."
+                                    TitleColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent"
+                                    SelectedItem="{Binding Prioridad}">
+                                <Picker.Items>
+                                    <x:String>Baja</x:String>
+                                    <x:String>Media</x:String>
+                                    <x:String>Alta</x:String>
+                                    <x:String>Crítica</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Estado -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                        <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
+                            <Picker Title="Seleccionar estado..."
+                                    TitleColor="#AAAAAA"
+                                    TextColor="#1A1A2E"
+                                    FontSize="14"
+                                    BackgroundColor="Transparent"
+                                    SelectedItem="{Binding EstadoReporte}">
+                                <Picker.Items>
+                                    <x:String>Abierto</x:String>
+                                    <x:String>En revisión</x:String>
+                                    <x:String>Cerrado</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#E53935" HorizontalOptions="Center" />
+
+                    <!-- BOTONES -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" BackgroundColor="White" Padding="0">
+                            <Button Text="Cancelar"
+                                    BackgroundColor="White"
+                                    TextColor="#666666"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Command="{Binding CancelarCommand}" />
+                        </Border>
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#E53935" Padding="0">
+                            <Button Text="Enviar reporte"
+                                    BackgroundColor="#E53935"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Command="{Binding GuardarCommand}" />
+                        </Border>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

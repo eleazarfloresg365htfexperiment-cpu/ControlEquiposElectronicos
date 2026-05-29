@@ -3,11 +3,173 @@
     x:Class="ControlEquiposElectronicos.Views.Reportes.ReportesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Reportes">
+    Title="Reportes"
+    BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Reportes" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
 
+            <Label Text="Consulta y exporta reportes técnicos de la academia"
+                   FontSize="14" TextColor="#666666" />
+
+            <!-- TARJETAS -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#E53935" StrokeShape="RoundRectangle 12" Stroke="Transparent" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center">
+                            <Label Text="⚠️" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Nuevo reporte de falla" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="Registrar falla técnica" FontSize="11" TextColor="#888888" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Button Text="Abrir" BackgroundColor="#E53935" TextColor="White" FontSize="12" CornerRadius="8" Command="{Binding NuevoReporteCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#2ECB8A" StrokeShape="RoundRectangle 12" Stroke="Transparent" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center">
+                            <Label Text="📊" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Exportar Excel" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="Descargar reporte .xlsx" FontSize="11" TextColor="#888888" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Button Text="Exportar" BackgroundColor="#2ECB8A" TextColor="White" FontSize="12" CornerRadius="8" Command="{Binding ExportarExcelCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#A855F7" StrokeShape="RoundRectangle 12" Stroke="Transparent" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center">
+                            <Label Text="📄" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Exportar PDF" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="Descargar reporte .pdf" FontSize="11" TextColor="#888888" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Button Text="Exportar" BackgroundColor="#A855F7" TextColor="White" FontSize="12" CornerRadius="8" Command="{Binding ExportarPdfCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="3" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="16">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#F5A623" StrokeShape="RoundRectangle 12" Stroke="Transparent" HeightRequest="56" WidthRequest="56" HorizontalOptions="Center">
+                            <Label Text="🕐" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <Label Text="Historial técnico" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="Ver auditoría de cambios" FontSize="11" TextColor="#888888" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Button Text="Ver" BackgroundColor="#F5A623" TextColor="White" FontSize="12" CornerRadius="8" Command="{Binding HistorialCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- FILTRO DE FECHAS PARA EXPORTAR -->
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20" IsVisible="{Binding MostrarFiltroFechas}">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Selecciona el rango de fechas" FontSize="16" FontAttributes="Bold" TextColor="#1A1A2E" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="6">
+                            <Label Text="Fecha desde" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
+                                <DatePicker Date="{Binding FechaDesde}" Format="dd/MM/yyyy" FontSize="13" BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Fecha hasta" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
+                            <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
+                                <DatePicker Date="{Binding FechaHasta}" Format="dd/MM/yyyy" FontSize="13" BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" BackgroundColor="White" Padding="0">
+                            <Button Text="Cancelar" BackgroundColor="White" TextColor="#666666" FontAttributes="Bold" FontSize="14" Command="{Binding CancelarExportCommand}" />
+                        </Border>
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#4F8EF7" Padding="0">
+                            <Button Text="Generar reporte" BackgroundColor="#4F8EF7" TextColor="White" FontAttributes="Bold" FontSize="14" Command="{Binding ConfirmarExportCommand}" />
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- HISTORIAL -->
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20" IsVisible="{Binding MostrarHistorial}">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Historial de reportes" FontSize="18" FontAttributes="Bold" TextColor="#1A1A2E" VerticalOptions="Center" />
+                        <Button Grid.Column="1" Text="✕ Cerrar" BackgroundColor="#E0E0E0" TextColor="#333" FontSize="12" CornerRadius="8" Command="{Binding CerrarHistorialCommand}" />
+                    </Grid>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#F5A623" HorizontalOptions="Center" />
+                    <Grid ColumnDefinitions="*,120,150" BackgroundColor="#F0F0F0" Padding="10,8">
+                        <Label Grid.Column="0" Text="Descripción" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="1" Text="Usuario" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="2" Text="Fecha" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                    </Grid>
+                    <CollectionView ItemsSource="{Binding Historial}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,120,150" Padding="10,8">
+                                    <Label Grid.Column="0" Text="{Binding Descripcion}" FontSize="12" TextColor="#1A1A2E" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Usuario}" FontSize="12" TextColor="#1A1A2E" VerticalOptions="Center" />
+                                    <Label Grid.Column="2" Text="{Binding FechaOperacion, StringFormat='{0:dd/MM/yy HH:mm}'}" FontSize="12" TextColor="#1A1A2E" VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- TABLA -->
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Reportes de falla" FontSize="18" FontAttributes="Bold" TextColor="#1A1A2E" VerticalOptions="Center" />
+                        <Border Grid.Column="1" BackgroundColor="#E53935" StrokeShape="RoundRectangle 8" Stroke="Transparent" Padding="0">
+                            <Button Text="+ Nuevo reporte" TextColor="White" FontAttributes="Bold" FontSize="13" BackgroundColor="#E53935" Command="{Binding NuevoReporteCommand}" Padding="14,10"/>
+                        </Border>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,8">
+                            <Entry Placeholder="🔍  Buscar por código..." PlaceholderColor="#AAAAAA" TextColor="#1A1A2E" FontSize="13" BackgroundColor="Transparent" Text="{Binding Busqueda}" />
+                        </Border>
+                        <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
+                            <Picker Title="Todos los estados" TitleColor="#AAAAAA" TextColor="#1A1A2E" FontSize="13" BackgroundColor="Transparent" SelectedItem="{Binding EstadoFiltro}">
+                                <Picker.Items>
+                                    <x:String>Abierto</x:String>
+                                    <x:String>En revisión</x:String>
+                                    <x:String>Cerrado</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </Grid>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#E53935" HorizontalOptions="Center" />
+
+                    <Grid ColumnDefinitions="50,110,*,110,110" BackgroundColor="#F0F0F0" Padding="10,8">
+                        <Label Grid.Column="0" Text="ID" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="1" Text="Equipo" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="2" Text="Título" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="3" Text="Prioridad" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                        <Label Grid.Column="4" Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="#555" />
+                    </Grid>
+
+                    <CollectionView ItemsSource="{Binding Reportes}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="50,110,*,110,110" Padding="10,10">
+                                    <Label Grid.Column="0" Text="{Binding Id}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="{Binding CodigoEquipo}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Label Grid.Column="2" Text="{Binding Titulo}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Label Grid.Column="3" Text="{Binding Prioridad}" FontSize="13" TextColor="#1A1A2E" VerticalOptions="Center"/>
+                                    <Border Grid.Column="4" BackgroundColor="#FDECEA" StrokeShape="RoundRectangle 20" Stroke="Transparent" Padding="10,4" HorizontalOptions="Start" VerticalOptions="Center">
+                                        <Label Text="{Binding EstadoReporte}" TextColor="#C62828" FontSize="12" FontAttributes="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

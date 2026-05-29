@@ -40,9 +40,6 @@ public static class MauiProgram
         // Servicio base de la API
         builder.Services.AddSingleton<IApiService, ApiService>();
 
-        // Navegación custom (reemplaza Shell.Current)
-        builder.Services.AddSingleton<INavigationService, NavigationService>();
-
         // Servicios por módulo
         builder.Services.AddSingleton<IEquipoApiService, EquipoApiService>();
         builder.Services.AddSingleton<IChecklistApiService, ChecklistApiService>();

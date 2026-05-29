@@ -1,9 +1,21 @@
-﻿namespace ControlEquiposElectronicos.Views.Mantenimientos;
+﻿using ControlEquiposElectronicos.ViewModels;
+
+namespace ControlEquiposElectronicos.Views.Mantenimientos;
 
 public partial class MantenimientosPage : ContentPage
 {
-    public MantenimientosPage()
+    private readonly MantenimientosViewModel _viewModel;
+
+    public MantenimientosPage(MantenimientosViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.CargarMantenimientosAsync();
     }
 }

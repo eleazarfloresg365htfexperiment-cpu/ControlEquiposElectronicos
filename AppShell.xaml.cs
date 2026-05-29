@@ -31,8 +31,6 @@ public partial class AppShell : Shell
         ActualizarBotonActivo(BtnDashboard);
     }
 
-    // ── Navegación ───────────────────────────────────────────────────────────
-
     private async void OnDashboardTapped(object? s, TappedEventArgs e)
     { await GoToAsync("//Dashboard"); ActualizarBotonActivo(BtnDashboard); }
 
@@ -61,8 +59,6 @@ public partial class AppShell : Shell
         _btnActivo = nuevo;
     }
 
-    // ── Toggle ───────────────────────────────────────────────────────────────
-
     private async void OnToggleSidebar(object? s, TappedEventArgs e)
     {
         if (_animando) return;
@@ -73,18 +69,12 @@ public partial class AppShell : Shell
         if (_sidebarExpandido)
         {
             FlyoutWidth = 240;
-
-            // Secciones: texto completo
             LabelPrincipal.Text = "PRINCIPAL";
             LabelGestion.Text = "GESTIÓN";
             LabelSistema.Text = "SISTEMA";
-
-            // Mostrar logo y nombre empresa
             LogoCPC.IsVisible = true;
             NombreEmpresaStack.IsVisible = true;
             NombreUsuarioStack.IsVisible = true;
-
-            // Reset opacity
             SetOpacity(0);
             MostrarTextos(true);
 
@@ -119,16 +109,10 @@ public partial class AppShell : Shell
             MostrarTextos(false);
             NombreEmpresaStack.IsVisible = false;
             NombreUsuarioStack.IsVisible = false;
-
-            // Ocultar logo para evitar recorte — solo queda hamburguesa
             LogoCPC.IsVisible = false;
-
-            // Secciones: texto abreviado, siempre visibles
             LabelPrincipal.Text = "P";
             LabelGestion.Text = "G";
             LabelSistema.Text = "S";
-
-            // Ancho exacto: hamburguesa 34 + padding 10*2 = 54
             FlyoutWidth = 54;
         }
 
@@ -149,8 +133,6 @@ public partial class AppShell : Shell
         LblChecklist.IsVisible = LblReportes.IsVisible = LblUsuarios.IsVisible = visible;
         LblConfiguracion.IsVisible = FlechaMenuLabel.IsVisible = visible;
     }
-
-    // ── Menú usuario ─────────────────────────────────────────────────────────
 
     private void OnMenuUsuarioTapped(object? s, TappedEventArgs e)
     {
@@ -175,8 +157,6 @@ public partial class AppShell : Shell
         _sesion.CerrarSesion();
         Application.Current!.Windows[0].Page = new Views.Login.LoginPage(_sesion);
     }
-
-    // ── Utilidades ───────────────────────────────────────────────────────────
 
     private void MostrarUsuario()
     {
