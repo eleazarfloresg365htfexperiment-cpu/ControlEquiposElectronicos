@@ -10,15 +10,31 @@
         <VerticalStackLayout Padding="24" Spacing="20">
 
             <!-- Botón volver -->
-            <Button Text="← Volver"
-                    Clicked="OnVolverClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="{StaticResource Primary}"
-                    FontAttributes="Bold"
-                    FontSize="14"
-                    HorizontalOptions="Start"
-                    Padding="0"
-                    HeightRequest="32" />
+            <Border
+                BackgroundColor="Transparent"
+                StrokeShape="RoundRectangle 10"
+                StrokeThickness="1"
+                Stroke="#DDD8F7"
+                Padding="12,8"
+                HorizontalOptions="Start">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVolverClicked" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="8">
+                    <Label Grid.Column="0"
+                           FontFamily="FontAwesome"
+                           Text="&#xf060;"
+                           TextColor="{StaticResource Primary}"
+                           FontSize="13"
+                           VerticalOptions="Center" />
+                    <Label Grid.Column="1"
+                           Text="Volver"
+                           TextColor="{StaticResource Primary}"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+                </Grid>
+            </Border>
 
             <!-- Aviso de estado real de la API -->
             <Border BackgroundColor="#FFF8E7"

@@ -39,11 +39,16 @@ public partial class NuevoChecklistPage : ContentPage, IQueryAttributable
 
         if (_viewModel.ChecklistActivo != null)
         {
-            await Shell.Current.GoToAsync(
-                $"{nameof(RevisionEquipoChecklistPage)}" +
-                $"?ChecklistId={_viewModel.ChecklistActivo.Id}" +
-                $"&ChecklistTecnicoEquipoId={card.ChecklistTecnicoEquipoId}");
+            // Crear la página de revisión y pasarle los parámetros directamente
+            var vm = ServiceHelper.GetRequiredService<RevisionEquipoChecklistViewModel>();
+            var query = new Dictionary<string, object>
+            {
+                ["ChecklistId"] = _viewModel.ChecklistActivo.Id,
+                ["ChecklistTecnicoEquipoId"] = card.ChecklistTecnicoEquipoId
+            };
+            vm.ApplyQueryAttributes(query);
+            var page = new RevisionEquipoChecklistPage(vm);
+            await Navigation.PushModalAsync(page);
         }
     }
-
 }

@@ -21,7 +21,6 @@ public partial class LoginPage : ContentPage
         var usuario = UsuarioEntry.Text?.Trim() ?? string.Empty;
         var contrasena = ContrasenaEntry.Text ?? string.Empty;
 
-        // Validación básica: que no estén vacíos
         if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contrasena))
         {
             await DisplayAlert("Datos incompletos",
@@ -29,42 +28,31 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        // Llamar a la API para validar las credenciales
         var respuesta = await _authService.LoginAsync(usuario, contrasena);
 
-        // Si la API devuelve null, las credenciales son incorrectas
         if (respuesta == null)
         {
             await DisplayAlert("Acceso denegado",
-                "Usuario o contraseña incorrectos. Por favor verifica tus datos e intenta de nuevo.",
-                "Entendido");
+                "Usuario o contraseña incorrectos.", "Entendido");
             ContrasenaEntry.Text = string.Empty;
             return;
         }
 
-        // Login exitoso: armar la sesión con los datos reales del usuario
-        // Convertir los permisos al formato "Modulo.Accion" que usa la app
-        var permisosTexto = new List<string>();
-        foreach (var p in respuesta.Permisos)
-        {
-            permisosTexto.Add($"{p.Modulo}.{p.Accion}");
-        }
+        var permisos = respuesta.Permisos
+            .Select(p => $"{p.Modulo}.{p.Accion}")
+            .ToList();
 
-        var usuarioSesion = new UsuarioSesionDto
+        _sesion.IniciarSesion(new UsuarioSesionDto
         {
             Nombre = respuesta.NombreCompleto,
             Rol = respuesta.Rol,
-            Permisos = permisosTexto
-        };
+            Permisos = permisos
+        });
 
-        _sesion.IniciarSesion(usuarioSesion);
-
+        // ← Vuelve a AppShell (Shell nativo = API funciona)
         Application.Current!.Windows[0].Page = new AppShell(_sesion);
     }
 
     private async void OnRegistrarseTapped(object? sender, TappedEventArgs e)
-    {
-        // false = auto-registro: no permite elegir rol (se asigna Consulta)
-        await Navigation.PushModalAsync(new RegistroUsuarioPage(false));
-    }
+        => await Navigation.PushModalAsync(new RegistroUsuarioPage(false));
 }

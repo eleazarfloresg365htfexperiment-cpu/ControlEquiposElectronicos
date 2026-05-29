@@ -70,7 +70,6 @@ public partial class RolesUsuarioPage : ContentPage
         if (sender is not Button boton) return;
         if (boton.BindingContext is not UsuarioListadoDto usuario) return;
 
-        // Si ya tiene ese rol, la API lo rechazará — avisamos antes
         if (usuario.Rol.Equals(nuevoRol, StringComparison.OrdinalIgnoreCase))
         {
             await DisplayAlert("Sin cambios",
@@ -82,7 +81,6 @@ public partial class RolesUsuarioPage : ContentPage
         bool confirmar = await DisplayAlert("Cambiar rol",
             $"¿Cambiar el rol de {usuario.NombreCompleto} a «{rolMostrar}»?",
             "Sí, cambiar", "Cancelar");
-
         if (!confirmar) return;
 
         var (exito, errorJson) = await _usuarioApi.CambiarRolAsync(usuario.UsuarioId, nuevoRol);
@@ -91,10 +89,8 @@ public partial class RolesUsuarioPage : ContentPage
         {
             await DisplayAlert("Rol actualizado",
                 $"El rol de {usuario.NombreCompleto} ahora es «{rolMostrar}».", "Aceptar");
-
             await CargarUsuariosAsync();
 
-            // Restaurar filtro de búsqueda si había texto
             var texto = BusquedaEntry.Text?.Trim().ToLower() ?? string.Empty;
             if (!string.IsNullOrEmpty(texto))
                 UsuariosCollection.ItemsSource = _todosLosUsuarios.Where(u =>
@@ -104,30 +100,26 @@ public partial class RolesUsuarioPage : ContentPage
         }
         else
         {
-            // Intentar extraer el mensaje legible que manda la API
             var mensajeApi = ExtraerMensaje(errorJson);
             await DisplayAlert("No se pudo cambiar el rol", mensajeApi, "Entendido");
         }
     }
 
-    // La API devuelve JSON como {"mensaje":"El usuario ya tiene..."}
-    // Intentamos extraerlo; si no, mostramos el raw tal cual
     private static string ExtraerMensaje(string? errorJson)
     {
         if (string.IsNullOrWhiteSpace(errorJson))
             return "Error desconocido. Verifica tu conexión.";
-
         try
         {
             using var doc = JsonDocument.Parse(errorJson);
             if (doc.RootElement.TryGetProperty("mensaje", out var msg))
                 return msg.GetString() ?? errorJson;
         }
-        catch { /* no es JSON válido */ }
-
+        catch { }
         return errorJson;
     }
 
+    // Volver — compatible con TapGestureRecognizer
     private async void OnVolverClicked(object? sender, EventArgs e)
         => await Shell.Current.GoToAsync("..");
 }

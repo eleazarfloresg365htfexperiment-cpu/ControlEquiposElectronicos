@@ -30,15 +30,11 @@ public partial class DashboardPage : ContentPage
         await _viewModel.CargarAsync();
     }
 
-    // Oculta las tarjetas y accesos rápidos a los que el usuario no tiene permiso
     private void AplicarPermisos()
     {
-        // Tarjetas de resumen
         TarjetaEquipos.IsVisible = _sesion.TienePermiso("Equipos.Ver");
         TarjetaMantenimientos.IsVisible = _sesion.TienePermiso("Mantenimientos.Ver");
         TarjetaReportes.IsVisible = _sesion.TienePermiso("Reportes.Ver");
-
-        // Accesos rápidos
         AccesoEquipos.IsVisible = _sesion.TienePermiso("Equipos.Ver");
         AccesoMantenimientos.IsVisible = _sesion.TienePermiso("Mantenimientos.Ver");
         AccesoReportes.IsVisible = _sesion.TienePermiso("Reportes.Ver");
@@ -47,31 +43,20 @@ public partial class DashboardPage : ContentPage
     }
 
     private async void OnEquiposTapped(object? sender, TappedEventArgs e)
-    {
-        await NavegarSeguro("//Equipos");
-    }
+        => await NavegarSeguro("//Equipos");
 
     private async void OnMantenimientosTapped(object? sender, TappedEventArgs e)
-    {
-        await NavegarSeguro("//Mantenimientos");
-    }
+        => await NavegarSeguro("//Mantenimientos");
 
     private async void OnReportesTapped(object? sender, TappedEventArgs e)
-    {
-        await NavegarSeguro("//Reportes");
-    }
+        => await NavegarSeguro("//Reportes");
 
     private async void OnUsuariosTapped(object? sender, TappedEventArgs e)
-    {
-        await NavegarSeguro("//Usuarios");
-    }
+        => await NavegarSeguro("//Usuarios");
 
     private async void OnConfiguracionTapped(object? sender, TappedEventArgs e)
-    {
-        await NavegarSeguro("//Configuracion");
-    }
+        => await NavegarSeguro("//Configuracion");
 
-    // Navega con seguridad: si la ruta no existe (porque el menú la ocultó por permisos), no crashea
     private async Task NavegarSeguro(string ruta)
     {
         try
@@ -85,3 +70,4 @@ public partial class DashboardPage : ContentPage
         }
     }
 }
+ 

@@ -1,5 +1,4 @@
 ﻿using ControlEquiposElectronicos.Services;
-using ControlEquiposElectronicos.Views.Login;
 
 namespace ControlEquiposElectronicos.Views.Configuracion;
 
@@ -23,7 +22,6 @@ public partial class ConfiguracionPage : ContentPage
     {
         var usuario = _sesion.UsuarioActual;
         var rol = usuario?.Rol;
-
         bool esAdminOSuperior = rol == "Administrador" || rol == "OP";
 
         ContenidoConfig.IsVisible = esAdminOSuperior;
@@ -33,8 +31,6 @@ public partial class ConfiguracionPage : ContentPage
         {
             NombreLabel.Text = usuario.Nombre;
             RolLabel.Text = usuario.Rol;
-
-            // Sección de auditoría solo para OP
             SeccionAuditoria.IsVisible = rol == "OP";
         }
     }

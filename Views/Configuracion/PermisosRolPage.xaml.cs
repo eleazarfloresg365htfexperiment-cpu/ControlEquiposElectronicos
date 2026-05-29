@@ -12,46 +12,48 @@ public partial class PermisosRolPage : ContentPage
     {
         var rol = RolPicker.SelectedItem?.ToString();
 
-        if (rol == "Administrador")
+        switch (rol)
         {
-            EstablecerModulos(true, true, true, true, true);
-            EstablecerAcciones(true, true, true);
-        }
-        else if (rol == "Técnico")
-        {
-            EstablecerModulos(true, true, true, true, false);
-            EstablecerAcciones(true, true, false);
+            case "OP":
+                EstablecerModulos(true, true, true, true, true, true, true);
+                EstablecerAcciones(true, true, true, true);
+                break;
+            case "Administrador":
+                EstablecerModulos(true, true, true, true, true, true, true);
+                EstablecerAcciones(true, true, true, false);
+                break;
+            case "Técnico":
+                EstablecerModulos(true, true, true, true, false, false, true);
+                EstablecerAcciones(true, true, false, false);
+                break;
+            case "Consulta":
+                EstablecerModulos(true, true, true, true, false, false, true);
+                EstablecerAcciones(false, false, false, false);
+                break;
         }
     }
 
-    private void EstablecerModulos(bool dashboard, bool equipos, bool mantenimientos, bool reportes, bool usuarios)
+    private void EstablecerModulos(bool dashboard, bool equipos, bool mantenimientos,
+        bool reportes, bool usuarios, bool configuracion, bool checklist)
     {
         SwDashboard.IsToggled = dashboard;
         SwEquipos.IsToggled = equipos;
         SwMantenimientos.IsToggled = mantenimientos;
         SwReportes.IsToggled = reportes;
         SwUsuarios.IsToggled = usuarios;
+        SwConfiguracion.IsToggled = configuracion;
+        SwChecklist.IsToggled = checklist;
     }
 
-    private void EstablecerAcciones(bool crear, bool editar, bool eliminar)
+    private void EstablecerAcciones(bool crear, bool editar, bool eliminar, bool gestionarPermisos)
     {
         SwCrear.IsToggled = crear;
         SwEditar.IsToggled = editar;
         SwEliminar.IsToggled = eliminar;
+        SwGestionarPermisos.IsToggled = gestionarPermisos;
     }
 
-    private async void OnGuardarClicked(object? sender, EventArgs e)
-    {
-        var rol = RolPicker.SelectedItem?.ToString() ?? "rol";
-
-        await DisplayAlert("Permisos guardados",
-            $"Los permisos del rol \"{rol}\" se guardaron localmente. " +
-            "La sincronización con el servidor se conectará cuando la API esté disponible.",
-            "Entendido");
-    }
-
+    // Volver con Shell — compatible con Clicked y TapGestureRecognizer
     private async void OnVolverClicked(object? sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("..");
-    }
+        => await Shell.Current.GoToAsync("..");
 }

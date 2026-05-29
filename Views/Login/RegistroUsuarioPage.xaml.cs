@@ -127,14 +127,6 @@ public partial class RegistroUsuarioPage : ContentPage
     }
 
     private async void OnVolverClicked(object? sender, EventArgs e)
-    {
-        if (Navigation.ModalStack.Count > 0)
-        {
-            await Navigation.PopModalAsync();
-        }
-        else
-        {
-            await Shell.Current.GoToAsync("..");
-        }
-    }
+        => await Shell.Current.GoToAsync("..");
 }
+

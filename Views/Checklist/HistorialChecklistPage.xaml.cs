@@ -23,6 +23,6 @@ public partial class HistorialChecklistPage : ContentPage
     }
 
     private async void OnVolverClicked(object? sender, EventArgs e) =>
-        await Shell.Current.GoToAsync("..");
+        await Navigation.PopModalAsync();
 
 }

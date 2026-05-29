@@ -30,6 +30,7 @@ public partial class PlantillasChecklistPage : ContentPage
     }
 
     private async void OnVolverClicked(object? sender, EventArgs e) =>
-        await Shell.Current.GoToAsync("..");
+        await Navigation.PopModalAsync();
 
 }
+ 
