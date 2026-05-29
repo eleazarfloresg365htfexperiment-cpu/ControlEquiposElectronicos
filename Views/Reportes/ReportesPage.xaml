@@ -9,10 +9,9 @@
     <ScrollView>
         <VerticalStackLayout Padding="30" Spacing="20">
 
-            <VerticalStackLayout Spacing="4">
-                <Label Text="Reportes" FontSize="28" FontAttributes="Bold" TextColor="#1A1A2E" />
-                <Label Text="Consulta y exporta reportes técnicos de la academia" FontSize="14" TextColor="#666666" />
-            </VerticalStackLayout>
+            <Label Text="Consulta y exporta reportes técnicos de la academia"
+                   FontSize="14"
+                   TextColor="#666666" />
 
             <!-- TARJETAS -->
             <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
@@ -80,9 +79,9 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*,120,150" Padding="10,8">
-                                    <Label Grid.Column="0" Text="{Binding Descripcion}" FontSize="12" TextColor="#333" VerticalOptions="Center" />
-                                    <Label Grid.Column="1" Text="{Binding Usuario}" FontSize="12" TextColor="#333" VerticalOptions="Center" />
-                                    <Label Grid.Column="2" Text="{Binding FechaOperacion, StringFormat='{0:dd/MM/yy HH:mm}'}" FontSize="12" TextColor="#333" VerticalOptions="Center" />
+                                    <Label Grid.Column="0" Text="{Binding Descripcion}" FontSize="12" TextColor="#1A1A2E" VerticalOptions="Center" />
+                                    <Label Grid.Column="1" Text="{Binding Usuario}" FontSize="12" TextColor="#1A1A2E" VerticalOptions="Center" />
+                                    <Label Grid.Column="2" Text="{Binding FechaOperacion, StringFormat='{0:dd/MM/yy HH:mm}'}" FontSize="12" TextColor="#1A1A2E" VerticalOptions="Center" />
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

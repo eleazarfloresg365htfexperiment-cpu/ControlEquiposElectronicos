@@ -1,5 +1,6 @@
 ﻿using ControlEquiposElectronicos.DTOs.Auditoria;
 using ControlEquiposElectronicos.DTOs.Reportes;
+using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Services.Interfaces;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -45,10 +46,7 @@ public class ReportesViewModel : BaseViewModel
     public ICommand HistorialCommand { get; }
     public ICommand CerrarHistorialCommand { get; }
 
-    public ReportesViewModel(
-        IReporteFallaApiService reporteFallaApiService,
-        IAuditoriaApiService auditoriaApiService,
-        IExportService exportService)
+    public ReportesViewModel(IReporteFallaApiService reporteFallaApiService, IAuditoriaApiService auditoriaApiService, IExportService exportService)
     {
         Title = "Reportes";
         _reporteFallaApiService = reporteFallaApiService;
@@ -84,72 +82,42 @@ public class ReportesViewModel : BaseViewModel
 
     private async Task ExportarExcelAsync()
     {
-        if (IsBusy) return;
-
-        var datos = Reportes.ToList();
-        if (datos.Count == 0)
+        if (_todosLosReportes.Count == 0)
         {
-            await Shell.Current.DisplayAlertAsync(
-                "Sin datos",
-                "No hay reportes para exportar.",
-                "OK");
+            await Shell.Current.DisplayAlertAsync("Aviso", "No hay reportes para exportar.", "OK");
             return;
         }
-
         IsBusy = true;
         try
         {
-            string ruta = await _exportService.ExportarReportesExcelAsync(datos);
-            bool abrir = await Shell.Current.DisplayAlertAsync(
-                "Excel generado",
-                $"Archivo guardado en:\n{ruta}",
-                "Abrir", "Cerrar");
-
-            if (abrir)
-                await Launcher.OpenAsync(new OpenFileRequest
-                {
-                    File = new ReadOnlyFile(ruta)
-                });
+            var path = await _exportService.ExportarReportesExcelAsync(_todosLosReportes);
+            await Shell.Current.DisplayAlertAsync("Éxito", $"Archivo guardado en:\n{path}", "OK");
+            await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(path) });
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Error al exportar", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
         }
         finally { IsBusy = false; }
     }
 
     private async Task ExportarPdfAsync()
     {
-        if (IsBusy) return;
-
-        var datos = Reportes.ToList();
-        if (datos.Count == 0)
+        if (_todosLosReportes.Count == 0)
         {
-            await Shell.Current.DisplayAlertAsync(
-                "Sin datos",
-                "No hay reportes para exportar.",
-                "OK");
+            await Shell.Current.DisplayAlertAsync("Aviso", "No hay reportes para exportar.", "OK");
             return;
         }
-
         IsBusy = true;
         try
         {
-            string ruta = await _exportService.ExportarReportesPdfAsync(datos);
-            bool abrir = await Shell.Current.DisplayAlertAsync(
-                "PDF generado",
-                $"Archivo guardado en:\n{ruta}",
-                "Abrir", "Cerrar");
-
-            if (abrir)
-                await Launcher.OpenAsync(new OpenFileRequest
-                {
-                    File = new ReadOnlyFile(ruta)
-                });
+            var path = await _exportService.ExportarReportesPdfAsync(_todosLosReportes);
+            await Shell.Current.DisplayAlertAsync("Éxito", $"Archivo guardado en:\n{path}", "OK");
+            await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(path) });
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Error al exportar", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
         }
         finally { IsBusy = false; }
     }
@@ -203,7 +171,6 @@ public class ReportesViewModel : BaseViewModel
         if (resultado)
         {
             Reportes.Remove(reporte);
-            _todosLosReportes.Remove(reporte);
             await Shell.Current.DisplayAlertAsync("Éxito", "Reporte eliminado correctamente.", "OK");
         }
         else
