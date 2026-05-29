@@ -33,6 +33,7 @@ public class AppDbContext : DbContext
     public DbSet<TipoEquipo> TiposEquipo => Set<TipoEquipo>();
     public DbSet<EstadoEquipo> EstadosEquipo => Set<EstadoEquipo>();
     public DbSet<Equipo> Equipos => Set<Equipo>();
+    public DbSet<EquipoPeriferico> EquipoPerifericos => Set<EquipoPeriferico>();
 
     // DETALLES
     public DbSet<DetalleComputadora> DetallesComputadora => Set<DetalleComputadora>();
@@ -121,6 +122,37 @@ public class AppDbContext : DbContext
             .WithMany(u => u.Equipos)
             .HasForeignKey(e => e.UbicacionId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // PERIFERICOS
+
+        modelBuilder.Entity<EquipoPeriferico>(entity =>
+        {
+            entity.ToTable("EquipoPerifericos");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Observaciones)
+                .HasMaxLength(300);
+
+            entity.Property(e => e.FechaAsignacion)
+                .IsRequired();
+
+            entity.Property(e => e.Activo)
+                .HasDefaultValue(true);
+
+            entity.HasOne(e => e.EquipoPrincipal)
+                .WithMany()
+                .HasForeignKey(e => e.EquipoPrincipalId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Periferico)
+                .WithMany()
+                .HasForeignKey(e => e.PerifericoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => new { e.EquipoPrincipalId, e.PerifericoId, e.Activo })
+                .HasDatabaseName("IX_EquipoPerifericos_EquipoPrincipal_Periferico_Activo");
+        });
 
         // DETALLE RED
         modelBuilder.Entity<DetalleRed>()

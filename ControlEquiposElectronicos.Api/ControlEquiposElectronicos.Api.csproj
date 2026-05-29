@@ -22,11 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Auth\" />
     <Folder Include="DTOs\Permisos\" />
     <Folder Include="DTOs\Reportes\" />
     <Folder Include="DTOs\Roles\" />
-    <Folder Include="DTOs\Usuarios\" />
   </ItemGroup>
 
 </Project>

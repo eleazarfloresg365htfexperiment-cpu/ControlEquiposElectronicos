@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Configuracion.RolesUsuarioPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dtos="clr-namespace:ControlEquiposElectronicos.DTOs.Usuarios"
+    Title="Roles por usuario"
+    BackgroundColor="{StaticResource Gray100}">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="24" RowSpacing="14">
+
+        <!-- Botón volver -->
+        <Button Grid.Row="0"
+                Text="← Volver"
+                Clicked="OnVolverClicked"
+                BackgroundColor="Transparent"
+                TextColor="{StaticResource Primary}"
+                FontAttributes="Bold"
+                FontSize="14"
+                HorizontalOptions="Start"
+                Padding="0"
+                HeightRequest="32" />
+
+        <!-- Encabezado -->
+        <VerticalStackLayout Grid.Row="1" Spacing="2">
+            <Label Text="Roles por usuario"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Gray900}" />
+            <Label Text="Consulta el rol asignado a cada usuario del sistema."
+                   FontSize="14"
+                   TextColor="{StaticResource Gray500}" />
+        </VerticalStackLayout>
+
+        <!-- Buscador -->
+        <Border Grid.Row="2"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 8"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="12,0">
+            <Entry x:Name="BusquedaEntry"
+                   Placeholder="Buscar por nombre, usuario o rol..."
+                   TextChanged="OnBusquedaTextChanged"
+                   TextColor="{StaticResource Gray900}"
+                   PlaceholderColor="{StaticResource Gray400}"
+                   HeightRequest="44"
+                   BackgroundColor="Transparent" />
+        </Border>
+
+        <ActivityIndicator Grid.Row="3"
+                           x:Name="CargandoIndicator"
+                           IsRunning="False"
+                           IsVisible="False"
+                           Color="{StaticResource Primary}"
+                           VerticalOptions="Start"
+                           HorizontalOptions="Center" />
+
+        <CollectionView Grid.Row="3"
+                        x:Name="UsuariosCollection">
+
+            <CollectionView.EmptyView>
+                <Label Text="No hay usuarios para mostrar."
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="{StaticResource Gray500}" />
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dtos:UsuarioListadoDto">
+                    <Border BackgroundColor="White"
+                            Padding="16" Margin="0,5"
+                            StrokeShape="RoundRectangle 10"
+                            Stroke="{StaticResource Gray200}"
+                            StrokeThickness="1">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnUsuarioTapped" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+
+                            <!-- Icono de usuario -->
+                            <Border Grid.Column="0"
+                                    WidthRequest="44" HeightRequest="44"
+                                    BackgroundColor="{StaticResource Secondary}"
+                                    StrokeShape="RoundRectangle 22"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Center">
+                                <Label FontFamily="FontAwesome"
+                                       Text="&#xf007;"
+                                       TextColor="{StaticResource Primary}"
+                                       FontSize="18"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+
+                            <!-- Datos del usuario -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding NombreCompleto}"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource Gray900}" />
+                                <Label Text="{Binding Nickname, StringFormat='@{0}'}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+
+                            <!-- Rol destacado -->
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{StaticResource Secondary}"
+                                    StrokeShape="RoundRectangle 6"
+                                    StrokeThickness="0"
+                                    Padding="10,4"
+                                    VerticalOptions="Center">
+                                <Label Text="{Binding Rol}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource Primary}" />
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

@@ -431,4 +431,43 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+    <Style x:Key="ChecklistStatCardStyle" TargetType="Border">
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ChecklistCardBg}" />
+        <Setter Property="Stroke" Value="{StaticResource Gray200}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape">
+            <RoundRectangle CornerRadius="12" />
+        </Setter>
+        <Setter Property="Shadow">
+            <Shadow Brush="#33000000" Offset="0,2" Radius="8" Opacity="0.12" />
+        </Setter>
+    </Style>
+
+    <Style x:Key="ChecklistNavCardStyle" TargetType="Border">
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ChecklistCardBg}" />
+        <Setter Property="Stroke" Value="{StaticResource Gray200}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape">
+            <RoundRectangle CornerRadius="12" />
+        </Setter>
+        <Setter Property="Shadow">
+            <Shadow Brush="#33000000" Offset="0,2" Radius="10" Opacity="0.14" />
+        </Setter>
+    </Style>
+
+    <Style x:Key="ChecklistTableCardStyle" TargetType="Border">
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ChecklistCardBg}" />
+        <Setter Property="Stroke" Value="{StaticResource Gray200}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape">
+            <RoundRectangle CornerRadius="12" />
+        </Setter>
+        <Setter Property="Shadow">
+            <Shadow Brush="#33000000" Offset="0,2" Radius="10" Opacity="0.14" />
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

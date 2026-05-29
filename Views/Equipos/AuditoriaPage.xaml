@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Equipos.AuditoriaPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Auditoría"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F8F9FB">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" Padding="28,18,28,14" BackgroundColor="White" ColumnDefinitions="Auto,*">
+            <Button Grid.Column="0" Text="← Volver"
+                    BackgroundColor="#F0F2F7" TextColor="#5A6282"
+                    CornerRadius="8" FontSize="12" Padding="12,7"
+                    Clicked="OnVolverTapped"/>
+            <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="16,0,0,0" VerticalOptions="Center">
+                <Label Text="Auditoría General" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                <Label Text="Historial de acciones sobre equipos" FontSize="13" TextColor="#9AA3BE"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <Border Grid.Row="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1"
+                StrokeShape="RoundRectangle 16" Margin="28,16,28,24">
+            <Grid RowDefinitions="Auto,*">
+
+                <Grid Grid.Row="0" Padding="18,14" ColumnDefinitions="60,100,120,*,120" BackgroundColor="#F8F9FB">
+                    <Label Grid.Column="0" Text="ID" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                    <Label Grid.Column="1" Text="USUARIO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                    <Label Grid.Column="2" Text="ACCIÓN" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                    <Label Grid.Column="3" Text="DESCRIPCIÓN" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                    <Label Grid.Column="4" Text="FECHA" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                </Grid>
+
+                <CollectionView Grid.Row="1" x:Name="ListaAuditoria" ItemsSource="{Binding Auditorias}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="12" Padding="40">
+                            <Label FontFamily="FontAwesome" Text="&#xf017;" FontSize="48" TextColor="#E2E6F0" HorizontalOptions="Center"/>
+                            <Label Text="Sin registros de auditoría" FontSize="14" TextColor="#9AA3BE" HorizontalOptions="Center"/>
+                            <Label Text="Cuando la API esté disponible aparecerán aquí los registros" FontSize="12" TextColor="#C4B5FD" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="18,12" ColumnDefinitions="60,100,120,*,120" BackgroundColor="White">
+                                <Label Grid.Column="0" Text="{Binding Id}" FontSize="12" TextColor="#5A6282" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Usuario}" FontSize="12" VerticalOptions="Center"/>
+                                <Border Grid.Column="2" BackgroundColor="#EDE9FE" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="8,4" HorizontalOptions="Start" VerticalOptions="Center">
+                                    <Label Text="{Binding Accion}" FontSize="11" TextColor="#5B21B6" FontAttributes="Bold"/>
+                                </Border>
+                                <Label Grid.Column="3" Text="{Binding Descripcion}" FontSize="12" TextColor="#5A6282" VerticalOptions="Center" Margin="8,0"/>
+                                <Label Grid.Column="4" Text="{Binding FechaOperacion, StringFormat='{0:dd/MM/yyyy HH:mm}'}" FontSize="11" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

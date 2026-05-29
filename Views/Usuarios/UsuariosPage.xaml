@@ -3,11 +3,79 @@
     x:Class="ControlEquiposElectronicos.Views.Usuarios.UsuariosPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Usuarios">
+    xmlns:dtos="clr-namespace:ControlEquiposElectronicos.DTOs.Usuarios"
+    Title="Usuarios"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Usuarios" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*" Padding="24" RowSpacing="14">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="2">
+            <Label Text="Usuarios registrados"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Gray900}" />
+            <Label Text="Lista de cuentas con acceso al sistema."
+                   FontSize="14"
+                   TextColor="{StaticResource Gray500}" />
+        </VerticalStackLayout>
+
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           Color="{StaticResource Primary}"
+                           VerticalOptions="Start"
+                           HorizontalOptions="Center" />
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Usuarios}">
+
+            <CollectionView.EmptyView>
+                <Label Text="No hay usuarios para mostrar."
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="{StaticResource Gray500}" />
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dtos:UsuarioListadoDto">
+                    <Border BackgroundColor="White"
+                            Padding="16" Margin="0,5"
+                            StrokeShape="RoundRectangle 10"
+                            Stroke="{StaticResource Gray200}"
+                            StrokeThickness="1">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+
+                            <Border Grid.Column="0"
+                                    WidthRequest="44" HeightRequest="44"
+                                    BackgroundColor="{StaticResource Secondary}"
+                                    StrokeShape="RoundRectangle 22"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Center">
+                                <Label FontFamily="FontAwesome" Text="&#xf007;"
+                                       TextColor="{StaticResource Primary}"
+                                       FontSize="18"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding NombreCompleto}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Gray900}" />
+                                <Label Text="{Binding Nickname, StringFormat='@{0}'}" FontSize="13" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding Rol}" FontSize="13" TextColor="{StaticResource Primary}" />
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="2"
+                                   Text="{Binding Activo, StringFormat='{0}'}"
+                                   FontSize="12"
+                                   TextColor="{StaticResource Gray400}"
+                                   VerticalOptions="Center" />
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
 
 </ContentPage>

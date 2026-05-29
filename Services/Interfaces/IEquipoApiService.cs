@@ -13,4 +13,7 @@ public interface IEquipoApiService
     Task<bool> ActualizarAsync(int id, ActualizarEquipoDto dto);
 
     Task<bool> EliminarAsync(int id);
+    Task<List<EquipoPerifericoDto>> ObtenerPerifericosDePcAsync(int equipoPrincipalId);
+    Task<EquipoPerifericoDto?> AsignarPerifericoAsync(AsignarPerifericoDto dto);
+    Task<bool> QuitarPerifericoAsync(int asignacionId);
 }

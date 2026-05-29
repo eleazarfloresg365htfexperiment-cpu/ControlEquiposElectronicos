@@ -16,4 +16,12 @@ public class UsuarioApiService : IUsuarioApiService
     {
         return await _apiService.GetAsync<List<UsuarioListadoDto>>("Usuarios") ?? new();
     }
+
+    public async Task<bool> CrearAsync(CrearUsuarioDto usuario)
+    {
+        // La API devuelve el usuario creado; si no es null, se creó correctamente
+        var creado = await _apiService.PostAsync<CrearUsuarioDto, UsuarioListadoDto>("Usuarios", usuario);
+        return creado != null;
+    }
 }
+ 

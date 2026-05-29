@@ -36,4 +36,20 @@ public class EquipoApiService : IEquipoApiService
     {
         return await _apiService.DeleteAsync($"Equipos/{id}");
     }
+    public async Task<List<EquipoPerifericoDto>> ObtenerPerifericosDePcAsync(int equipoPrincipalId)
+    {
+        return await _apiService.GetAsync<List<EquipoPerifericoDto>>(
+            $"EquipoPerifericos/pc/{equipoPrincipalId}") ?? new();
+    }
+
+    public async Task<EquipoPerifericoDto?> AsignarPerifericoAsync(AsignarPerifericoDto dto)
+    {
+        return await _apiService.PostAsync<AsignarPerifericoDto, EquipoPerifericoDto>(
+            "EquipoPerifericos/asignar", dto);
+    }
+
+    public async Task<bool> QuitarPerifericoAsync(int asignacionId)
+    {
+        return await _apiService.PatchAsync($"EquipoPerifericos/{asignacionId}/quitar", new { });
+    }
 }

@@ -6,17 +6,132 @@
     xmlns:dashboard="clr-namespace:ControlEquiposElectronicos.Views.Dashboard"
     xmlns:equipos="clr-namespace:ControlEquiposElectronicos.Views.Equipos"
     xmlns:mantenimientos="clr-namespace:ControlEquiposElectronicos.Views.Mantenimientos"
+    xmlns:checklist="clr-namespace:ControlEquiposElectronicos.Views.Checklist"
     xmlns:reportes="clr-namespace:ControlEquiposElectronicos.Views.Reportes"
     xmlns:usuarios="clr-namespace:ControlEquiposElectronicos.Views.Usuarios"
     xmlns:config="clr-namespace:ControlEquiposElectronicos.Views.Configuracion"
-    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBehavior="Locked"
+    FlyoutWidth="240"
+    FlyoutBackgroundColor="{StaticResource Primary}"
+    Shell.BackgroundColor="{StaticResource Gray100}"
+    Shell.ForegroundColor="{StaticResource Primary}"
+    Shell.TitleColor="{StaticResource Gray900}"
     Title="Control de Equipos CPC">
 
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="{StaticResource Tertiary}" Padding="20,30,20,16" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnMenuUsuarioTapped" />
+            </Grid.GestureRecognizers>
+
+            <Border
+                Grid.Row="0"
+                WidthRequest="60"
+                HeightRequest="60"
+                HorizontalOptions="Start"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 14"
+                StrokeThickness="0">
+                <Label
+                    Text="CPC"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+            </Border>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,10,0,0">
+                <Label
+                    Grid.Column="0"
+                    x:Name="NombreUsuarioLabel"
+                    Text="Usuario"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Column="1"
+                    x:Name="FlechaMenuLabel"
+                    Text="&#x25BE;"
+                    TextColor="White"
+                    FontSize="14"
+                    VerticalOptions="Center"
+                    Margin="6,0,0,0" />
+            </Grid>
+
+            <Label
+                Grid.Row="2"
+                x:Name="RolUsuarioLabel"
+                Text="Rol"
+                TextColor="{StaticResource Secondary}"
+                FontSize="13" />
+
+            <!-- Mini-menú desplegable: opciones que aparecen al tocar -->
+            <VerticalStackLayout Grid.Row="3"
+                                 x:Name="MenuUsuarioDesplegable"
+                                 IsVisible="False"
+                                 Margin="0,14,0,0"
+                                 Spacing="2">
+
+                <Border BackgroundColor="#3A1F8F"
+                        StrokeShape="RoundRectangle 6"
+                        StrokeThickness="0"
+                        Padding="10,8">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMiPerfilTapped" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Grid.Column="0"
+                               FontFamily="FontAwesome"
+                               Text="&#xf007;"
+                               TextColor="White"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="Mi perfil"
+                               TextColor="White"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Border BackgroundColor="#3A1F8F"
+                        StrokeShape="RoundRectangle 6"
+                        StrokeThickness="0"
+                        Padding="10,8">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCerrarSesionTapped" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                        <Label Grid.Column="0"
+                               FontFamily="FontAwesome"
+                               Text="&#xf2f5;"
+                               TextColor="White"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="Cerrar sesión"
+                               TextColor="White"
+                               FontSize="14"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+
+        </Grid>
+    </Shell.FlyoutHeader>
+
     <FlyoutItem Title="Dashboard" Route="Dashboard">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf015;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Equipos" Route="Equipos">
+
         <Tab Title="General">
             <ShellContent Title="Equipos"
                           ContentTemplate="{DataTemplate equipos:EquiposPage}" />
@@ -37,23 +152,51 @@
             <ShellContent Title="Soporte Ambiental"
                           ContentTemplate="{DataTemplate equipos:SoporteAmbientalPage}" />
         </Tab>
+
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf108;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate equipos:EquiposPage}" />
+>>>>>>> origin/pablo-inicio-de-sesion
     </FlyoutItem>
 
     <FlyoutItem Title="Mantenimientos" Route="Mantenimientos">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf0ad;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate mantenimientos:MantenimientosPage}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Checklist" Route="Checklist">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf46c;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate checklist:ChecklistPage}" />
+    </FlyoutItem>
+
     <FlyoutItem Title="Reportes" Route="Reportes">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf15c;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate reportes:ReportesPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Usuarios" Route="Usuarios">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf0c0;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate usuarios:UsuariosPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Configuración" Route="Configuracion">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf013;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate config:ConfiguracionPage}" />
     </FlyoutItem>
 
 </Shell>
+HEAD
     
+=======
+>>>>>>> origin/pablo-inicio-de-sesion
