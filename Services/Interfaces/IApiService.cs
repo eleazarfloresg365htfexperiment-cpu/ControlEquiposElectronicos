@@ -12,5 +12,9 @@ public interface IApiService
 
     Task<bool> PatchAsync<TRequest>(string endpoint, TRequest data);
 
+    // Igual que PatchAsync pero devuelve el mensaje de error de la API si falla
+    Task<(bool Exito, string? ErrorMessage)> PatchWithErrorAsync<TRequest>(string endpoint, TRequest data);
+
     Task<bool> DeleteAsync(string endpoint);
 }
+ 

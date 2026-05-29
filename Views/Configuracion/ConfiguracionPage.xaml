@@ -9,7 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="20">
 
-            <!-- Vista cuando NO es administrador -->
+            <!-- Vista cuando NO es administrador ni OP -->
             <Border x:Name="AccesoRestringido"
                     IsVisible="False"
                     BackgroundColor="White"
@@ -30,7 +30,7 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Vista cuando SÍ es administrador -->
+            <!-- Vista cuando SÍ es administrador o OP -->
             <VerticalStackLayout x:Name="ContenidoConfig" IsVisible="False" Spacing="20">
 
                 <!-- Información del usuario -->
@@ -44,11 +44,9 @@
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
-
                         <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
                             <Label Grid.Row="0" Grid.Column="0" Text="Usuario:" TextColor="{StaticResource Gray500}" />
                             <Label Grid.Row="0" Grid.Column="1" x:Name="NombreLabel" Text="-" TextColor="{StaticResource Gray900}" FontAttributes="Bold" />
-
                             <Label Grid.Row="1" Grid.Column="0" Text="Rol:" TextColor="{StaticResource Gray500}" />
                             <Label Grid.Row="1" Grid.Column="1" x:Name="RolLabel" Text="-" TextColor="{StaticResource Gray900}" FontAttributes="Bold" />
                         </Grid>
@@ -66,7 +64,6 @@
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="{StaticResource Gray900}" />
-
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout Grid.Column="0" Spacing="2">
                                 <Label Text="Notificaciones" TextColor="{StaticResource Gray900}" />
@@ -74,7 +71,6 @@
                             </VerticalStackLayout>
                             <Switch Grid.Column="1" IsToggled="True" OnColor="{StaticResource Primary}" VerticalOptions="Center" />
                         </Grid>
-
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout Grid.Column="0" Spacing="2">
                                 <Label Text="Confirmar antes de eliminar" TextColor="{StaticResource Gray900}" />
@@ -85,7 +81,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Administración (permisos por rol) -->
+                <!-- Administración -->
                 <Border BackgroundColor="White"
                         StrokeShape="RoundRectangle 12"
                         Stroke="{StaticResource Gray200}"
@@ -114,6 +110,29 @@
                                 Clicked="OnGestionarRolesUsuarioClicked"
                                 BackgroundColor="{StaticResource Secondary}"
                                 TextColor="{StaticResource Primary}"
+                                FontAttributes="Bold"
+                                HeightRequest="46"
+                                CornerRadius="8" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Auditoría — solo visible para OP -->
+                <Border x:Name="SeccionAuditoria"
+                        IsVisible="False"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gray200}"
+                        StrokeThickness="1"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Sistema"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Gray900}" />
+                        <Button Text="Ver auditoría del sistema"
+                                Clicked="OnAuditoriaClicked"
+                                BackgroundColor="#2B0B98"
+                                TextColor="White"
                                 FontAttributes="Bold"
                                 HeightRequest="46"
                                 CornerRadius="8" />

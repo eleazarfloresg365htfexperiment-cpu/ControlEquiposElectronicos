@@ -22,31 +22,32 @@ public partial class ConfiguracionPage : ContentPage
     private void VerificarAcceso()
     {
         var usuario = _sesion.UsuarioActual;
-        bool esAdministrador = usuario != null && usuario.Rol == "Administrador";
+        var rol = usuario?.Rol;
 
-        // Solo los administradores ven el contenido; los demás ven el aviso
-        ContenidoConfig.IsVisible = esAdministrador;
-        AccesoRestringido.IsVisible = !esAdministrador;
+        bool esAdminOSuperior = rol == "Administrador" || rol == "OP";
 
-        if (esAdministrador && usuario != null)
+        ContenidoConfig.IsVisible = esAdminOSuperior;
+        AccesoRestringido.IsVisible = !esAdminOSuperior;
+
+        if (esAdminOSuperior && usuario != null)
         {
             NombreLabel.Text = usuario.Nombre;
             RolLabel.Text = usuario.Rol;
+
+            // Sección de auditoría solo para OP
+            SeccionAuditoria.IsVisible = rol == "OP";
         }
     }
 
     private async void OnPermisosClicked(object? sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("PermisosRol");
-    }
+        => await Shell.Current.GoToAsync("PermisosRol");
 
     private async void OnRegistrarUsuarioClicked(object? sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("RegistroUsuario");
-    }
+        => await Shell.Current.GoToAsync("RegistroUsuario");
 
     private async void OnGestionarRolesUsuarioClicked(object? sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("RolesUsuario");
-    }
+        => await Shell.Current.GoToAsync("RolesUsuario");
+
+    private async void OnAuditoriaClicked(object? sender, EventArgs e)
+        => await Shell.Current.GoToAsync("Auditoria");
 }

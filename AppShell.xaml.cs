@@ -1,5 +1,7 @@
 using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Views.Equipos;
+using ControlEquiposElectronicos.Views.Mantenimientos;
+using ControlEquiposElectronicos.Views.Reportes;
 
 namespace ControlEquiposElectronicos;
 
@@ -12,35 +14,37 @@ public partial class AppShell : Shell
         InitializeComponent();
         _sesion = sesion;
 
-        // ── Rutas registradas ──────────────────────────────────────────────────
+        // Rutas de pablo (login, sesión, configuración)
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
         Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
         Routing.RegisterRoute("RolesUsuario", typeof(Views.Configuracion.RolesUsuarioPage));
-        Routing.RegisterRoute("PerfilUsuario", typeof(Views.Configuracion.PerfilUsuarioPage)); // ← NUEVO
+        Routing.RegisterRoute("PerfilUsuario", typeof(Views.Configuracion.PerfilUsuarioPage));
+        Routing.RegisterRoute("Auditoria", typeof(Views.Configuracion.AuditoriaPage)); // ← NUEVO
 
-        MostrarUsuario();
-        ConfigurarMenu();
-
-        // Rutas de navegación - Equipos (Suarlin)
+        // Rutas de equipos (suarlin)
         Routing.RegisterRoute("RegistrarEquipoPage", typeof(Views.Equipos.RegistrarEquipoPage));
         Routing.RegisterRoute("DetalleEquipoPage", typeof(Views.Equipos.DetalleEquipoPage));
         Routing.RegisterRoute("ComputoPage", typeof(Views.Equipos.ComputoPage));
         Routing.RegisterRoute("AuditoriaPage", typeof(AuditoriaPage));
+
+        // Rutas de mantenimientos y reportes
+        Routing.RegisterRoute("MantenimientoFormulario", typeof(MantenimientoFormularioPage));
+        Routing.RegisterRoute("ReporteFallaFormulario", typeof(ReporteFallaFormularioPage));
+
+        MostrarUsuario();
+        ConfigurarMenu();
     }
 
-    // Al tocar el área del usuario en la barra lateral, muestra/oculta el mini-menú
     private void OnMenuUsuarioTapped(object? sender, TappedEventArgs e)
     {
         MenuUsuarioDesplegable.IsVisible = !MenuUsuarioDesplegable.IsVisible;
         FlechaMenuLabel.Text = MenuUsuarioDesplegable.IsVisible ? "\u25B4" : "\u25BE";
     }
 
-    // Navega a la nueva PerfilUsuarioPage en lugar del DisplayAlert anterior
     private async void OnMiPerfilTapped(object? sender, TappedEventArgs e)
     {
         MenuUsuarioDesplegable.IsVisible = false;
         FlechaMenuLabel.Text = "\u25BE";
-
         await Shell.Current.GoToAsync("PerfilUsuario");
     }
 
@@ -51,9 +55,7 @@ public partial class AppShell : Shell
 
         bool confirmar = await DisplayAlert("Cerrar sesión",
             "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
-
-        if (!confirmar)
-            return;
+        if (!confirmar) return;
 
         _sesion.CerrarSesion();
         Application.Current!.Windows[0].Page = new Views.Login.LoginPage(_sesion);
@@ -86,3 +88,4 @@ public partial class AppShell : Shell
         }
     }
 }
+ 

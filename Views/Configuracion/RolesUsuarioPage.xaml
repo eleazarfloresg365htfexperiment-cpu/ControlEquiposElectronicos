@@ -27,7 +27,7 @@
                    FontSize="22"
                    FontAttributes="Bold"
                    TextColor="{StaticResource Gray900}" />
-            <Label Text="Toca un usuario para cambiar su rol."
+            <Label Text="Toca un botón para cambiar el rol del usuario."
                    FontSize="14"
                    TextColor="{StaticResource Gray500}" />
         </VerticalStackLayout>
@@ -48,7 +48,7 @@
                    BackgroundColor="Transparent" />
         </Border>
 
-        <!-- Indicador de carga (superpuesto a la lista) -->
+        <!-- Indicador de carga -->
         <ActivityIndicator Grid.Row="3"
                            x:Name="CargandoIndicator"
                            IsRunning="False"
@@ -75,18 +75,14 @@
                             StrokeShape="RoundRectangle 10"
                             Stroke="{StaticResource Gray200}"
                             StrokeThickness="1">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnUsuarioTapped" />
-                        </Border.GestureRecognizers>
 
-                        <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
 
-                            <!-- Fila superior: avatar + datos + chip de rol -->
+                            <!-- Fila superior: avatar + datos + chip de rol actual -->
                             <Grid Grid.Row="0"
                                   ColumnDefinitions="Auto,*,Auto"
                                   ColumnSpacing="14">
 
-                                <!-- Avatar circular -->
                                 <Border Grid.Column="0"
                                         WidthRequest="44" HeightRequest="44"
                                         BackgroundColor="{StaticResource Secondary}"
@@ -101,7 +97,6 @@
                                            VerticalOptions="Center" />
                                 </Border>
 
-                                <!-- Nombre y nickname -->
                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                     <Label Text="{Binding NombreCompleto}"
                                            FontSize="15"
@@ -124,16 +119,26 @@
                                            FontAttributes="Bold"
                                            TextColor="{StaticResource Primary}" />
                                 </Border>
-
                             </Grid>
 
-                            <!-- Fila inferior: botones de cambio de rol -->
+                            <!-- Fila inferior: 4 botones de rol -->
                             <Grid Grid.Row="1"
-                                  ColumnDefinitions="*,*,*"
-                                  ColumnSpacing="8">
+                                  ColumnDefinitions="*,*,*,*"
+                                  ColumnSpacing="6">
 
                                 <Button Grid.Column="0"
-                                        Text="Administrador"
+                                        Text="OP"
+                                        CommandParameter="{Binding .}"
+                                        Clicked="OnAsignarOPClicked"
+                                        BackgroundColor="#2B0B98"
+                                        TextColor="White"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        CornerRadius="6" />
+
+                                <Button Grid.Column="1"
+                                        Text="Admin"
                                         CommandParameter="{Binding .}"
                                         Clicked="OnAsignarAdministradorClicked"
                                         BackgroundColor="{StaticResource Primary}"
@@ -143,7 +148,7 @@
                                         HeightRequest="36"
                                         CornerRadius="6" />
 
-                                <Button Grid.Column="1"
+                                <Button Grid.Column="2"
                                         Text="Técnico"
                                         CommandParameter="{Binding .}"
                                         Clicked="OnAsignarTecnicoClicked"
@@ -154,7 +159,7 @@
                                         HeightRequest="36"
                                         CornerRadius="6" />
 
-                                <Button Grid.Column="2"
+                                <Button Grid.Column="3"
                                         Text="Consulta"
                                         CommandParameter="{Binding .}"
                                         Clicked="OnAsignarConsultaClicked"
@@ -164,7 +169,6 @@
                                         FontAttributes="Bold"
                                         HeightRequest="36"
                                         CornerRadius="6" />
-
                             </Grid>
 
                         </Grid>

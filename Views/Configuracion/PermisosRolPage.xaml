@@ -20,6 +20,33 @@
                     Padding="0"
                     HeightRequest="32" />
 
+            <!-- Aviso de estado real de la API -->
+            <Border BackgroundColor="#FFF8E7"
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="1"
+                    Stroke="#F0C040"
+                    Padding="16">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Label Grid.Column="0"
+                           FontFamily="FontAwesome"
+                           Text="&#xf071;"
+                           TextColor="#B8860B"
+                           FontSize="18"
+                           VerticalOptions="Start"
+                           Margin="0,2,0,0" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                        <Label Text="Función en desarrollo"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#7A5800" />
+                        <Label Text="La API de permisos por rol aún no está disponible. Esta pantalla es una vista previa. Los cambios que hagas aquí no se guardarán en el servidor."
+                               FontSize="13"
+                               TextColor="#7A5800" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Selector de rol -->
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 12"
                     Stroke="{StaticResource Gray200}"
@@ -30,7 +57,7 @@
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="{StaticResource Gray900}" />
-                    <Label Text="Elige el rol al que deseas configurar los permisos."
+                    <Label Text="Elige el rol para ver sus permisos actuales."
                            FontSize="13"
                            TextColor="{StaticResource Gray500}" />
                     <Picker x:Name="RolPicker"
@@ -39,13 +66,16 @@
                             TextColor="{StaticResource Gray900}"
                             TitleColor="{StaticResource Gray400}">
                         <Picker.Items>
+                            <x:String>OP</x:String>
                             <x:String>Administrador</x:String>
                             <x:String>Técnico</x:String>
+                            <x:String>Consulta</x:String>
                         </Picker.Items>
                     </Picker>
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Permisos de acceso a módulos -->
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 12"
                     Stroke="{StaticResource Gray200}"
@@ -58,28 +88,37 @@
                            TextColor="{StaticResource Gray900}" />
 
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Ver Dashboard" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwDashboard" OnColor="{StaticResource Primary}" />
+                        <Label Grid.Column="0" Text="Dashboard" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwDashboard" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Ver Equipos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwEquipos" OnColor="{StaticResource Primary}" />
+                        <Label Grid.Column="0" Text="Equipos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwEquipos" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Ver Mantenimientos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwMantenimientos" OnColor="{StaticResource Primary}" />
+                        <Label Grid.Column="0" Text="Mantenimientos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwMantenimientos" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Ver Reportes" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwReportes" OnColor="{StaticResource Primary}" />
+                        <Label Grid.Column="0" Text="Reportes" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwReportes" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Ver Usuarios" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwUsuarios" OnColor="{StaticResource Primary}" />
+                        <Label Grid.Column="0" Text="Usuarios" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwUsuarios" OnColor="{StaticResource Primary}" IsEnabled="False" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Configuración" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwConfiguracion" OnColor="{StaticResource Primary}" IsEnabled="False" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Checklist" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwChecklist" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Permisos de acciones -->
             <Border BackgroundColor="White"
                     StrokeShape="RoundRectangle 12"
                     Stroke="{StaticResource Gray200}"
@@ -93,23 +132,28 @@
 
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0" Text="Crear registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwCrear" OnColor="{StaticResource Primary}" />
+                        <Switch Grid.Column="1" x:Name="SwCrear" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0" Text="Editar registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwEditar" OnColor="{StaticResource Primary}" />
+                        <Switch Grid.Column="1" x:Name="SwEditar" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Grid.Column="0" Text="Eliminar registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwEliminar" OnColor="{StaticResource Primary}" />
+                        <Switch Grid.Column="1" x:Name="SwEliminar" OnColor="{StaticResource Primary}" IsEnabled="False" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Gestionar permisos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwGestionarPermisos" OnColor="{StaticResource Primary}" IsEnabled="False" />
                     </Grid>
                 </VerticalStackLayout>
             </Border>
 
-            <Button Text="Guardar permisos"
-                    Clicked="OnGuardarClicked"
-                    BackgroundColor="{StaticResource Primary}"
-                    TextColor="White"
+            <!-- Botón deshabilitado con explicación -->
+            <Button Text="Guardar permisos (no disponible aún)"
+                    IsEnabled="False"
+                    BackgroundColor="{StaticResource Gray300}"
+                    TextColor="{StaticResource Gray500}"
                     FontAttributes="Bold"
                     HeightRequest="48"
                     CornerRadius="8" />

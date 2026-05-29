@@ -1,5 +1,6 @@
 using ControlEquiposElectronicos.DTOs.Usuarios;
 using ControlEquiposElectronicos.Services.Interfaces;
+using System.Text.Json;
 
 namespace ControlEquiposElectronicos.Views.Configuracion;
 
@@ -26,13 +27,12 @@ public partial class RolesUsuarioPage : ContentPage
         {
             CargandoIndicator.IsRunning = true;
             CargandoIndicator.IsVisible = true;
-
             _todosLosUsuarios = await _usuarioApi.ObtenerTodosAsync();
             UsuariosCollection.ItemsSource = _todosLosUsuarios;
         }
-        catch (Exception)
+        catch
         {
-            _todosLosUsuarios = new List<UsuarioListadoDto>();
+            _todosLosUsuarios = new();
             UsuariosCollection.ItemsSource = _todosLosUsuarios;
         }
         finally
@@ -45,35 +45,16 @@ public partial class RolesUsuarioPage : ContentPage
     private void OnBusquedaTextChanged(object? sender, TextChangedEventArgs e)
     {
         var texto = (e.NewTextValue ?? string.Empty).Trim().ToLower();
-
-        if (string.IsNullOrEmpty(texto))
-        {
-            UsuariosCollection.ItemsSource = _todosLosUsuarios;
-            return;
-        }
-
-        var filtrados = _todosLosUsuarios.Where(u =>
-            u.NombreCompleto.ToLower().Contains(texto) ||
-            u.Nickname.ToLower().Contains(texto) ||
-            u.Rol.ToLower().Contains(texto)
-        ).ToList();
-
-        UsuariosCollection.ItemsSource = filtrados;
+        UsuariosCollection.ItemsSource = string.IsNullOrEmpty(texto)
+            ? _todosLosUsuarios
+            : _todosLosUsuarios.Where(u =>
+                u.NombreCompleto.ToLower().Contains(texto) ||
+                u.Nickname.ToLower().Contains(texto) ||
+                u.Rol.ToLower().Contains(texto)).ToList();
     }
 
-    // Tapping the card still shows a summary (informational, non-destructive)
-    private async void OnUsuarioTapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is not BindableObject bindable) return;
-        if (bindable.BindingContext is not UsuarioListadoDto usuario) return;
-
-        var estado = usuario.Activo ? "Activo" : "Inactivo";
-        await DisplayAlert(usuario.NombreCompleto,
-            $"Usuario: @{usuario.Nickname}\nRol actual: {usuario.Rol}\nEstado: {estado}\n\nUsa los botones para cambiar el rol.",
-            "Cerrar");
-    }
-
-    // ── Botones de cambio de rol ──────────────────────────────────────────────
+    private async void OnAsignarOPClicked(object? sender, EventArgs e)
+        => await CambiarRol(sender, "OP");
 
     private async void OnAsignarAdministradorClicked(object? sender, EventArgs e)
         => await CambiarRol(sender, "Administrador");
@@ -84,15 +65,12 @@ public partial class RolesUsuarioPage : ContentPage
     private async void OnAsignarConsultaClicked(object? sender, EventArgs e)
         => await CambiarRol(sender, "Consulta");
 
-    // ── Lógica central ───────────────────────────────────────────────────────
-
     private async Task CambiarRol(object? sender, string nuevoRol)
     {
-        // Obtener el usuario desde el CommandParameter del botón
         if (sender is not Button boton) return;
         if (boton.BindingContext is not UsuarioListadoDto usuario) return;
 
-        // No hacer nada si ya tiene ese rol
+        // Si ya tiene ese rol, la API lo rechazará — avisamos antes
         if (usuario.Rol.Equals(nuevoRol, StringComparison.OrdinalIgnoreCase))
         {
             await DisplayAlert("Sin cambios",
@@ -100,47 +78,56 @@ public partial class RolesUsuarioPage : ContentPage
             return;
         }
 
-        // Confirmar antes de aplicar
         var rolMostrar = nuevoRol == "Tecnico" ? "Técnico" : nuevoRol;
-        bool confirmar = await DisplayAlert(
-            "Cambiar rol",
+        bool confirmar = await DisplayAlert("Cambiar rol",
             $"¿Cambiar el rol de {usuario.NombreCompleto} a «{rolMostrar}»?",
             "Sí, cambiar", "Cancelar");
 
         if (!confirmar) return;
 
-        // Llamar a la API
-        bool exito = await _usuarioApi.CambiarRolAsync(usuario.UsuarioId, nuevoRol);
+        var (exito, errorJson) = await _usuarioApi.CambiarRolAsync(usuario.UsuarioId, nuevoRol);
 
         if (exito)
         {
             await DisplayAlert("Rol actualizado",
                 $"El rol de {usuario.NombreCompleto} ahora es «{rolMostrar}».", "Aceptar");
 
-            // Recargar la lista para reflejar el cambio
             await CargarUsuariosAsync();
 
-            // Restaurar el filtro de búsqueda si había texto
-            var textoBusqueda = BusquedaEntry.Text?.Trim() ?? string.Empty;
-            if (!string.IsNullOrEmpty(textoBusqueda))
-            {
-                var filtrados = _todosLosUsuarios.Where(u =>
-                    u.NombreCompleto.ToLower().Contains(textoBusqueda.ToLower()) ||
-                    u.Nickname.ToLower().Contains(textoBusqueda.ToLower()) ||
-                    u.Rol.ToLower().Contains(textoBusqueda.ToLower())
-                ).ToList();
-                UsuariosCollection.ItemsSource = filtrados;
-            }
+            // Restaurar filtro de búsqueda si había texto
+            var texto = BusquedaEntry.Text?.Trim().ToLower() ?? string.Empty;
+            if (!string.IsNullOrEmpty(texto))
+                UsuariosCollection.ItemsSource = _todosLosUsuarios.Where(u =>
+                    u.NombreCompleto.ToLower().Contains(texto) ||
+                    u.Nickname.ToLower().Contains(texto) ||
+                    u.Rol.ToLower().Contains(texto)).ToList();
         }
         else
         {
-            await DisplayAlert("Error",
-                "No se pudo cambiar el rol. Verifica tu conexión e intenta de nuevo.", "Entendido");
+            // Intentar extraer el mensaje legible que manda la API
+            var mensajeApi = ExtraerMensaje(errorJson);
+            await DisplayAlert("No se pudo cambiar el rol", mensajeApi, "Entendido");
         }
     }
 
-    private async void OnVolverClicked(object? sender, EventArgs e)
+    // La API devuelve JSON como {"mensaje":"El usuario ya tiene..."}
+    // Intentamos extraerlo; si no, mostramos el raw tal cual
+    private static string ExtraerMensaje(string? errorJson)
     {
-        await Shell.Current.GoToAsync("..");
+        if (string.IsNullOrWhiteSpace(errorJson))
+            return "Error desconocido. Verifica tu conexión.";
+
+        try
+        {
+            using var doc = JsonDocument.Parse(errorJson);
+            if (doc.RootElement.TryGetProperty("mensaje", out var msg))
+                return msg.GetString() ?? errorJson;
+        }
+        catch { /* no es JSON válido */ }
+
+        return errorJson;
     }
+
+    private async void OnVolverClicked(object? sender, EventArgs e)
+        => await Shell.Current.GoToAsync("..");
 }

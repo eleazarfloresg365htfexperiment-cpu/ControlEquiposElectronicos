@@ -19,15 +19,15 @@ public class UsuarioApiService : IUsuarioApiService
 
     public async Task<bool> CrearAsync(CrearUsuarioDto usuario)
     {
-        // La API devuelve el usuario creado; si no es null, se creó correctamente
         var creado = await _apiService.PostAsync<CrearUsuarioDto, UsuarioListadoDto>("Usuarios", usuario);
         return creado != null;
     }
 
-    // Llama a PATCH api/Usuarios/{id}/rol con el nuevo rol
-    public async Task<bool> CambiarRolAsync(int usuarioId, string nuevoRol)
+    // Llama PATCH api/Usuarios/{id}/rol y devuelve el error exacto si falla
+    public async Task<(bool Exito, string? Error)> CambiarRolAsync(int usuarioId, string nuevoRol)
     {
         var dto = new ActualizarRolUsuarioDto { Rol = nuevoRol };
-        return await _apiService.PatchAsync<ActualizarRolUsuarioDto>($"Usuarios/{usuarioId}/rol", dto);
+        return await _apiService.PatchWithErrorAsync($"Usuarios/{usuarioId}/rol", dto);
     }
 }
+ 
