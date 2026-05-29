@@ -3,151 +3,277 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ControlEquiposElectronicos.Views.Login.RegistroUsuarioPage"
-    Title="Registro de usuario"
-    BackgroundColor="{StaticResource Gray100}">
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F5F6FA">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
+    <Grid ColumnDefinitions="*,420">
 
-            <Border BackgroundColor="White"
-                    StrokeShape="RoundRectangle 12"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeThickness="1"
-                    Padding="24">
-                <VerticalStackLayout Spacing="16">
+        <!-- ── OVERLAY IZQUIERDO (fondo difuminado) ── -->
+        <BoxView Grid.Column="0" BackgroundColor="#33000000"/>
 
-                    <Label Text="Registrar nuevo usuario"
-                           FontSize="20"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Label Text="Completa los datos para crear una cuenta de acceso al sistema."
-                           FontSize="13"
-                           TextColor="{StaticResource Gray500}" />
+        <!-- ── PANEL LATERAL DERECHO ── -->
+        <Border Grid.Column="1"
+                BackgroundColor="White"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 24,0,0,24">
+            <Border.Shadow>
+                <Shadow Brush="#40000000" Offset="-8,0" Radius="32" Opacity="1"/>
+            </Border.Shadow>
 
-                    <!-- Nombre completo -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Nombre completo" FontSize="13" TextColor="{StaticResource Gray500}" />
-                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
-                            <Entry x:Name="NombreEntry"
-                                   Placeholder="Ej. Juan Pérez"
-                                   TextColor="{StaticResource Gray900}"
-                                   PlaceholderColor="{StaticResource Gray400}"
-                                   HeightRequest="44"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
+            <ScrollView>
+                <VerticalStackLayout Padding="32,32,32,40" Spacing="0">
 
-                    <!-- Nickname / Usuario -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Nombre de usuario" FontSize="13" TextColor="{StaticResource Gray500}" />
-                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
-                            <Entry x:Name="NicknameEntry"
-                                   Placeholder="Ej. jperez"
-                                   TextColor="{StaticResource Gray900}"
-                                   PlaceholderColor="{StaticResource Gray400}"
-                                   HeightRequest="44"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Correo -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Correo electrónico" FontSize="13" TextColor="{StaticResource Gray500}" />
-                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
-                            <Entry x:Name="CorreoEntry"
-                                   Placeholder="Ej. jperez@cpc.com"
-                                   Keyboard="Email"
-                                   TextColor="{StaticResource Gray900}"
-                                   PlaceholderColor="{StaticResource Gray400}"
-                                   HeightRequest="44"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Teléfono -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Teléfono" FontSize="13" TextColor="{StaticResource Gray500}" />
-                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
-                            <Entry x:Name="TelefonoEntry"
-                                   Placeholder="Ej. 1234-5678"
-                                   Keyboard="Telephone"
-                                   TextColor="{StaticResource Gray900}"
-                                   PlaceholderColor="{StaticResource Gray400}"
-                                   HeightRequest="44"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Contraseña -->
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Contraseña" FontSize="13" TextColor="{StaticResource Gray500}" />
-                        <Border StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="12,0">
-                            <Entry x:Name="ContrasenaEntry"
-                                   Placeholder="••••••••"
-                                   IsPassword="True"
-                                   TextColor="{StaticResource Gray900}"
-                                   PlaceholderColor="{StaticResource Gray400}"
-                                   HeightRequest="44"
-                                   BackgroundColor="Transparent" />
-                        </Border>
-                    </VerticalStackLayout>
-
-                    <!-- Rol -->
-                    <VerticalStackLayout x:Name="SeccionRol" Spacing="6">
-                        <Label Text="Rol" FontSize="13" TextColor="{StaticResource Gray500}" />
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                            <Button Grid.Column="0"
-                                    x:Name="BtnAdministrador"
-                                    Text="Administrador"
-                                    Clicked="OnRolAdministrador"
-                                    BackgroundColor="{StaticResource Gray100}"
-                                    TextColor="{StaticResource Gray900}"
-                                    BorderColor="{StaticResource Gray200}"
-                                    BorderWidth="1"
-                                    HeightRequest="44"
-                                    CornerRadius="8" />
-                            <Button Grid.Column="1"
-                                    x:Name="BtnTecnico"
-                                    Text="Técnico"
-                                    Clicked="OnRolTecnico"
-                                    BackgroundColor="{StaticResource Gray100}"
-                                    TextColor="{StaticResource Gray900}"
-                                    BorderColor="{StaticResource Gray200}"
-                                    BorderWidth="1"
-                                    HeightRequest="44"
-                                    CornerRadius="8" />
-                        </Grid>
-                    </VerticalStackLayout>
-
-                    <!-- Activo -->
-                    <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Grid.Column="0" Spacing="2">
-                            <Label Text="Usuario activo" TextColor="{StaticResource Gray900}" />
-                            <Label Text="Permite el acceso al sistema" FontSize="12" TextColor="{StaticResource Gray400}" />
+                    <!-- ── ENCABEZADO ── -->
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Label Text="Nuevo usuario"
+                                   FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                            <Label Text="Completa los datos para crear una cuenta de acceso al sistema."
+                                   FontSize="12" TextColor="#9AA3BE"/>
                         </VerticalStackLayout>
-                        <Switch Grid.Column="1" x:Name="ActivoSwitch" IsToggled="True" OnColor="{StaticResource Primary}" VerticalOptions="Center" />
+                        <!-- Botón X cerrar — reutiliza OnVolverClicked -->
+                        <Border Grid.Column="1"
+                                BackgroundColor="#F5F3FC"
+                                StrokeShape="RoundRectangle 10"
+                                StrokeThickness="0"
+                                WidthRequest="36" HeightRequest="36"
+                                VerticalOptions="Start">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnVolverClicked"/>
+                            </Border.GestureRecognizers>
+                            <Label FontFamily="FontAwesome" Text="&#xf00d;"
+                                   FontSize="14" TextColor="#9AA3BE"
+                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
                     </Grid>
 
-                    <!-- Botón registrar -->
+                    <BoxView HeightRequest="1" BackgroundColor="#F0EDF9" Margin="0,16,0,24"/>
+
+                    <!-- ── NOMBRE COMPLETO ── -->
+                    <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
+                        <Label Text="Nombre completo"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                        <Border BackgroundColor="#F8F7FC"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Padding="14,0">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf007;"
+                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"
+                                       x:Name="NombreEntry"
+                                       Placeholder="Ej. Juan Pérez"
+                                       TextColor="#1A1F3A"
+                                       PlaceholderColor="#C4C9D8"
+                                       HeightRequest="48"
+                                       BackgroundColor="Transparent"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- ── NOMBRE DE USUARIO ── -->
+                    <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
+                        <Label Text="Nombre de usuario"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                        <Border BackgroundColor="#F8F7FC"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Padding="14,0">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf406;"
+                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"
+                                       x:Name="NicknameEntry"
+                                       Placeholder="Ej. jperez"
+                                       TextColor="#1A1F3A"
+                                       PlaceholderColor="#C4C9D8"
+                                       HeightRequest="48"
+                                       BackgroundColor="Transparent"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- ── CORREO ── -->
+                    <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
+                        <Label Text="Correo electrónico"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                        <Border BackgroundColor="#F8F7FC"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Padding="14,0">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf0e0;"
+                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"
+                                       x:Name="CorreoEntry"
+                                       Placeholder="Ej. jperez@cpc.com"
+                                       Keyboard="Email"
+                                       TextColor="#1A1F3A"
+                                       PlaceholderColor="#C4C9D8"
+                                       HeightRequest="48"
+                                       BackgroundColor="Transparent"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- ── TELÉFONO ── -->
+                    <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
+                        <Label Text="Teléfono"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                        <Border BackgroundColor="#F8F7FC"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Padding="14,0">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf095;"
+                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"
+                                       x:Name="TelefonoEntry"
+                                       Placeholder="Ej. 1234-5678"
+                                       Keyboard="Telephone"
+                                       TextColor="#1A1F3A"
+                                       PlaceholderColor="#C4C9D8"
+                                       HeightRequest="48"
+                                       BackgroundColor="Transparent"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- ── CONTRASEÑA ── -->
+                    <VerticalStackLayout Spacing="6" Margin="0,0,0,24">
+                        <Label Text="Contraseña"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                        <Border BackgroundColor="#F8F7FC"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Padding="14,0">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf023;"
+                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1"
+                                       x:Name="ContrasenaEntry"
+                                       Placeholder="••••••••"
+                                       IsPassword="True"
+                                       TextColor="#1A1F3A"
+                                       PlaceholderColor="#C4C9D8"
+                                       HeightRequest="48"
+                                       BackgroundColor="Transparent"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- ── ROL ── -->
+                    <VerticalStackLayout x:Name="SeccionRol" Spacing="10" Margin="0,0,0,28">
+                        <Label Text="Rol"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+
+                        <!-- Administrador -->
+                        <Button x:Name="BtnAdministrador"
+                                Clicked="OnRolAdministrador"
+                                Text="Administrador"
+                                BackgroundColor="#F8F7FC"
+                                TextColor="#4A5270"
+                                BorderColor="#E8E4F8"
+                                BorderWidth="1"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="12">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FontAwesome"
+                                                 Glyph="&#xf505;"
+                                                 Color="#C4B5FD"
+                                                 Size="14"/>
+                            </Button.ImageSource>
+                        </Button>
+
+                        <!-- Técnico / OP -->
+                        <Button x:Name="BtnTecnico"
+                                Clicked="OnRolTecnico"
+                                Text="Técnico / OP"
+                                BackgroundColor="#F8F7FC"
+                                TextColor="#4A5270"
+                                BorderColor="#E8E4F8"
+                                BorderWidth="1"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="12">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FontAwesome"
+                                                 Glyph="&#xf0ad;"
+                                                 Color="#C4B5FD"
+                                                 Size="14"/>
+                            </Button.ImageSource>
+                        </Button>
+
+                        <!-- Consulta (visual, sin lógica nueva — apunta al mismo handler vacío) -->
+                        <Button x:Name="BtnConsulta"
+                                Clicked="OnRolConsulta"
+                                Text="Consulta"
+                                BackgroundColor="#F8F7FC"
+                                TextColor="#4A5270"
+                                BorderColor="#E8E4F8"
+                                BorderWidth="1"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                HeightRequest="50"
+                                CornerRadius="12">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FontAwesome"
+                                                 Glyph="&#xf007;"
+                                                 Color="#C4B5FD"
+                                                 Size="14"/>
+                            </Button.ImageSource>
+                        </Button>
+
+                    </VerticalStackLayout>
+
+                    <!-- Switch activo — oculto, siempre en true para la lógica del .cs -->
+                    <Switch x:Name="ActivoSwitch" IsToggled="True" IsVisible="False"/>
+
+                    <!-- ── BOTÓN REGISTRAR ── -->
                     <Button Text="Registrar usuario"
                             Clicked="OnRegistrarClicked"
-                            BackgroundColor="{StaticResource Primary}"
+                            BackgroundColor="#512BD4"
                             TextColor="White"
                             FontAttributes="Bold"
-                            HeightRequest="48"
-                            CornerRadius="8"
-                            Margin="0,8,0,0" />
+                            FontSize="14"
+                            HeightRequest="52"
+                            CornerRadius="14"
+                            Margin="0,0,0,10">
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="&#xf234;"
+                                             Color="White"
+                                             Size="15"/>
+                        </Button.ImageSource>
+                        <Button.Shadow>
+                            <Shadow Brush="#40512BD4" Offset="0,4" Radius="14" Opacity="1"/>
+                        </Button.Shadow>
+                    </Button>
 
-                    <Button Text="Volver"
+                    <!-- ── BOTÓN CANCELAR ── -->
+                    <Button Text="Cancelar"
                             Clicked="OnVolverClicked"
                             BackgroundColor="Transparent"
-                            TextColor="{StaticResource Primary}"
-                            HeightRequest="44" />
+                            TextColor="#9AA3BE"
+                            FontSize="13"
+                            HeightRequest="44"
+                            CornerRadius="12"
+                            BorderColor="#E8E4F8"
+                            BorderWidth="1"/>
 
                 </VerticalStackLayout>
-            </Border>
+            </ScrollView>
+        </Border>
 
-        </VerticalStackLayout>
-    </ScrollView>
-
+    </Grid>
 </ContentPage>

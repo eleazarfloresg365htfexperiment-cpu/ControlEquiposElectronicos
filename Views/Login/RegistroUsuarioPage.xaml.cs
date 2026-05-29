@@ -40,13 +40,39 @@ public partial class RegistroUsuarioPage : ContentPage
         MarcarRol(BtnTecnico, BtnAdministrador);
     }
 
+    private void OnRolConsulta(object? sender, EventArgs e)
+    {
+        _rolSeleccionado = "Consulta";
+        MarcarRolTres(BtnConsulta, BtnAdministrador, BtnTecnico);
+    }
+
     private void MarcarRol(Button elegido, Button otro)
     {
         elegido.BackgroundColor = Color.FromArgb("#512BD4");
         elegido.TextColor = Colors.White;
+        elegido.BorderColor = Color.FromArgb("#512BD4");
 
-        otro.BackgroundColor = Color.FromArgb("#F0F0F0");
-        otro.TextColor = Color.FromArgb("#1F1F1F");
+        otro.BackgroundColor = Color.FromArgb("#F8F7FC");
+        otro.TextColor = Color.FromArgb("#4A5270");
+        otro.BorderColor = Color.FromArgb("#E8E4F8");
+
+        BtnConsulta.BackgroundColor = Color.FromArgb("#F8F7FC");
+        BtnConsulta.TextColor = Color.FromArgb("#4A5270");
+        BtnConsulta.BorderColor = Color.FromArgb("#E8E4F8");
+    }
+
+    private void MarcarRolTres(Button elegido, Button otro1, Button otro2)
+    {
+        elegido.BackgroundColor = Color.FromArgb("#512BD4");
+        elegido.TextColor = Colors.White;
+        elegido.BorderColor = Color.FromArgb("#512BD4");
+
+        foreach (var btn in new[] { otro1, otro2 })
+        {
+            btn.BackgroundColor = Color.FromArgb("#F8F7FC");
+            btn.TextColor = Color.FromArgb("#4A5270");
+            btn.BorderColor = Color.FromArgb("#E8E4F8");
+        }
     }
 
     private async void OnRegistrarClicked(object? sender, EventArgs e)
@@ -112,10 +138,12 @@ public partial class RegistroUsuarioPage : ContentPage
             if (_permiteElegirRol)
             {
                 _rolSeleccionado = string.Empty;
-                BtnAdministrador.BackgroundColor = Color.FromArgb("#F0F0F0");
-                BtnAdministrador.TextColor = Color.FromArgb("#1F1F1F");
-                BtnTecnico.BackgroundColor = Color.FromArgb("#F0F0F0");
-                BtnTecnico.TextColor = Color.FromArgb("#1F1F1F");
+                foreach (var btn in new[] { BtnAdministrador, BtnTecnico, BtnConsulta })
+                {
+                    btn.BackgroundColor = Color.FromArgb("#F8F7FC");
+                    btn.TextColor = Color.FromArgb("#4A5270");
+                    btn.BorderColor = Color.FromArgb("#E8E4F8");
+                }
             }
         }
         else

@@ -122,4 +122,27 @@ public partial class RolesUsuarioPage : ContentPage
     // Volver — compatible con TapGestureRecognizer
     private async void OnVolverClicked(object? sender, EventArgs e)
         => await Shell.Current.GoToAsync("..");
+
+    // Botón "Cambiar rol" — muestra ActionSheet y llama al handler correcto
+    private async void OnCambiarRolTapped(object? sender, EventArgs e)
+    {
+        if (sender is not Button boton) return;
+        if (boton.BindingContext is not UsuarioListadoDto usuario) return;
+
+        string rolActual = usuario.Rol ?? "Sin rol";
+        string? seleccion = await DisplayActionSheet(
+            $"Cambiar rol de {usuario.NombreCompleto}\nRol actual: {rolActual}",
+            "Cancelar", null,
+            "OP", "Administrador", "Técnico", "Consulta");
+
+        if (seleccion == null || seleccion == "Cancelar") return;
+
+        // Redirigir al handler correspondiente con el BindingContext correcto
+        var fakeBtn = new Button { BindingContext = usuario };
+        if (seleccion == "OP") await CambiarRol(fakeBtn, "OP");
+        else if (seleccion == "Administrador") await CambiarRol(fakeBtn, "Administrador");
+        else if (seleccion == "Técnico") await CambiarRol(fakeBtn, "Tecnico");
+        else if (seleccion == "Consulta") await CambiarRol(fakeBtn, "Consulta");
+    }
+
 }

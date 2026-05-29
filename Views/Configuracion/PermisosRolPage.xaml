@@ -3,176 +3,362 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ControlEquiposElectronicos.Views.Configuracion.PermisosRolPage"
-    Title="Permisos por rol"
-    BackgroundColor="{StaticResource Gray100}">
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F5F6FA">
 
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
+        <VerticalStackLayout Padding="28,24,28,32" Spacing="0">
 
-            <!-- Botón volver -->
-            <Border
-                BackgroundColor="Transparent"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Stroke="#DDD8F7"
-                Padding="12,8"
-                HorizontalOptions="Start">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnVolverClicked" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="8">
-                    <Label Grid.Column="0"
-                           FontFamily="FontAwesome"
-                           Text="&#xf060;"
-                           TextColor="{StaticResource Primary}"
-                           FontSize="13"
-                           VerticalOptions="Center" />
-                    <Label Grid.Column="1"
-                           Text="Volver"
-                           TextColor="{StaticResource Primary}"
-                           FontSize="13"
-                           FontAttributes="Bold"
-                           VerticalOptions="Center" />
-                </Grid>
-            </Border>
+            <!-- ── ENCABEZADO ── -->
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,24">
+                <Border Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="1" Stroke="#E8E4F8"
+                        Padding="12,8" VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnVolverClicked"/>
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout Spacing="8">
+                        <Label FontFamily="FontAwesome" Text="&#xf060;"
+                               TextColor="#512BD4" FontSize="12" VerticalOptions="Center"/>
+                        <Label Text="Volver" TextColor="#512BD4" FontSize="13"
+                               FontAttributes="Bold" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
 
-            <!-- Aviso de estado real de la API -->
-            <Border BackgroundColor="#FFF8E7"
-                    StrokeShape="RoundRectangle 10"
-                    StrokeThickness="1"
-                    Stroke="#F0C040"
-                    Padding="16">
-                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                    <Label Grid.Column="0"
-                           FontFamily="FontAwesome"
-                           Text="&#xf071;"
-                           TextColor="#B8860B"
-                           FontSize="18"
-                           VerticalOptions="Start"
-                           Margin="0,2,0,0" />
-                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="16,0" VerticalOptions="Center">
+                    <Label Text="Permisos por rol" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                    <Label Text="Define los permisos que tendrá este rol en el sistema."
+                           FontSize="13" TextColor="#9AA3BE"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- ── AVISO EN DESARROLLO ── -->
+            <Border BackgroundColor="#FFFBEB"
+                    StrokeShape="RoundRectangle 12"
+                    StrokeThickness="1" Stroke="#FDE68A"
+                    Padding="16" Margin="0,0,0,20">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                    <Border Grid.Column="0"
+                            BackgroundColor="#FEF3C7"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0"
+                            WidthRequest="38" HeightRequest="38">
+                        <Label FontFamily="FontAwesome" Text="&#xf071;"
+                               TextColor="#D97706" FontSize="16"
+                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
                         <Label Text="Función en desarrollo"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="#7A5800" />
-                        <Label Text="La API de permisos por rol aún no está disponible. Esta pantalla es una vista previa. Los cambios que hagas aquí no se guardarán en el servidor."
-                               FontSize="13"
-                               TextColor="#7A5800" />
+                               FontSize="13" FontAttributes="Bold" TextColor="#92400E"/>
+                        <Label Text="La API de permisos por rol aún no está disponible. Esta pantalla es una vista previa."
+                               FontSize="12" TextColor="#B45309"/>
                     </VerticalStackLayout>
                 </Grid>
             </Border>
 
-            <!-- Selector de rol -->
+            <!-- ── SELECTOR DE ROL ── -->
             <Border BackgroundColor="White"
-                    StrokeShape="RoundRectangle 12"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeThickness="1"
-                    Padding="20">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Seleccionar rol"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-                    <Label Text="Elige el rol para ver sus permisos actuales."
-                           FontSize="13"
-                           TextColor="{StaticResource Gray500}" />
-                    <Picker x:Name="RolPicker"
-                            Title="Selecciona un rol"
-                            SelectedIndexChanged="OnRolCambiado"
-                            TextColor="{StaticResource Gray900}"
-                            TitleColor="{StaticResource Gray400}">
-                        <Picker.Items>
-                            <x:String>OP</x:String>
-                            <x:String>Administrador</x:String>
-                            <x:String>Técnico</x:String>
-                            <x:String>Consulta</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </VerticalStackLayout>
+                    StrokeShape="RoundRectangle 14"
+                    Stroke="#EEEBf8" StrokeThickness="1"
+                    Padding="20" Margin="0,0,0,16">
+                <Border.Shadow>
+                    <Shadow Brush="#10512BD4" Offset="0,2" Radius="10" Opacity="1"/>
+                </Border.Shadow>
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
+
+                    <!-- Ícono -->
+                    <Border Grid.Column="0"
+                            BackgroundColor="#EDE9FB"
+                            StrokeShape="RoundRectangle 12"
+                            StrokeThickness="0"
+                            WidthRequest="46" HeightRequest="46">
+                        <Label FontFamily="FontAwesome" Text="&#xf0c0;"
+                               TextColor="#512BD4" FontSize="18"
+                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+
+                    <!-- Texto + Picker -->
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                        <Label Text="Seleccionar rol" FontSize="14" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                        <Label Text="Elige el rol para ver y editar sus permisos." FontSize="12" TextColor="#9AA3BE"/>
+                        <Picker x:Name="RolPicker"
+                                Title="Selecciona un rol"
+                                SelectedIndexChanged="OnRolCambiado"
+                                TextColor="#1A1F3A"
+                                TitleColor="#C4C9D8"
+                                BackgroundColor="Transparent">
+                            <Picker.Items>
+                                <x:String>OP</x:String>
+                                <x:String>Administrador</x:String>
+                                <x:String>Técnico</x:String>
+                                <x:String>Consulta</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                </Grid>
             </Border>
 
-            <!-- Permisos de acceso a módulos -->
-            <Border BackgroundColor="White"
-                    StrokeShape="RoundRectangle 12"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeThickness="1"
-                    Padding="20">
-                <VerticalStackLayout Spacing="14">
-                    <Label Text="Acceso a módulos"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
+            <!-- ── PANELES: MÓDULOS + ACCIONES (lado a lado) ── -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="16" Margin="0,0,0,16">
 
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Dashboard" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwDashboard" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Equipos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwEquipos" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Mantenimientos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwMantenimientos" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Reportes" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwReportes" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Usuarios" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwUsuarios" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Configuración" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwConfiguracion" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Checklist" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwChecklist" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                </VerticalStackLayout>
+                <!-- Panel Módulos -->
+                <Border Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="#EEEBf8" StrokeThickness="1"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#10512BD4" Offset="0,2" Radius="10" Opacity="1"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="0">
+
+                        <!-- Header panel -->
+                        <HorizontalStackLayout Spacing="10" Margin="0,0,0,16">
+                            <Border BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="32" HeightRequest="32">
+                                <Label FontFamily="FontAwesome" Text="&#xf009;"
+                                       TextColor="#512BD4" FontSize="13"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="1" VerticalOptions="Center">
+                                <Label Text="Acceso a módulos" FontSize="14" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Define a qué módulos puede acceder." FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <!-- Fila: Dashboard -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf3fd;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Dashboard" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Acceso al panel principal" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwDashboard" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Fila: Equipos -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf108;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Equipos" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Gestión de equipos" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwEquipos" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Fila: Mantenimientos -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf0ad;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Mantenimientos" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Gestión de mantenimientos" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwMantenimientos" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Fila: Reportes -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf15c;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Reportes" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Visualizar reportes" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwReportes" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Fila: Usuarios -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf0c0;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Usuarios" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Gestión de usuarios" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwUsuarios" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Fila: Configuración -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf013;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Configuración" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Configuración del sistema" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwConfiguracion" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Fila: Checklist -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf46c;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Checklist" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Acceso al checklist" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwChecklist" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Panel Acciones -->
+                <Border Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="#EEEBf8" StrokeThickness="1"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#10512BD4" Offset="0,2" Radius="10" Opacity="1"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="0">
+
+                        <!-- Header panel -->
+                        <HorizontalStackLayout Spacing="10" Margin="0,0,0,16">
+                            <Border BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="32" HeightRequest="32">
+                                <Label FontFamily="FontAwesome" Text="&#xf05a;"
+                                       TextColor="#512BD4" FontSize="13"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Spacing="1" VerticalOptions="Center">
+                                <Label Text="Acciones permitidas" FontSize="14" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Define qué puede hacer este rol." FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <!-- Crear registros -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#E8F5E9" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf055;"
+                                       TextColor="#2E7D32" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Crear registros" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Permite crear nuevos registros" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwCrear" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Editar registros -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EBF4FF" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf044;"
+                                       TextColor="#1E40AF" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Editar registros" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Permite editar registros existentes" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwEditar" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Eliminar registros -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#FEE2E2" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf2ed;"
+                                       TextColor="#991B1B" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Eliminar registros" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Permite eliminar registros" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwEliminar" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="#F5F3FC"/>
+
+                        <!-- Gestionar permisos -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+                            <Border Grid.Column="0" BackgroundColor="#EDE9FB" StrokeShape="RoundRectangle 8"
+                                    StrokeThickness="0" WidthRequest="30" HeightRequest="30">
+                                <Label FontFamily="FontAwesome" Text="&#xf084;"
+                                       TextColor="#512BD4" FontSize="12"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="Gestionar permisos" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                <Label Text="Permite administrar roles y permisos" FontSize="11" TextColor="#9AA3BE"/>
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="2" x:Name="SwGestionarPermisos" OnColor="#512BD4" IsEnabled="False"/>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- ── BOTÓN GUARDAR ── -->
+            <Border BackgroundColor="#F0EBFF"
+                    StrokeShape="RoundRectangle 14"
+                    StrokeThickness="1" Stroke="#DDD8F7"
+                    Padding="20,16" Margin="0,0,0,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Configuración pendiente" FontSize="13" FontAttributes="Bold" TextColor="#6B46C1"/>
+                        <Label Text="La API de permisos aún no está disponible en esta versión." FontSize="11" TextColor="#9AA3BE"/>
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            Text="Guardar permisos"
+                            IsEnabled="False"
+                            BackgroundColor="#C4B5FD"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="13"
+                            HeightRequest="44"
+                            CornerRadius="10"
+                            Padding="16,0"/>
+                </Grid>
             </Border>
-
-            <!-- Permisos de acciones -->
-            <Border BackgroundColor="White"
-                    StrokeShape="RoundRectangle 12"
-                    Stroke="{StaticResource Gray200}"
-                    StrokeThickness="1"
-                    Padding="20">
-                <VerticalStackLayout Spacing="14">
-                    <Label Text="Acciones permitidas"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="{StaticResource Gray900}" />
-
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Crear registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwCrear" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Editar registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwEditar" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Eliminar registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwEliminar" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="Gestionar permisos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
-                        <Switch Grid.Column="1" x:Name="SwGestionarPermisos" OnColor="{StaticResource Primary}" IsEnabled="False" />
-                    </Grid>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Botón deshabilitado con explicación -->
-            <Button Text="Guardar permisos (no disponible aún)"
-                    IsEnabled="False"
-                    BackgroundColor="{StaticResource Gray300}"
-                    TextColor="{StaticResource Gray500}"
-                    FontAttributes="Bold"
-                    HeightRequest="48"
-                    CornerRadius="8" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -4,195 +4,178 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dtos="clr-namespace:ControlEquiposElectronicos.DTOs.Usuarios"
-    Title="Roles por usuario"
-    BackgroundColor="{StaticResource Gray100}">
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F5F6FA">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="24" RowSpacing="14">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="28,24,28,0" RowSpacing="0">
 
-        <!-- Botón volver -->
-        <Border
-                BackgroundColor="Transparent"
-                StrokeShape="RoundRectangle 10"
-                StrokeThickness="1"
-                Stroke="#DDD8F7"
-                Padding="12,8"
-                HorizontalOptions="Start">
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnVolverClicked" />
-            </Border.GestureRecognizers>
-            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="8">
-                <Label Grid.Column="0"
-                           FontFamily="FontAwesome"
-                           Text="&#xf060;"
-                           TextColor="{StaticResource Primary}"
-                           FontSize="13"
-                           VerticalOptions="Center" />
-                <Label Grid.Column="1"
-                           Text="Volver"
-                           TextColor="{StaticResource Primary}"
-                           FontSize="13"
-                           FontAttributes="Bold"
-                           VerticalOptions="Center" />
+        <!-- ── ENCABEZADO ── -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Margin="0,0,0,20">
+            <Border Grid.Column="0"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="1" Stroke="#E8E4F8"
+                    Padding="12,8" VerticalOptions="Center">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVolverClicked"/>
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout Spacing="8">
+                    <Label FontFamily="FontAwesome" Text="&#xf060;"
+                           TextColor="#512BD4" FontSize="12" VerticalOptions="Center"/>
+                    <Label Text="Volver" TextColor="#512BD4" FontSize="13"
+                           FontAttributes="Bold" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+            <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="16,0,0,0" VerticalOptions="Center">
+                <Label Text="Roles por usuario" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                <Label Text="Administra los roles asignados a cada usuario."
+                       FontSize="13" TextColor="#9AA3BE"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- ── BUSCADOR ── -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 12"
+                Stroke="#E8E4F8" StrokeThickness="1"
+                Padding="14,0" Margin="0,0,0,20">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf002;"
+                       FontSize="14" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                <Entry Grid.Column="1"
+                       x:Name="BusquedaEntry"
+                       Placeholder="Buscar usuario..."
+                       TextChanged="OnBusquedaTextChanged"
+                       TextColor="#1A1F3A"
+                       PlaceholderColor="#C4C9D8"
+                       HeightRequest="46"
+                       BackgroundColor="Transparent"/>
             </Grid>
         </Border>
 
-        <!-- Encabezado -->
-        <VerticalStackLayout Grid.Row="1" Spacing="2">
-            <Label Text="Roles por usuario"
-                   FontSize="22"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Gray900}" />
-            <Label Text="Toca un botón para cambiar el rol del usuario."
-                   FontSize="14"
-                   TextColor="{StaticResource Gray500}" />
-        </VerticalStackLayout>
-
-        <!-- Buscador -->
-        <Border Grid.Row="2"
-                BackgroundColor="White"
-                StrokeShape="RoundRectangle 8"
-                Stroke="{StaticResource Gray200}"
-                StrokeThickness="1"
-                Padding="12,0">
-            <Entry x:Name="BusquedaEntry"
-                   Placeholder="Buscar por nombre, usuario o rol..."
-                   TextChanged="OnBusquedaTextChanged"
-                   TextColor="{StaticResource Gray900}"
-                   PlaceholderColor="{StaticResource Gray400}"
-                   HeightRequest="44"
-                   BackgroundColor="Transparent" />
-        </Border>
-
-        <!-- Indicador de carga -->
-        <ActivityIndicator Grid.Row="3"
+        <!-- ── INDICADOR DE CARGA ── -->
+        <ActivityIndicator Grid.Row="2"
                            x:Name="CargandoIndicator"
-                           IsRunning="False"
-                           IsVisible="False"
-                           Color="{StaticResource Primary}"
-                           VerticalOptions="Start"
-                           HorizontalOptions="Center" />
+                           IsRunning="False" IsVisible="False"
+                           Color="#512BD4"
+                           HorizontalOptions="Center" Margin="0,0,0,12"/>
 
-        <CollectionView Grid.Row="3"
-                        x:Name="UsuariosCollection">
+        <!-- ── LISTA DE USUARIOS ── -->
+        <CollectionView Grid.Row="3" x:Name="UsuariosCollection">
 
             <CollectionView.EmptyView>
-                <Label Text="No hay usuarios para mostrar."
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       TextColor="{StaticResource Gray500}" />
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label FontFamily="FontAwesome" Text="&#xf0c0;"
+                           FontSize="32" TextColor="#D1D5E8" HorizontalOptions="Center"/>
+                    <Label Text="No hay usuarios para mostrar."
+                           FontSize="14" TextColor="#9AA3BE" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
             </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2"
+                                 HorizontalItemSpacing="14" VerticalItemSpacing="14"/>
+            </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="dtos:UsuarioListadoDto">
                     <Border BackgroundColor="White"
-                            Padding="16"
-                            Margin="0,5"
-                            StrokeShape="RoundRectangle 10"
-                            Stroke="{StaticResource Gray200}"
-                            StrokeThickness="1">
+                            Padding="18"
+                            StrokeShape="RoundRectangle 14"
+                            Stroke="#EEEBf8" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="#18512BD4" Offset="0,2" Radius="12" Opacity="1"/>
+                        </Border.Shadow>
 
-                        <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                        <VerticalStackLayout Spacing="14">
 
-                            <!-- Fila superior: avatar + datos + chip de rol actual -->
-                            <Grid Grid.Row="0"
-                                  ColumnDefinitions="Auto,*,Auto"
-                                  ColumnSpacing="14">
-
+                            <!-- Fila: avatar + nombre + rol actual -->
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                <!-- Avatar -->
                                 <Border Grid.Column="0"
-                                        WidthRequest="44" HeightRequest="44"
-                                        BackgroundColor="{StaticResource Secondary}"
-                                        StrokeShape="RoundRectangle 22"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Center">
-                                    <Label FontFamily="FontAwesome"
-                                           Text="&#xf007;"
-                                           TextColor="{StaticResource Primary}"
-                                           FontSize="18"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center" />
+                                        WidthRequest="48" HeightRequest="48"
+                                        BackgroundColor="#EDE9FB"
+                                        StrokeShape="RoundRectangle 24"
+                                        StrokeThickness="0" VerticalOptions="Center">
+                                    <Label FontFamily="FontAwesome" Text="&#xf007;"
+                                           TextColor="#512BD4" FontSize="20"
+                                           HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
 
-                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <!-- Nombre, nick y chip de rol -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
                                     <Label Text="{Binding NombreCompleto}"
-                                           FontSize="15"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource Gray900}" />
+                                           FontSize="14" FontAttributes="Bold" TextColor="#1A1F3A"
+                                           LineBreakMode="TailTruncation"/>
                                     <Label Text="{Binding Nickname, StringFormat='@{0}'}"
-                                           FontSize="12"
-                                           TextColor="{StaticResource Gray500}" />
-                                </VerticalStackLayout>
+                                           FontSize="12" TextColor="#9AA3BE"/>
 
-                                <!-- Chip del rol actual -->
-                                <Border Grid.Column="2"
-                                        BackgroundColor="{StaticResource Secondary}"
-                                        StrokeShape="RoundRectangle 6"
-                                        StrokeThickness="0"
-                                        Padding="10,4"
-                                        VerticalOptions="Center">
-                                    <Label Text="{Binding Rol}"
-                                           FontSize="12"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource Primary}" />
-                                </Border>
+                                    <!-- Chip del rol actual -->
+                                    <Border BackgroundColor="#EDE9FB"
+                                            StrokeShape="RoundRectangle 6"
+                                            StrokeThickness="0"
+                                            Padding="10,4"
+                                            HorizontalOptions="Start">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label FontFamily="FontAwesome" Text="&#xf521;"
+                                                   FontSize="10" TextColor="#512BD4"
+                                                   VerticalOptions="Center"/>
+                                            <Label Text="{Binding Rol}"
+                                                   FontSize="11" FontAttributes="Bold"
+                                                   TextColor="#512BD4"/>
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </VerticalStackLayout>
                             </Grid>
 
-                            <!-- Fila inferior: 4 botones de rol -->
-                            <Grid Grid.Row="1"
-                                  ColumnDefinitions="*,*,*,*"
-                                  ColumnSpacing="6">
+                            <!-- Separador -->
+                            <BoxView HeightRequest="1" BackgroundColor="#F0EDF9"/>
 
-                                <Button Grid.Column="0"
+                            <!-- Fila: botones de cambio de rol (ocultos visualmente, necesarios funcionalmente) -->
+                            <!-- Se usan como invisible triggers — el botón "Cambiar rol" dispara el ActionSheet -->
+                            <Grid IsVisible="False" HeightRequest="0">
+                                <Button x:Name="BtnOP"
                                         Text="OP"
                                         CommandParameter="{Binding .}"
-                                        Clicked="OnAsignarOPClicked"
-                                        BackgroundColor="#2B0B98"
-                                        TextColor="White"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        HeightRequest="36"
-                                        CornerRadius="6" />
-
-                                <Button Grid.Column="1"
+                                        Clicked="OnAsignarOPClicked"/>
+                                <Button x:Name="BtnAdmin"
                                         Text="Admin"
                                         CommandParameter="{Binding .}"
-                                        Clicked="OnAsignarAdministradorClicked"
-                                        BackgroundColor="{StaticResource Primary}"
-                                        TextColor="White"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        HeightRequest="36"
-                                        CornerRadius="6" />
-
-                                <Button Grid.Column="2"
+                                        Clicked="OnAsignarAdministradorClicked"/>
+                                <Button x:Name="BtnTecnico"
                                         Text="Técnico"
                                         CommandParameter="{Binding .}"
-                                        Clicked="OnAsignarTecnicoClicked"
-                                        BackgroundColor="{StaticResource Primary}"
-                                        TextColor="White"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        HeightRequest="36"
-                                        CornerRadius="6" />
-
-                                <Button Grid.Column="3"
+                                        Clicked="OnAsignarTecnicoClicked"/>
+                                <Button x:Name="BtnConsulta"
                                         Text="Consulta"
                                         CommandParameter="{Binding .}"
-                                        Clicked="OnAsignarConsultaClicked"
-                                        BackgroundColor="{StaticResource Secondary}"
-                                        TextColor="{StaticResource Primary}"
-                                        FontSize="11"
-                                        FontAttributes="Bold"
-                                        HeightRequest="36"
-                                        CornerRadius="6" />
+                                        Clicked="OnAsignarConsultaClicked"/>
                             </Grid>
 
-                        </Grid>
+                            <!-- Botón "Cambiar rol" visible -->
+                            <Button BackgroundColor="#512BD4"
+                                    TextColor="White"
+                                    Text="Cambiar rol"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    CornerRadius="10"
+                                    HeightRequest="42"
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnCambiarRolTapped">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FontAwesome"
+                                                     Glyph="&#xf044;"
+                                                     Color="White"
+                                                     Size="14"/>
+                                </Button.ImageSource>
+                            </Button>
+
+                        </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-
         </CollectionView>
 
     </Grid>
-
 </ContentPage>
