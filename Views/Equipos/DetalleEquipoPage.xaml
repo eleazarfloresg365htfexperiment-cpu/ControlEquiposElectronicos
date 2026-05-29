@@ -106,6 +106,33 @@
                         </VerticalStackLayout>
                     </Border>
 
+                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="18">
+                        <VerticalStackLayout Spacing="0">
+                            <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
+                                <Label FontFamily="FontAwesome" Text="&#xf287;" FontSize="13" TextColor="#7F77DD" VerticalOptions="Center"/>
+                                <Label Text="Periféricos asignados" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                            </HorizontalStackLayout>
+
+                            <CollectionView ItemsSource="{Binding Perifericos}">
+                                <CollectionView.EmptyView>
+                                    <Label Text="Sin periféricos asignados" FontSize="12" TextColor="#9AA3BE" Padding="0,8"/>
+                                </CollectionView.EmptyView>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,*" Padding="0,8">
+                                            <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                                                <Label FontFamily="FontAwesome" Text="&#xf287;" FontSize="11" TextColor="#7F77DD" VerticalOptions="Center"/>
+                                                <Label Text="{Binding NombrePeriferico}" FontSize="12" VerticalOptions="Center"/>
+                                            </HorizontalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding CodigoPeriferico}" FontSize="12" TextColor="#9AA3BE" HorizontalOptions="End" VerticalOptions="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                        </VerticalStackLayout>
+                    </Border>
+
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Grid.Column="1" Spacing="10" WidthRequest="200">
@@ -116,25 +143,41 @@
                                 <Label Text="Acciones" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
                             </HorizontalStackLayout>
 
-                            <Button Text="✏ Editar información"
-                                    BackgroundColor="#DBEAFE" TextColor="#1E40AF"
+                            <Button BackgroundColor="#DBEAFE" TextColor="#1E40AF"
                                     CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnEditar"/>
+                                    x:Name="BtnEditar">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FontAwesome" Glyph="&#xf044;" Color="#1E40AF" Size="13"/>
+                                </Button.ImageSource>
+                                <Button.Text>Editar información</Button.Text>
+                            </Button>
 
-                            <Button Text="🔄 Cambiar estado"
-                                    BackgroundColor="#FEF3C7" TextColor="#92400E"
+                            <Button BackgroundColor="#FEF3C7" TextColor="#92400E"
                                     CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnCambiarEstado"/>
+                                    x:Name="BtnCambiarEstado">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FontAwesome" Glyph="&#xf021;" Color="#92400E" Size="13"/>
+                                </Button.ImageSource>
+                                <Button.Text>Cambiar estado</Button.Text>
+                            </Button>
 
-                            <Button Text="🏷️ Reclasificar"
-                                    BackgroundColor="#EDE9FE" TextColor="#5B21B6"
+                            <Button BackgroundColor="#EDE9FE" TextColor="#5B21B6"
                                     CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnReclasificar"/>
+                                    x:Name="BtnReclasificar">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FontAwesome" Glyph="&#xf02b;" Color="#5B21B6" Size="13"/>
+                                </Button.ImageSource>
+                                <Button.Text>Reclasificar</Button.Text>
+                            </Button>
 
-                            <Button Text="🗑️ Desactivar"
-                                    BackgroundColor="#FEE2E2" TextColor="#991B1B"
+                            <Button BackgroundColor="#FEE2E2" TextColor="#991B1B"
                                     CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnDesactivar"/>
+                                    x:Name="BtnDesactivar">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FontAwesome" Glyph="&#xf2ed;" Color="#991B1B" Size="13"/>
+                                </Button.ImageSource>
+                                <Button.Text>Desactivar</Button.Text>
+                            </Button>
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>

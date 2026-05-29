@@ -15,6 +15,7 @@ public partial class DetalleEquipoPage : ContentPage
         {
             _equipoId = value;
             _ = _viewModel.CargarEquipoAsync(value);
+            _ = _viewModel.CargarPerifericos(value);
         }
     }
 

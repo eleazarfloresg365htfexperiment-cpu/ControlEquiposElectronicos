@@ -142,4 +142,27 @@ public class DetalleEquiposViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+    private List<EquipoPerifericoDto> _perifericos = new();
+    public List<EquipoPerifericoDto> Perifericos
+    {
+        get => _perifericos;
+        set
+        {
+            _perifericos = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public async Task CargarPerifericos(int equipoId)
+    {
+        try
+        {
+            var resultado = await _equipoApiService.ObtenerPerifericosDePcAsync(equipoId);
+            Perifericos = resultado ?? new();
+        }
+        catch
+        {
+            Perifericos = new();
+        }
+    }
 }
