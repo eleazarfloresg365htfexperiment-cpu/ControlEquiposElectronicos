@@ -14,12 +14,12 @@ public partial class AppShell : Shell
         InitializeComponent();
         _sesion = sesion;
 
-        // Rutas de pablo (login, sesión, configuración)
+        // Rutas de pablo
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
         Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
         Routing.RegisterRoute("RolesUsuario", typeof(Views.Configuracion.RolesUsuarioPage));
         Routing.RegisterRoute("PerfilUsuario", typeof(Views.Configuracion.PerfilUsuarioPage));
-        Routing.RegisterRoute("Auditoria", typeof(Views.Configuracion.AuditoriaPage)); // ← NUEVO
+        Routing.RegisterRoute("Auditoria", typeof(Views.Configuracion.AuditoriaPage));
 
         // Rutas de equipos (suarlin)
         Routing.RegisterRoute("RegistrarEquipoPage", typeof(Views.Equipos.RegistrarEquipoPage));
@@ -63,11 +63,12 @@ public partial class AppShell : Shell
 
     private void MostrarUsuario()
     {
-        if (_sesion.UsuarioActual != null)
-        {
-            NombreUsuarioLabel.Text = _sesion.UsuarioActual.Nombre;
-            RolUsuarioLabel.Text = _sesion.UsuarioActual.Rol;
-        }
+        var usuario = _sesion.UsuarioActual;
+        if (usuario == null) return;
+
+        NombreUsuarioLabel.Text = usuario.Nombre;
+        RolUsuarioLabel.Text = usuario.Rol;
+        InicialesLabel.Text = ObtenerIniciales(usuario.Nombre);
     }
 
     private void ConfigurarMenu()
@@ -87,5 +88,12 @@ public partial class AppShell : Shell
             };
         }
     }
+
+    private static string ObtenerIniciales(string nombre)
+    {
+        if (string.IsNullOrWhiteSpace(nombre)) return "??";
+        var partes = nombre.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (partes.Length == 1) return partes[0][..Math.Min(2, partes[0].Length)].ToUpper();
+        return $"{partes[0][0]}{partes[1][0]}".ToUpper();
+    }
 }
- 

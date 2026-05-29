@@ -4,169 +4,323 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Dashboard"
-    BackgroundColor="{StaticResource Gray100}">
+    BackgroundColor="#F4F6FA">
 
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
+        <VerticalStackLayout Padding="32,28,32,32" Spacing="0">
 
-            <!-- Tarjetas de resumen -->
-            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- ENCABEZADO                                              -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,28">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="Panel de control"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="#1A1A2E" />
+                    <Label Text="Resumen general del sistema"
+                           FontSize="14"
+                           TextColor="#8A8FA8" />
+                </VerticalStackLayout>
 
-                <Border x:Name="TarjetaEquipos" Grid.Column="0"
+                <ActivityIndicator Grid.Column="1"
+                                   IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}"
+                                   Color="{StaticResource Primary}"
+                                   VerticalOptions="Center" />
+            </Grid>
+
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- TARJETAS DE RESUMEN                                     -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16" Margin="0,0,0,32">
+
+                <!-- Equipos -->
+                <Border x:Name="TarjetaEquipos"
+                        Grid.Column="0"
                         BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="18">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0"
-                                WidthRequest="48" HeightRequest="48"
-                                BackgroundColor="#378ADD"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="22,20">
+                    <Border.Shadow>
+                        <Shadow Brush="#1A512BD4" Offset="0,4" Radius="16" Opacity="1" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="14">
+                        <Border WidthRequest="46" HeightRequest="46"
+                                BackgroundColor="#EBF4FF"
                                 StrokeShape="RoundRectangle 12"
-                                StrokeThickness="0"
-                                VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf108;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                StrokeThickness="0">
+                            <Label FontFamily="FontAwesome" Text="&#xf108;"
+                                   TextColor="#378ADD" FontSize="19"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Equipos" FontSize="14" TextColor="{StaticResource Gray500}" />
-                            <Label Text="{Binding TotalEquipos}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Total registrados" FontSize="11" TextColor="{StaticResource Gray400}" />
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding TotalEquipos}"
+                                   FontSize="34" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Equipos registrados"
+                                   FontSize="13" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
-                    </Grid>
+                        <BoxView HeightRequest="3" WidthRequest="36"
+                                 BackgroundColor="#378ADD"
+                                 HorizontalOptions="Start"
+                                 CornerRadius="2" />
+                    </VerticalStackLayout>
                 </Border>
 
-                <Border x:Name="TarjetaMantenimientos" Grid.Column="1"
+                <!-- Mantenimientos -->
+                <Border x:Name="TarjetaMantenimientos"
+                        Grid.Column="1"
                         BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="18">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0"
-                                WidthRequest="48" HeightRequest="48"
-                                BackgroundColor="#BA7517"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="22,20">
+                    <Border.Shadow>
+                        <Shadow Brush="#1ABA7517" Offset="0,4" Radius="16" Opacity="1" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="14">
+                        <Border WidthRequest="46" HeightRequest="46"
+                                BackgroundColor="#FFF4E5"
                                 StrokeShape="RoundRectangle 12"
-                                StrokeThickness="0"
-                                VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf0ad;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                StrokeThickness="0">
+                            <Label FontFamily="FontAwesome" Text="&#xf0ad;"
+                                   TextColor="#BA7517" FontSize="19"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Mantenimientos" FontSize="14" TextColor="{StaticResource Gray500}" />
-                            <Label Text="{Binding TotalMantenimientos}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="En total" FontSize="11" TextColor="{StaticResource Gray400}" />
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding TotalMantenimientos}"
+                                   FontSize="34" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Mantenimientos totales"
+                                   FontSize="13" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
-                    </Grid>
+                        <BoxView HeightRequest="3" WidthRequest="36"
+                                 BackgroundColor="#BA7517"
+                                 HorizontalOptions="Start"
+                                 CornerRadius="2" />
+                    </VerticalStackLayout>
                 </Border>
 
-                <Border x:Name="TarjetaReportes" Grid.Column="2"
+                <!-- Reportes -->
+                <Border x:Name="TarjetaReportes"
+                        Grid.Column="2"
                         BackgroundColor="White"
-                        StrokeShape="RoundRectangle 12"
-                        Stroke="{StaticResource Gray200}"
-                        StrokeThickness="1"
-                        Padding="18">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0"
-                                WidthRequest="48" HeightRequest="48"
-                                BackgroundColor="#E24B4A"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="22,20">
+                    <Border.Shadow>
+                        <Shadow Brush="#1AE24B4A" Offset="0,4" Radius="16" Opacity="1" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="14">
+                        <Border WidthRequest="46" HeightRequest="46"
+                                BackgroundColor="#FFECEC"
                                 StrokeShape="RoundRectangle 12"
-                                StrokeThickness="0"
-                                VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf15c;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                                StrokeThickness="0">
+                            <Label FontFamily="FontAwesome" Text="&#xf15c;"
+                                   TextColor="#E24B4A" FontSize="19"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Reportes" FontSize="14" TextColor="{StaticResource Gray500}" />
-                            <Label Text="{Binding TotalReportes}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Reportes de falla" FontSize="11" TextColor="{StaticResource Gray400}" />
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding TotalReportes}"
+                                   FontSize="34" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Reportes de falla"
+                                   FontSize="13" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
-                    </Grid>
+                        <BoxView HeightRequest="3" WidthRequest="36"
+                                 BackgroundColor="#E24B4A"
+                                 HorizontalOptions="Start"
+                                 CornerRadius="2" />
+                    </VerticalStackLayout>
                 </Border>
 
             </Grid>
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}"
-                               Color="{StaticResource Primary}"
-                               HorizontalOptions="Center" />
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <!-- SECCIÓN: ACCESOS RÁPIDOS                                -->
+            <!-- ═══════════════════════════════════════════════════════ -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="Accesos rápidos"
+                           FontSize="18" FontAttributes="Bold"
+                           TextColor="#1A1A2E" />
+                    <Label Text="Navega a los módulos del sistema"
+                           FontSize="13" TextColor="#8A8FA8" />
+                </VerticalStackLayout>
+            </Grid>
 
-            <Label Text="Accesos rápidos"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Gray900}"
-                   Margin="0,8,0,0" />
+            <!-- Grid de accesos: 3 columnas x 2 filas -->
+            <Grid ColumnDefinitions="*,*,*"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="16"
+                  RowSpacing="16">
 
-            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="16">
-
-                <Border x:Name="AccesoEquipos" Grid.Row="0" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <!-- Equipos -->
+                <Border x:Name="AccesoEquipos"
+                        Grid.Row="0" Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnEquiposTapped" />
                     </Border.GestureRecognizers>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#378ADD" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf108;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#EBF4FF"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf108;"
+                                   TextColor="#378ADD" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Equipos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Gestionar equipos" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Equipos"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Gestionar equipos"
+                                   FontSize="12" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
 
-                <Border x:Name="AccesoMantenimientos" Grid.Row="0" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <!-- Mantenimientos -->
+                <Border x:Name="AccesoMantenimientos"
+                        Grid.Row="0" Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnMantenimientosTapped" />
                     </Border.GestureRecognizers>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#BA7517" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf0ad;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#FFF4E5"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf0ad;"
+                                   TextColor="#BA7517" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Mantenimientos" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Ver mantenimientos" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Mantenimientos"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Ver mantenimientos"
+                                   FontSize="12" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
 
-                <Border x:Name="AccesoReportes" Grid.Row="0" Grid.Column="2" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <!-- Reportes -->
+                <Border x:Name="AccesoReportes"
+                        Grid.Row="0" Grid.Column="2"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnReportesTapped" />
                     </Border.GestureRecognizers>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#E24B4A" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf15c;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#FFECEC"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf15c;"
+                                   TextColor="#E24B4A" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Reportes" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Ver reportes" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Reportes"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Ver reportes"
+                                   FontSize="12" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
 
-                <Border x:Name="AccesoUsuarios" Grid.Row="1" Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <!-- Usuarios -->
+                <Border x:Name="AccesoUsuarios"
+                        Grid.Row="1" Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnUsuariosTapped" />
                     </Border.GestureRecognizers>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#639922" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf0c0;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#EDFADF"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf0c0;"
+                                   TextColor="#639922" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Usuarios" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Gestionar usuarios" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Usuarios"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Gestionar usuarios"
+                                   FontSize="12" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
 
-                <Border x:Name="AccesoConfiguracion" Grid.Row="1" Grid.Column="1" BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="20">
+                <!-- Configuración -->
+                <Border x:Name="AccesoConfiguracion"
+                        Grid.Row="1" Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnConfiguracionTapped" />
                     </Border.GestureRecognizers>
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
-                        <Border Grid.Column="0" WidthRequest="44" HeightRequest="44" BackgroundColor="#7F77DD" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="Center">
-                            <Label FontFamily="FontAwesome" Text="&#xf013;" TextColor="White" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0"
+                                WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#EEECFF"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf013;"
+                                   TextColor="#7F77DD" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
                         </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Configuración" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label Text="Ajustes del sistema" FontSize="12" TextColor="{StaticResource Gray500}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Configuración"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Ajustes del sistema"
+                                   FontSize="12" TextColor="#8A8FA8" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>

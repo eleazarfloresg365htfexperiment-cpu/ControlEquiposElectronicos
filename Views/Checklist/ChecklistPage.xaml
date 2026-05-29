@@ -14,56 +14,18 @@
         <ScrollView>
             <VerticalStackLayout Padding="24" Spacing="20">
 
-                <!-- Encabezado + perfil -->
-                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                    <VerticalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
-                        <Label Text="Checklist Técnico"
-                               FontSize="28"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource ChecklistHeader}" />
-                        <Label Text="Supervisa el estado técnico de los equipos por ubicación"
-                               FontSize="14"
-                               TextColor="{StaticResource Gray500}" />
-                    </VerticalStackLayout>
+                <!-- Encabezado -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Checklist Técnico"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource ChecklistHeader}" />
+                    <Label Text="Supervisa el estado técnico de los equipos por ubicación"
+                           FontSize="14"
+                           TextColor="{StaticResource Gray500}" />
+                </VerticalStackLayout>
 
-                    <Border Grid.Column="1"
-                            Padding="12"
-                            BackgroundColor="{StaticResource ChecklistCardBg}"
-                            Stroke="{StaticResource Gray200}"
-                            StrokeThickness="1"
-                            VerticalOptions="Start">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="12" />
-                        </Border.StrokeShape>
-                        <Border.Shadow>
-                            <Shadow Brush="#33000000" Offset="0,2" Radius="8" Opacity="0.15" />
-                        </Border.Shadow>
-                        <HorizontalStackLayout Spacing="10">
-                            <Border WidthRequest="44"
-                                    HeightRequest="44"
-                                    BackgroundColor="{StaticResource Secondary}"
-                                    StrokeThickness="0"
-                                    VerticalOptions="Center">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="22" />
-                                </Border.StrokeShape>
-                                <Label Text="👤"
-                                       FontSize="20"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                            </Border>
-                            <VerticalStackLayout Spacing="2" VerticalOptions="Center">
-                                <Label Text="{Binding NombreUsuario}"
-                                       FontAttributes="Bold"
-                                       FontSize="14"
-                                       TextColor="{StaticResource ChecklistHeader}" />
-                                <Label Text="{Binding RolUsuario}"
-                                       FontSize="12"
-                                       TextColor="{StaticResource Gray500}" />
-                            </VerticalStackLayout>
-                        </HorizontalStackLayout>
-                    </Border>
-                </Grid>
+
 
                 <Label Text="{Binding MensajeError}"
                        TextColor="{StaticResource ChecklistRed}"
@@ -75,7 +37,9 @@
                     <Border Grid.Column="0" Style="{StaticResource ChecklistStatCardStyle}">
                         <HorizontalStackLayout Spacing="10">
                             <Border BackgroundColor="#E8EDFF" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
                                 <Label Text="✓" FontSize="18" TextColor="{StaticResource ChecklistBlue}" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout Spacing="2" VerticalOptions="Center">
@@ -88,7 +52,9 @@
                     <Border Grid.Column="1" Style="{StaticResource ChecklistStatCardStyle}">
                         <HorizontalStackLayout Spacing="10">
                             <Border BackgroundColor="#E8F8EF" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
                                 <Label Text="🖥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout Spacing="2" VerticalOptions="Center">
@@ -101,7 +67,9 @@
                     <Border Grid.Column="2" Style="{StaticResource ChecklistStatCardStyle}">
                         <HorizontalStackLayout Spacing="10">
                             <Border BackgroundColor="#FFF4E5" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
                                 <Label Text="⚠" FontSize="18" TextColor="{StaticResource ChecklistOrange}" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout Spacing="2" VerticalOptions="Center">
@@ -114,7 +82,9 @@
                     <Border Grid.Column="3" Style="{StaticResource ChecklistStatCardStyle}">
                         <HorizontalStackLayout Spacing="10">
                             <Border BackgroundColor="#FDECEC" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
                                 <Label Text="⏳" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Border>
                             <VerticalStackLayout Spacing="2" VerticalOptions="Center">
