@@ -1,9 +1,28 @@
-﻿namespace ControlEquiposElectronicos.Views.Checklist;
+﻿using ControlEquiposElectronicos.Helpers;
+using ControlEquiposElectronicos.ViewModels.Checklist;
 
-public partial class RevisionEquipoChecklistPage : ContentPage
+namespace ControlEquiposElectronicos.Views.Checklist;
+
+public partial class RevisionEquipoChecklistPage : ContentPage, IQueryAttributable
 {
-    public RevisionEquipoChecklistPage()
+    private readonly RevisionEquipoChecklistViewModel _viewModel;
+
+    public RevisionEquipoChecklistPage() : this(ServiceHelper.GetRequiredService<RevisionEquipoChecklistViewModel>()) { }
+
+    public RevisionEquipoChecklistPage(RevisionEquipoChecklistViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query) =>
+        _viewModel.ApplyQueryAttributes(query);
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.CargarAsync();
+    }
+
 }

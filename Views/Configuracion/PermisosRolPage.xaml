@@ -3,13 +3,118 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ControlEquiposElectronicos.Views.Configuracion.PermisosRolPage"
-    Title="Permisos por rol">
+    Title="Permisos por rol"
+    BackgroundColor="{StaticResource Gray100}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Permisos por rol"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <!-- Botón volver -->
+            <Button Text="← Volver"
+                    Clicked="OnVolverClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Primary}"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    HorizontalOptions="Start"
+                    Padding="0"
+                    HeightRequest="32" />
+
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Seleccionar rol"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}" />
+                    <Label Text="Elige el rol al que deseas configurar los permisos."
+                           FontSize="13"
+                           TextColor="{StaticResource Gray500}" />
+                    <Picker x:Name="RolPicker"
+                            Title="Selecciona un rol"
+                            SelectedIndexChanged="OnRolCambiado"
+                            TextColor="{StaticResource Gray900}"
+                            TitleColor="{StaticResource Gray400}">
+                        <Picker.Items>
+                            <x:String>Administrador</x:String>
+                            <x:String>Técnico</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Acceso a módulos"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Ver Dashboard" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwDashboard" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Ver Equipos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwEquipos" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Ver Mantenimientos" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwMantenimientos" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Ver Reportes" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwReportes" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Ver Usuarios" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwUsuarios" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Acciones permitidas"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Gray900}" />
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Crear registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwCrear" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Editar registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwEditar" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Eliminar registros" TextColor="{StaticResource Gray900}" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="SwEliminar" OnColor="{StaticResource Primary}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar permisos"
+                    Clicked="OnGuardarClicked"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    HeightRequest="48"
+                    CornerRadius="8" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

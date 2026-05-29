@@ -5,11 +5,29 @@
     x:Class="ControlEquiposElectronicos.Views.Equipos.ImpresionPage"
     Title="Impresión">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Impresión"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <Label Text="Modulo Impresión"
+                   FontSize="30"
+                   FontAttributes="Bold" />
+
+            <Button Text="Registrar Impresora"
+                    Clicked="OnRegistrarImpresora" />
+
+            <Button Text="Registrar Cartucho"
+                    Clicked="OnRegistrarCartucho" />
+
+            <Button Text="Editar Detalle"
+                    Clicked="OnEditarDetalle" />
+
+            <Button Text="Ver Historial"
+                    Clicked="OnVerHistorial" />
+
+            <Button Text="Reportar Falla"
+                    Clicked="OnReportarFalla" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

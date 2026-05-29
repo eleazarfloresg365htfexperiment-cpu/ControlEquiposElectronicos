@@ -1,4 +1,5 @@
-﻿using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Views.Equipos;
 using ControlEquiposElectronicos.Views.Mantenimientos;
 using ControlEquiposElectronicos.Views.Reportes;
 
@@ -13,11 +14,62 @@ public partial class AppShell : Shell
         InitializeComponent();
         _sesion = sesion;
 
-        // Registrar rutas de navegación
+        // Rutas de pablo (login, sesión, configuración)
+        Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
+        Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
+        Routing.RegisterRoute("RolesUsuario", typeof(Views.Configuracion.RolesUsuarioPage));
+        // Routing.RegisterRoute("PerfilUsuario", typeof(Views.Configuracion.PerfilUsuarioPage));
+
+        // Rutas de equipos (suarlin)
+        Routing.RegisterRoute("RegistrarEquipoPage", typeof(Views.Equipos.RegistrarEquipoPage));
+        Routing.RegisterRoute("DetalleEquipoPage", typeof(Views.Equipos.DetalleEquipoPage));
+        Routing.RegisterRoute("ComputoPage", typeof(Views.Equipos.ComputoPage));
+        Routing.RegisterRoute("AuditoriaPage", typeof(AuditoriaPage));
+
+        // Rutas del compañero (mantenimientos y reportes)
         Routing.RegisterRoute("MantenimientoFormulario", typeof(MantenimientoFormularioPage));
         Routing.RegisterRoute("ReporteFallaFormulario", typeof(ReporteFallaFormularioPage));
 
+        MostrarUsuario();
         ConfigurarMenu();
+    }
+
+    private void OnMenuUsuarioTapped(object? sender, TappedEventArgs e)
+    {
+        MenuUsuarioDesplegable.IsVisible = !MenuUsuarioDesplegable.IsVisible;
+        FlechaMenuLabel.Text = MenuUsuarioDesplegable.IsVisible ? "\u25B4" : "\u25BE";
+    }
+
+    private async void OnMiPerfilTapped(object? sender, TappedEventArgs e)
+    {
+        MenuUsuarioDesplegable.IsVisible = false;
+        FlechaMenuLabel.Text = "\u25BE";
+
+        await DisplayAlert("Mi perfil",
+            $"Nombre: {_sesion.UsuarioActual?.Nombre}\nRol: {_sesion.UsuarioActual?.Rol}",
+            "Cerrar");
+    }
+
+    private async void OnCerrarSesionTapped(object? sender, TappedEventArgs e)
+    {
+        MenuUsuarioDesplegable.IsVisible = false;
+        FlechaMenuLabel.Text = "\u25BE";
+
+        bool confirmar = await DisplayAlert("Cerrar sesión",
+            "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
+        if (!confirmar) return;
+
+        _sesion.CerrarSesion();
+        Application.Current!.Windows[0].Page = new Views.Login.LoginPage(_sesion);
+    }
+
+    private void MostrarUsuario()
+    {
+        if (_sesion.UsuarioActual != null)
+        {
+            NombreUsuarioLabel.Text = _sesion.UsuarioActual.Nombre;
+            RolUsuarioLabel.Text = _sesion.UsuarioActual.Rol;
+        }
     }
 
     private void ConfigurarMenu()
@@ -29,6 +81,7 @@ public partial class AppShell : Shell
                 "Dashboard" => _sesion.TienePermiso("Dashboard.Ver"),
                 "Equipos" => _sesion.TienePermiso("Equipos.Ver"),
                 "Mantenimientos" => _sesion.TienePermiso("Mantenimientos.Ver"),
+                "Checklist" => _sesion.TienePermiso("Checklist.Ver"),
                 "Reportes" => _sesion.TienePermiso("Reportes.Ver"),
                 "Usuarios" => _sesion.TienePermiso("Usuarios.Ver"),
                 "Configuración" => _sesion.TienePermiso("Configuracion.Ver"),

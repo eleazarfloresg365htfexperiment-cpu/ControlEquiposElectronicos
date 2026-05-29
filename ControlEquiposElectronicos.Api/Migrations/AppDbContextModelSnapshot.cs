@@ -577,6 +577,45 @@ namespace ControlEquiposElectronicos.Api.Migrations
                     b.ToTable("Equipos");
                 });
 
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.EquipoPeriferico", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int>("EquipoPrincipalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaAsignacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaDesasignacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("PerifericoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PerifericoId");
+
+                    b.HasIndex("EquipoPrincipalId", "PerifericoId", "Activo")
+                        .HasDatabaseName("IX_EquipoPerifericos_EquipoPrincipal_Periferico_Activo");
+
+                    b.ToTable("EquipoPerifericos", (string)null);
+                });
+
             modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.EstadoEquipo", b =>
                 {
                     b.Property<int>("Id")
@@ -1332,6 +1371,25 @@ namespace ControlEquiposElectronicos.Api.Migrations
                     b.Navigation("TipoEquipo");
 
                     b.Navigation("Ubicacion");
+                });
+
+            modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.EquipoPeriferico", b =>
+                {
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.Equipo", "EquipoPrincipal")
+                        .WithMany()
+                        .HasForeignKey("EquipoPrincipalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ControlEquiposElectronicos.Api.Entities.Inventario.Equipo", "Periferico")
+                        .WithMany()
+                        .HasForeignKey("PerifericoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EquipoPrincipal");
+
+                    b.Navigation("Periferico");
                 });
 
             modelBuilder.Entity("ControlEquiposElectronicos.Api.Entities.Inventario.SwitchPuerto", b =>

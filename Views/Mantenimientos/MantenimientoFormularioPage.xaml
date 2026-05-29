@@ -120,6 +120,4 @@
         </VerticalStackLayout>
     </ScrollView>
 
-</ContentPage> git add -A
-git commit -m "Quitar título doble en mantenimientos y reportes"
-git push
+</ContentPage>
