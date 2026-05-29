@@ -3,11 +3,172 @@
     x:Class="ControlEquiposElectronicos.Views.Equipos.EquiposPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Equipos">
+    Title="Gestión de Equipos"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F5F5F5">
 
-    <VerticalStackLayout Padding="30" Spacing="15">
-        <Label Text="Equipos" FontSize="28" FontAttributes="Bold" />
-        <Label Text="Resumen general del sistema CPC" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
 
+        <VerticalStackLayout Grid.Row="0" Padding="28,20,28,10" Spacing="2">
+            <Label Text="Gestión de Equipos" FontSize="24" FontAttributes="Bold" TextColor="#1A1F3A"/>
+            <Label Text="Administra la información de los equipos de la academia" FontSize="13" TextColor="#9AA3BE"/>
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="1" Padding="28,0,28,16">
+            <HorizontalStackLayout Spacing="14" HorizontalOptions="Start">
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="20,20" WidthRequest="190">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnRegistrarEquipoTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#378ADD" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="70" HeightRequest="70" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf067;" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Registrar nuevo equipo" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Agregar un nuevo equipo al inventario" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="20,20" WidthRequest="190">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnActualizarListaTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#639922" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="70" HeightRequest="70" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf021;" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Actualizar lista" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Recargar todos los equipos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="20,20" WidthRequest="190">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnVerComputoTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#E24B4A" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="70" HeightRequest="70" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf108;" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Cómputo" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Ver PCs y periféricos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="20,20" WidthRequest="190">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFiltrarActivosTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#7F77DD" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="70" HeightRequest="70" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf00c;" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Ver activos" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Filtrar solo equipos activos" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="20,20" WidthRequest="190">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFiltrarInactivosTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#BA7517" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="70" HeightRequest="70" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf071;" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Ver en mantenimiento" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                        <Label Text="Equipos en mantenimiento o dañados" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="20,20" WidthRequest="190">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAuditoriaTapped"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Border BackgroundColor="#512BD4" StrokeThickness="0" StrokeShape="RoundRectangle 18" WidthRequest="70" HeightRequest="70" HorizontalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf46d;" FontSize="28" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="Auditoría" FontSize="13" FontAttributes="Bold" TextColor="#1A1F3A" HorizontalOptions="Center"/>
+                        <Label Text="Historial de acciones" FontSize="11" TextColor="#9AA3BE" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Grid Grid.Row="2" Padding="28,0,28,14" ColumnDefinitions="*,Auto">
+            <Label Grid.Column="0" Text="Listado de equipos" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+            <Button Grid.Column="1" Text="+ Registrar nuevo equipo"
+                    BackgroundColor="#512BD4" TextColor="White"
+                    CornerRadius="10" FontSize="13" Padding="16,10"
+                    Clicked="OnRegistrarEquipoTapped"/>
+        </Grid>
+
+        <Border Grid.Row="3" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Margin="28,0,28,24">
+            <Grid RowDefinitions="Auto,*">
+
+                <HorizontalStackLayout Grid.Row="0" Padding="18,12" Spacing="10">
+                    <Border BackgroundColor="#F8F9FB" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12,8" WidthRequest="200">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label FontFamily="FontAwesome" Text="&#xf002;" FontSize="13" TextColor="#9AA3BE" VerticalOptions="Center"/>
+                            <Entry Text="{Binding TextoBusqueda}" Placeholder="Buscar equipo" FontSize="13" BackgroundColor="Transparent" VerticalOptions="Center" WidthRequest="160"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Picker Title="Todos los tipos" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="130"
+                            ItemsSource="{Binding Tipos}" ItemDisplayBinding="{Binding Nombre}"
+                            SelectedItem="{Binding TipoSeleccionado}"/>
+                    <Picker Title="Todas las ubicaciones" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="150"
+                            ItemsSource="{Binding Ubicaciones}" ItemDisplayBinding="{Binding Nombre}"
+                            SelectedItem="{Binding UbicacionSeleccionada}"/>
+                    <Picker Title="Todos los estados" FontSize="12" BackgroundColor="#F8F9FB" WidthRequest="140"
+                            ItemsSource="{Binding Estados}" ItemDisplayBinding="{Binding Nombre}"
+                            SelectedItem="{Binding EstadoSeleccionado}"/>
+                </HorizontalStackLayout>
+
+                <CollectionView Grid.Row="1" x:Name="ListaEquipos" ItemsSource="{Binding Equipos}" SelectionMode="Single" SelectionChanged="OnEquipoSeleccionado">
+                    <CollectionView.Header>
+                        <Grid Padding="18,10" ColumnDefinitions="60,100,*,150,150,120" BackgroundColor="#F8F9FB">
+                            <Label Grid.Column="0" Text="ID" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="1" Text="CÓDIGO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="2" Text="TIPO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="3" Text="UBICACIÓN ACTUAL" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="4" Text="ESTADO" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                            <Label Grid.Column="5" Text="ACCIONES" FontSize="11" FontAttributes="Bold" TextColor="#9AA3BE"/>
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="18,12" ColumnDefinitions="60,100,*,150,150,120" BackgroundColor="White">
+                                <Label Grid.Column="0" Text="{Binding Id}" FontSize="13" VerticalOptions="Center" TextColor="#5A6282"/>
+                                <Border Grid.Column="1" BackgroundColor="#F0F2F7" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="8,4" HorizontalOptions="Start" VerticalOptions="Center">
+                                    <Label Text="{Binding Codigo}" FontSize="12" TextColor="#3D2DB5" FontAttributes="Bold"/>
+                                </Border>
+                                <Label Grid.Column="2" Text="{Binding Tipo}" FontSize="13" VerticalOptions="Center" Margin="8,0"/>
+                                <Label Grid.Column="3" Text="{Binding Ubicacion}" FontSize="13" TextColor="#5A6282" VerticalOptions="Center"/>
+                                <Label Grid.Column="4" Text="{Binding Estado}" FontSize="12" VerticalOptions="Center" FontAttributes="Bold"/>
+                                <HorizontalStackLayout Grid.Column="5" Spacing="6" VerticalOptions="Center">
+                                    <Border BackgroundColor="#DBEAFE" Stroke="#93C5FD" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="32" HeightRequest="32">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnEditarFilaTapped" CommandParameter="{Binding Id}"/>
+                                        </Border.GestureRecognizers>
+                                        <Label FontFamily="FontAwesome" Text="&#xf044;" FontSize="13" TextColor="#1E40AF" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border BackgroundColor="#F0F2F7" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="32" HeightRequest="32">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnMasOpcionesTapped" CommandParameter="{Binding Id}"/>
+                                        </Border.GestureRecognizers>
+                                        <Label FontFamily="FontAwesome" Text="&#xf141;" FontSize="13" TextColor="#5A6282" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Grid>
+        </Border>
+
+    </Grid>
 </ContentPage>

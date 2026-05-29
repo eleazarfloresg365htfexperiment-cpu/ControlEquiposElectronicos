@@ -2,6 +2,7 @@
 using ControlEquiposElectronicos.Services.Interfaces;
 using ControlEquiposElectronicos.ViewModels.Checklist;
 using ControlEquiposElectronicos.Views.Checklist;
+using ControlEquiposElectronicos.Views.Equipos;
 using Microsoft.Extensions.Logging;
 
 namespace ControlEquiposElectronicos;
@@ -24,13 +25,13 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
+        // Sesión y autenticación
+        builder.Services.AddSingleton<SesionService>();
+        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IAuthService, ControlEquiposElectronicos.Services.AuthService>();
+        builder.Services.AddTransient<AppShell>();
+
         // Servicio base de la API
         builder.Services.AddSingleton<IApiService, ApiService>();
-
-        // Sesión, autenticación y navegación
-        builder.Services.AddSingleton<SesionService>();
-        builder.Services.AddSingleton<IAuthService, AuthService>();
-        builder.Services.AddTransient<AppShell>();
 
         // Services por módulo
         builder.Services.AddSingleton<IEquipoApiService, EquipoApiService>();
@@ -40,6 +41,16 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUsuarioApiService, UsuarioApiService>();
         builder.Services.AddSingleton<ICatalogoApiService, CatalogoApiService>();
         builder.Services.AddSingleton<IAuditoriaApiService, AuditoriaApiService>();
+
+        // ViewModels y Pages de Equipos
+        builder.Services.AddTransient<ControlEquiposElectronicos.ViewModels.EquiposViewModel>();
+        builder.Services.AddTransient<ControlEquiposElectronicos.ViewModels.Equipos.EquipoFormularioViewModel>();
+        builder.Services.AddTransient<ControlEquiposElectronicos.ViewModels.Equipos.DetalleEquiposViewModel>();
+        builder.Services.AddTransient<EquiposPage>();
+        builder.Services.AddTransient<RegistrarEquipoPage>();
+        builder.Services.AddTransient<DetalleEquipoPage>();
+        builder.Services.AddTransient<ComputoPage>();
+        builder.Services.AddTransient<AuditoriaPage>();
 
         // ViewModels del Checklist (de Danny)
         builder.Services.AddTransient<ChecklistViewModel>();
