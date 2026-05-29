@@ -16,8 +16,22 @@ public class ElectricidadViewModel : INotifyPropertyChanged
 
     public ElectricidadViewModel()
     {
-        _http = new HttpClient { BaseAddress = new Uri("https://localhost:7212/") };
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (m, c, ch, e) => true
+        };
+        _http = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://localhost:7212/")
+        };
         CargarDatos();
+    }
+
+    private bool _cargando;
+    public bool Cargando
+    {
+        get => _cargando;
+        set { _cargando = value; OnPropertyChanged(); }
     }
 
     private string _busquedaTexto = string.Empty;
@@ -41,13 +55,6 @@ public class ElectricidadViewModel : INotifyPropertyChanged
         set { _totalMantenimientos = value; OnPropertyChanged(); }
     }
 
-    private bool _cargando;
-    public bool Cargando
-    {
-        get => _cargando;
-        set { _cargando = value; OnPropertyChanged(); }
-    }
-
     public ObservableCollection<EquipoItem> ListaUps { get; } = new();
 
     async void CargarDatos()
@@ -59,20 +66,21 @@ public class ElectricidadViewModel : INotifyPropertyChanged
             if (equipos != null)
             {
                 ListaUps.Clear();
-                var ups = equipos.Where(e => e.TipoEquipo == "UPS").ToList();
-                foreach (var e in ups)
+                var filtrados = string.IsNullOrWhiteSpace(BusquedaTexto)
+                    ? equipos
+                    : equipos.Where(e =>
+                        e.Nombre.Contains(BusquedaTexto, StringComparison.OrdinalIgnoreCase) ||
+                        e.Codigo.Contains(BusquedaTexto, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                var lista = filtrados.Where(e => e.TipoEquipo == "UPS").ToList();
+                foreach (var e in lista)
                     ListaUps.Add(e);
-                TotalUps = ups.Count;
+
+                TotalUps = ListaUps.Count;
             }
         }
-        catch
-        {
-            // API no disponible aún
-        }
-        finally
-        {
-            Cargando = false;
-        }
+        catch { }
+        finally { Cargando = false; }
     }
 
     public ICommand RegistrarUpsCommand => new Command(async () =>
@@ -84,10 +92,46 @@ public class ElectricidadViewModel : INotifyPropertyChanged
     public ICommand BuscarCommand => new Command(CargarDatos);
 
     public ICommand VerHistorialCommand => new Command(async (item) =>
-        await Shell.Current.DisplayAlert("Historial", "Ver historial del UPS", "OK"));
+    {
+        if (item is EquipoItem e)
+        {
+            try
+            {
+                var detalle = await _http.GetFromJsonAsync<object>(
+                    $"api/equipos/{e.Id}/detalle-ups");
+                await Shell.Current.DisplayAlert("Detalle UPS",
+                    $"Equipo: {e.Nombre}\nEstado: {e.Estado}", "OK");
+            }
+            catch
+            {
+                await Shell.Current.DisplayAlert("Detalle",
+                    $"Equipo: {e.Nombre}\nCódigo: {e.Codigo}", "OK");
+            }
+        }
+    });
 
     public ICommand ReportarFallaCommand => new Command(async (item) =>
-        await Shell.Current.DisplayAlert("Falla", "Reportar falla eléctrica", "OK"));
+    {
+        if (item is EquipoItem e)
+        {
+            try
+            {
+                var payload = new
+                {
+                    equipoId = e.Id,
+                    descripcion = "Falla eléctrica reportada desde la app",
+                    tipoFalla = "UPS"
+                };
+                await _http.PostAsJsonAsync("api/ReportesFalla", payload);
+                await Shell.Current.DisplayAlert("✅ Falla reportada",
+                    $"Se reportó falla en {e.Nombre}", "OK");
+            }
+            catch
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo reportar la falla.", "OK");
+            }
+        }
+    });
 
     public ICommand ActualizarCommand => new Command(CargarDatos);
 }
