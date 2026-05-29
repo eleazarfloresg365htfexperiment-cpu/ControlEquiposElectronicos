@@ -1,33 +1,139 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Equipos.ImpresionPage"
-    Title="Impresión">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Equipos"
+             x:Class="ControlEquiposElectronicos.Views.Equipos.ImpresionPage"
+             Title="Impresión" BackgroundColor="#F4F6F9">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+    <ContentPage.BindingContext>
+        <vm:ImpresionViewModel />
+    </ContentPage.BindingContext>
 
-            <Label Text="Modulo Impresión"
-                   FontSize="30"
-                   FontAttributes="Bold" />
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" BackgroundColor="#6A1B9A" Padding="20,16" StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0"/>
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="🖨️ Módulo de Impresión" FontSize="20"
+                           FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="Impresoras · Cartuchos · Historial"
+                           FontSize="12" TextColor="#E1BEE7"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="+ Impresora" Command="{Binding RegistrarImpresoraCommand}"
+                            BackgroundColor="White" TextColor="#6A1B9A"
+                            FontSize="13" CornerRadius="8" FontAttributes="Bold"/>
+                    <Button Text="+ Cartucho" Command="{Binding RegistrarCartuchoCommand}"
+                            BackgroundColor="White" TextColor="#6A1B9A"
+                            FontSize="13" CornerRadius="8" FontAttributes="Bold"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
 
-            <Button Text="Registrar Impresora"
-                    Clicked="OnRegistrarImpresora" />
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Button Text="Registrar Cartucho"
-                    Clicked="OnRegistrarCartucho" />
+                <Border BackgroundColor="White" Padding="12"
+                        StrokeThickness="1" Stroke="#E0E0E0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Entry Placeholder="Buscar impresora..."
+                               Text="{Binding BusquedaTexto}"
+                               TextColor="#212121" PlaceholderColor="#9E9E9E"
+                               BackgroundColor="Transparent"/>
+                        <Button Grid.Column="1" Text="Buscar"
+                                Command="{Binding BuscarCommand}"
+                                BackgroundColor="#6A1B9A" TextColor="White" CornerRadius="8"/>
+                    </Grid>
+                </Border>
 
-            <Button Text="Editar Detalle"
-                    Clicked="OnEditarDetalle" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border BackgroundColor="White" Padding="16"
+                            StrokeThickness="1" Stroke="#E0E0E0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <Label Text="🖨️ Impresoras" FontSize="13" TextColor="#757575"/>
+                            <Label Text="{Binding TotalImpresoras}" FontSize="28"
+                                   FontAttributes="Bold" TextColor="#6A1B9A"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" BackgroundColor="White" Padding="16"
+                            StrokeThickness="1" Stroke="#E0E0E0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <Label Text="🖊️ Cambios cartucho" FontSize="13" TextColor="#757575"/>
+                            <Label Text="{Binding TotalCambiosCartucho}" FontSize="28"
+                                   FontAttributes="Bold" TextColor="#6A1B9A"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
 
-            <Button Text="Ver Historial"
-                    Clicked="OnVerHistorial" />
+                <ActivityIndicator IsRunning="{Binding Cargando}"
+                                   IsVisible="{Binding Cargando}"
+                                   Color="#6A1B9A" HorizontalOptions="Center"/>
 
-            <Button Text="Reportar Falla"
-                    Clicked="OnReportarFalla" />
+                <Label Text="Impresoras registradas" FontSize="16"
+                       FontAttributes="Bold" TextColor="#212121"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <CollectionView ItemsSource="{Binding Impresoras}"
+                                EmptyView="No hay impresoras registradas.">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,10" BackgroundColor="White"
+                                    Padding="16" StrokeThickness="1" Stroke="#E0E0E0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Border WidthRequest="46" HeightRequest="46"
+                                            BackgroundColor="#F3E5F5" Padding="0" StrokeThickness="0">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="23"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="🖨️" FontSize="20"
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                                        <Label Text="{Binding Nombre}" FontSize="15"
+                                               FontAttributes="Bold" TextColor="#212121"/>
+                                        <Label Text="{Binding Codigo}" FontSize="12" TextColor="#9E9E9E"/>
+                                        <Label Text="{Binding Ubicacion}" FontSize="12" TextColor="#6A1B9A"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="2" Spacing="6">
+                                        <Button Text="Historial"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VerHistorialCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#F3E5F5" TextColor="#6A1B9A"
+                                                FontSize="12" CornerRadius="6" Padding="8,4"/>
+                                        <Button Text="Falla"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ReportarFallaCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FFEBEE" TextColor="#C62828"
+                                                FontSize="12" CornerRadius="6" Padding="8,4"/>
+                                        <Button Text="Reporte"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GenerarReporteCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#E8F5E9" TextColor="#2E7D32"
+                                                FontSize="12" CornerRadius="6" Padding="8,4"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
+                <Button Text="↻ Actualizar lista" Command="{Binding ActualizarCommand}"
+                        BackgroundColor="#F3E5F5" TextColor="#6A1B9A"
+                        CornerRadius="10" FontSize="13" Margin="0,0,0,20"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
