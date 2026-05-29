@@ -1,8 +1,15 @@
 ﻿using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Services.Interfaces;
+using ControlEquiposElectronicos.ViewModels;
 using ControlEquiposElectronicos.ViewModels.Checklist;
+using ControlEquiposElectronicos.ViewModels.Consultas;
+using ControlEquiposElectronicos.ViewModels.Mantenimientos;
+using ControlEquiposElectronicos.ViewModels.Reportes;
 using ControlEquiposElectronicos.Views.Checklist;
+using ControlEquiposElectronicos.Views.Consultas;
 using ControlEquiposElectronicos.Views.Equipos;
+using ControlEquiposElectronicos.Views.Mantenimientos;
+using ControlEquiposElectronicos.Views.Reportes;
 using Microsoft.Extensions.Logging;
 
 namespace ControlEquiposElectronicos;
@@ -27,13 +34,13 @@ public static class MauiProgram
 
         // Sesión y autenticación
         builder.Services.AddSingleton<SesionService>();
-        builder.Services.AddSingleton<ControlEquiposElectronicos.Services.Interfaces.IAuthService, ControlEquiposElectronicos.Services.AuthService>();
+        builder.Services.AddSingleton<IAuthService, AuthService>();
         builder.Services.AddTransient<AppShell>();
 
         // Servicio base de la API
         builder.Services.AddSingleton<IApiService, ApiService>();
 
-        // Services por módulo
+        // Servicios por módulo
         builder.Services.AddSingleton<IEquipoApiService, EquipoApiService>();
         builder.Services.AddSingleton<IChecklistApiService, ChecklistApiService>();
         builder.Services.AddSingleton<IMantenimientoApiService, MantenimientoApiService>();
@@ -41,9 +48,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUsuarioApiService, UsuarioApiService>();
         builder.Services.AddSingleton<ICatalogoApiService, CatalogoApiService>();
         builder.Services.AddSingleton<IAuditoriaApiService, AuditoriaApiService>();
+        builder.Services.AddSingleton<IExportService, ExportService>();
 
-        // ViewModels y Pages de Equipos
-        builder.Services.AddTransient<ControlEquiposElectronicos.ViewModels.EquiposViewModel>();
+        // ViewModels y Pages — Equipos (suarlin)
+        builder.Services.AddTransient<EquiposViewModel>();
         builder.Services.AddTransient<ControlEquiposElectronicos.ViewModels.Equipos.EquipoFormularioViewModel>();
         builder.Services.AddTransient<ControlEquiposElectronicos.ViewModels.Equipos.DetalleEquiposViewModel>();
         builder.Services.AddTransient<EquiposPage>();
@@ -52,23 +60,37 @@ public static class MauiProgram
         builder.Services.AddTransient<ComputoPage>();
         builder.Services.AddTransient<AuditoriaPage>();
 
-        // ViewModels del Checklist (de Danny)
+        // ViewModels y Pages — Checklist (danny)
         builder.Services.AddTransient<ChecklistViewModel>();
         builder.Services.AddTransient<NuevoChecklistViewModel>();
         builder.Services.AddTransient<RevisionEquipoChecklistViewModel>();
         builder.Services.AddTransient<PlantillasChecklistViewModel>();
         builder.Services.AddTransient<HistorialChecklistViewModel>();
-
-        // Pages del Checklist (de Danny)
         builder.Services.AddTransient<ChecklistPage>();
         builder.Services.AddTransient<NuevoChecklistPage>();
         builder.Services.AddTransient<RevisionEquipoChecklistPage>();
         builder.Services.AddTransient<HistorialChecklistPage>();
         builder.Services.AddTransient<PlantillasChecklistPage>();
 
+        // ViewModels y Pages — Mantenimientos (compañero)
+        builder.Services.AddTransient<MantenimientosViewModel>();
+        builder.Services.AddTransient<MantenimientosPage>();
+        builder.Services.AddTransient<MantenimientoFormularioViewModel>();
+        builder.Services.AddTransient<MantenimientoFormularioPage>();
+
+        // ViewModels y Pages — Reportes (compañero)
+        builder.Services.AddTransient<ReportesViewModel>();
+        builder.Services.AddTransient<ReportesPage>();
+        builder.Services.AddTransient<ReporteFallaFormularioViewModel>();
+        builder.Services.AddTransient<ReporteFallaFormularioPage>();
+
+        // ViewModels y Pages — Consultas (compañero)
+        builder.Services.AddTransient<ConsultasViewModel>();
+        builder.Services.AddTransient<ConsultasPage>();
+
         var app = builder.Build();
 
-        // Rutas del Checklist (de Danny)
+        // Rutas del Checklist (danny)
         Routing.RegisterRoute(nameof(NuevoChecklistPage), typeof(NuevoChecklistPage));
         Routing.RegisterRoute(nameof(RevisionEquipoChecklistPage), typeof(RevisionEquipoChecklistPage));
         Routing.RegisterRoute(nameof(HistorialChecklistPage), typeof(HistorialChecklistPage));

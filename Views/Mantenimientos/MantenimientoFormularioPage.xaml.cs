@@ -1,9 +1,15 @@
-﻿namespace ControlEquiposElectronicos.Views.Mantenimientos;
+﻿using ControlEquiposElectronicos.ViewModels.Mantenimientos;
+
+namespace ControlEquiposElectronicos.Views.Mantenimientos;
 
 public partial class MantenimientoFormularioPage : ContentPage
 {
-    public MantenimientoFormularioPage()
+    private readonly MantenimientoFormularioViewModel _viewModel;
+
+    public MantenimientoFormularioPage(MantenimientoFormularioViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 }

@@ -1,5 +1,7 @@
 using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Views.Equipos;
+using ControlEquiposElectronicos.Views.Mantenimientos;
+using ControlEquiposElectronicos.Views.Reportes;
 
 namespace ControlEquiposElectronicos;
 
@@ -12,53 +14,50 @@ public partial class AppShell : Shell
         InitializeComponent();
         _sesion = sesion;
 
+        // Rutas de pablo (login, sesión, configuración)
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
         Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
         Routing.RegisterRoute("RolesUsuario", typeof(Views.Configuracion.RolesUsuarioPage));
+        // Routing.RegisterRoute("PerfilUsuario", typeof(Views.Configuracion.PerfilUsuarioPage));
 
-        MostrarUsuario();
-        ConfigurarMenu();
-
-        // Rutas de navegación - Equipos (Suarlin)
+        // Rutas de equipos (suarlin)
         Routing.RegisterRoute("RegistrarEquipoPage", typeof(Views.Equipos.RegistrarEquipoPage));
         Routing.RegisterRoute("DetalleEquipoPage", typeof(Views.Equipos.DetalleEquipoPage));
         Routing.RegisterRoute("ComputoPage", typeof(Views.Equipos.ComputoPage));
         Routing.RegisterRoute("AuditoriaPage", typeof(AuditoriaPage));
+
+        // Rutas del compañero (mantenimientos y reportes)
+        Routing.RegisterRoute("MantenimientoFormulario", typeof(MantenimientoFormularioPage));
+        Routing.RegisterRoute("ReporteFallaFormulario", typeof(ReporteFallaFormularioPage));
+
+        MostrarUsuario();
+        ConfigurarMenu();
     }
 
-    // Al tocar el área del usuario en la barra lateral, muestra/oculta el mini-menú
     private void OnMenuUsuarioTapped(object? sender, TappedEventArgs e)
     {
         MenuUsuarioDesplegable.IsVisible = !MenuUsuarioDesplegable.IsVisible;
-        // La flecha cambia: ▾ cuando está cerrado, ▴ cuando está abierto
         FlechaMenuLabel.Text = MenuUsuarioDesplegable.IsVisible ? "\u25B4" : "\u25BE";
     }
 
     private async void OnMiPerfilTapped(object? sender, TappedEventArgs e)
     {
-        // Cerrar el menú primero
         MenuUsuarioDesplegable.IsVisible = false;
         FlechaMenuLabel.Text = "\u25BE";
 
-        var usuario = _sesion.UsuarioActual;
-        if (usuario == null) return;
-
         await DisplayAlert("Mi perfil",
-            $"Nombre: {usuario.Nombre}\nRol: {usuario.Rol}",
+            $"Nombre: {_sesion.UsuarioActual?.Nombre}\nRol: {_sesion.UsuarioActual?.Rol}",
             "Cerrar");
     }
 
     private async void OnCerrarSesionTapped(object? sender, TappedEventArgs e)
     {
-        // Cerrar el menú primero
         MenuUsuarioDesplegable.IsVisible = false;
         FlechaMenuLabel.Text = "\u25BE";
 
         bool confirmar = await DisplayAlert("Cerrar sesión",
             "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
-
-        if (!confirmar)
-            return;
+        if (!confirmar) return;
 
         _sesion.CerrarSesion();
         Application.Current!.Windows[0].Page = new Views.Login.LoginPage(_sesion);
@@ -91,4 +90,3 @@ public partial class AppShell : Shell
         }
     }
 }
- 
