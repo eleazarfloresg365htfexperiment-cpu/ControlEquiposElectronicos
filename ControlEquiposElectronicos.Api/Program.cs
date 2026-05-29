@@ -40,6 +40,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioActualService, UsuarioActualService>();
+builder.Services.AddScoped<IEquipoPerifericoService, EquipoPerifericoService>();
 
 var app = builder.Build();
 
