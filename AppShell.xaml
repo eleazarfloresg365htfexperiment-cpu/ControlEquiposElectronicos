@@ -6,6 +6,7 @@
     xmlns:dashboard="clr-namespace:ControlEquiposElectronicos.Views.Dashboard"
     xmlns:equipos="clr-namespace:ControlEquiposElectronicos.Views.Equipos"
     xmlns:mantenimientos="clr-namespace:ControlEquiposElectronicos.Views.Mantenimientos"
+    xmlns:checklist="clr-namespace:ControlEquiposElectronicos.Views.Checklist"
     xmlns:reportes="clr-namespace:ControlEquiposElectronicos.Views.Reportes"
     xmlns:usuarios="clr-namespace:ControlEquiposElectronicos.Views.Usuarios"
     xmlns:config="clr-namespace:ControlEquiposElectronicos.Views.Configuracion"
@@ -141,6 +142,13 @@
             <FontImageSource FontFamily="FontAwesome" Glyph="&#xf0ad;" Color="White" Size="18" />
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate mantenimientos:MantenimientosPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Checklist" Route="Checklist">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="FontAwesome" Glyph="&#xf46c;" Color="White" Size="18" />
+        </FlyoutItem.Icon>
+        <ShellContent ContentTemplate="{DataTemplate checklist:ChecklistPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Reportes" Route="Reportes">

@@ -74,8 +74,8 @@ public partial class AppShell : Shell
             {
                 "Dashboard" => _sesion.TienePermiso("Dashboard.Ver"),
                 "Equipos" => _sesion.TienePermiso("Equipos.Ver"),
-                "Checklist" => _sesion.TienePermiso("Checklist.Ver"),
                 "Mantenimientos" => _sesion.TienePermiso("Mantenimientos.Ver"),
+                "Checklist" => _sesion.TienePermiso("Checklist.Ver"),
                 "Reportes" => _sesion.TienePermiso("Reportes.Ver"),
                 "Usuarios" => _sesion.TienePermiso("Usuarios.Ver"),
                 "Configuración" => _sesion.TienePermiso("Configuracion.Ver"),
@@ -84,3 +84,4 @@ public partial class AppShell : Shell
         }
     }
 }
+ 

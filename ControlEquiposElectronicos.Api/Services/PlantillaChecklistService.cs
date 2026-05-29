@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlEquiposElectronicos.Api.Services;
 
-public PlantillaChecklistService : IPlantillaChecklistService
+public class PlantillaChecklistService : IPlantillaChecklistService
 {
     private readonly AppDbContext _context;
     private readonly IAuditoriaService _auditoriaService;
