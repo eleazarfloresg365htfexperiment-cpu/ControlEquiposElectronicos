@@ -234,23 +234,9 @@
         <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}" />
     </FlyoutItem>
 
-    <!-- Equipos con tabs de Kevin -->
+    <!-- Equipos: navegación interna manejada por EquiposPage con tabs custom -->
     <FlyoutItem Title="Equipos" Route="Equipos">
-        <Tab Title="General">
-            <ShellContent Title="Equipos" ContentTemplate="{DataTemplate equipos:EquiposPage}" />
-        </Tab>
-        <Tab Title="Red">
-            <ShellContent Title="Red" ContentTemplate="{DataTemplate equipos:RedPage}" />
-        </Tab>
-        <Tab Title="Impresión">
-            <ShellContent Title="Impresión" ContentTemplate="{DataTemplate equipos:ImpresionPage}" />
-        </Tab>
-        <Tab Title="Electricidad">
-            <ShellContent Title="Electricidad" ContentTemplate="{DataTemplate equipos:ElectricidadPage}" />
-        </Tab>
-        <Tab Title="Soporte Ambiental">
-            <ShellContent Title="Soporte Ambiental" ContentTemplate="{DataTemplate equipos:SoporteAmbientalPage}" />
-        </Tab>
+        <ShellContent ContentTemplate="{DataTemplate equipos:EquiposPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Mantenimientos" Route="Mantenimientos">

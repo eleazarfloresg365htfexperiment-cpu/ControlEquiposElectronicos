@@ -28,13 +28,16 @@ public partial class AuditoriaPage : ContentPage
             var resultado = await _apiService.GetAsync<List<AuditoriaDto>>("Auditoria");
             if (resultado != null)
             {
+                foreach (var item in resultado)
+                    item.FechaOperacion = item.FechaOperacion.ToLocalTime();
+
                 Auditorias = resultado;
                 OnPropertyChanged(nameof(Auditorias));
             }
         }
         catch
         {
-            // API no disponible aún
+            // API no disponible aun
         }
     }
 

@@ -6,31 +6,59 @@ namespace ControlEquiposElectronicos.Views.Equipos;
 public partial class EquiposPage : ContentPage
 {
     private readonly EquiposViewModel _viewModel;
+    private Border? _tabActivo;
+
+    // Contenidos de cada tab
+    private View[] _contenidos = null!;
+    private Border[] _tabs = null!;
 
     public EquiposPage(EquiposViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
         BindingContext = _viewModel;
+
+        _contenidos = new View[] { ContenidoGeneral, ContenidoRed, ContenidoImpresion, ContenidoElectricidad, ContenidoSoporteAmbiental };
+        _tabs = new Border[] { TabGeneral, TabRed, TabImpresion, TabElectricidad, TabSoporteAmbiental };
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        try
+        try { await _viewModel.CargarEquiposAsync(); }
+        catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
+    }
+
+    // ── Helpers de tabs ────────────────────────────────────────────
+    private void MostrarTab(int index)
+    {
+        for (int i = 0; i < _contenidos.Length; i++)
+            _contenidos[i].IsVisible = i == index;
+
+        for (int i = 0; i < _tabs.Length; i++)
         {
-            await _viewModel.CargarEquiposAsync();
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", ex.Message, "OK");
+            bool activo = i == index;
+            _tabs[i].BackgroundColor = activo ? Color.FromArgb("#512BD4") : Colors.White;
+            _tabs[i].Stroke = activo ? Colors.Transparent : Color.FromArgb("#E2E6F0");
+            _tabs[i].StrokeThickness = activo ? 0 : 1;
+            if (_tabs[i].Content is HorizontalStackLayout hsl)
+                foreach (var child in hsl.Children)
+                    if (child is Label lbl)
+                        lbl.TextColor = activo ? Colors.White
+                            : (lbl.FontFamily == "FontAwesome" ? Color.FromArgb("#512BD4") : Color.FromArgb("#4A5270"));
         }
     }
 
+    // ── Handlers tabs ──────────────────────────────────────────────
+    private void OnTabGeneralTapped(object sender, TappedEventArgs e) => MostrarTab(0);
+    private void OnTabRedTapped(object sender, TappedEventArgs e) => MostrarTab(1);
+    private void OnTabImpresionTapped(object sender, TappedEventArgs e) => MostrarTab(2);
+    private void OnTabElectricidadTapped(object sender, TappedEventArgs e) => MostrarTab(3);
+    private void OnTabSoporteAmbientalTapped(object sender, TappedEventArgs e) => MostrarTab(4);
+
+    // ── Acciones General ──────────────────────────────────────────
     private async void OnRegistrarEquipoTapped(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("RegistrarEquipoPage");
-    }
+        => await Shell.Current.GoToAsync("RegistrarEquipoPage");
 
     private async void OnActualizarListaTapped(object sender, EventArgs e)
     {
@@ -39,24 +67,26 @@ public partial class EquiposPage : ContentPage
     }
 
     private async void OnVerComputoTapped(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("ComputoPage");
-    }
+        => await Shell.Current.GoToAsync("ComputoPage");
 
     private void OnFiltrarActivosTapped(object sender, EventArgs e)
     {
+        MostrarTab(0);
         _viewModel.TextoBusqueda = string.Empty;
         _viewModel.FiltrarPorEstado("Funcional");
     }
 
     private void OnFiltrarInactivosTapped(object sender, EventArgs e)
     {
+        MostrarTab(0);
         _viewModel.TextoBusqueda = string.Empty;
         var filtrados = _viewModel.ObtenerPorEstados("En mantenimiento", "No funcional", "Dado de baja");
         _viewModel.Equipos.Clear();
-        foreach (var eq in filtrados)
-            _viewModel.Equipos.Add(eq);
+        foreach (var eq in filtrados) _viewModel.Equipos.Add(eq);
     }
+
+    private async void OnAuditoriaTapped(object sender, EventArgs e)
+        => await Shell.Current.GoToAsync("AuditoriaPage");
 
     private async void OnEditarFilaTapped(object sender, EventArgs e)
     {
@@ -71,21 +101,14 @@ public partial class EquiposPage : ContentPage
 
         string accion = await DisplayActionSheet(
             $"Equipo: {equipo.Codigo}", "Cancelar", null,
-            "🔄 Cambiar estado",
-            "🏷️ Reclasificar",
-            "🗑️ Desactivar");
+            "🔄 Cambiar estado", "🗑️ Desactivar");
 
         if (accion == null || accion == "Cancelar") return;
 
         if (accion.Contains("Cambiar estado"))
         {
-            string estado = await DisplayActionSheet(
-            "Cambiar estado", "Cancelar", null,
-            "Funcional",
-            "No funcional",
-            "En mantenimiento",
-            "Dado de baja");
-            
+            string estado = await DisplayActionSheet("Cambiar estado", "Cancelar", null,
+                "Funcional", "No funcional", "En mantenimiento", "Dado de baja");
             if (estado != null && estado != "Cancelar")
             {
                 _viewModel.ActualizarEstadoVisual(equipo.Id, estado);
@@ -93,14 +116,10 @@ public partial class EquiposPage : ContentPage
                 await _viewModel.CargarEquiposAsync();
             }
         }
-        else if (accion.Contains("Reclasificar"))
-        {
-            await DisplayAlert("Reclasificar", "Función próximamente.", "OK");
-        }
         else if (accion.Contains("Desactivar"))
         {
             bool confirmar = await DisplayAlert("Desactivar",
-                $"¿Estás segura de desactivar {equipo.Codigo}?", "Sí", "No");
+                $"¿Desactivar {equipo.Codigo}?", "Sí", "No");
             if (confirmar)
             {
                 _viewModel.ActualizarEstadoVisual(equipo.Id, "Inactivo");
@@ -112,13 +131,39 @@ public partial class EquiposPage : ContentPage
 
     private async void OnEquipoSeleccionado(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is not EquipoListadoDto equipo)
-            return;
+        if (e.CurrentSelection.FirstOrDefault() is not EquipoListadoDto equipo) return;
         ListaEquipos.SelectedItem = null;
         await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={equipo.Id}");
     }
-    private async void OnAuditoriaTapped(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("AuditoriaPage");
-    }
+
+    // ── Handlers Red ───────────────────────────────────────────────
+    private async void OnRegistrarRouter(object sender, EventArgs e)
+        => await DisplayAlert("Router", "Registrar Router", "OK");
+
+    private async void OnRegistrarSwitch(object sender, EventArgs e)
+        => await DisplayAlert("Switch", "Registrar Switch", "OK");
+
+    private async void OnRegistrarRepetidor(object sender, EventArgs e)
+        => await DisplayAlert("Repetidor", "Registrar Repetidor", "OK");
+
+    // ── Handlers Impresión ─────────────────────────────────────────
+    private async void OnRegistrarImpresora(object sender, EventArgs e)
+        => await DisplayAlert("Impresora", "Registrar Impresora", "OK");
+
+    private async void OnRegistrarCartucho(object sender, EventArgs e)
+        => await DisplayAlert("Cartucho", "Registrar Cartucho", "OK");
+
+    // ── Handlers Electricidad ──────────────────────────────────────
+    private async void OnRegistrarUps(object sender, EventArgs e)
+        => await DisplayAlert("UPS", "Registrar UPS", "OK");
+
+    private async void OnRegistrarMantenimientoElectrico(object sender, EventArgs e)
+        => await DisplayAlert("Mantenimiento", "Registrar Mantenimiento Eléctrico", "OK");
+
+    // ── Handlers Soporte Ambiental ─────────────────────────────────
+    private async void OnRegistrarAire(object sender, EventArgs e)
+        => await DisplayAlert("Aire", "Registrar Aire Acondicionado", "OK");
+
+    private async void OnRegistrarAmbientador(object sender, EventArgs e)
+        => await DisplayAlert("Ambientador", "Registrar Ambientador", "OK");
 }

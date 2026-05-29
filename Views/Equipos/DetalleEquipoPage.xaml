@@ -14,65 +14,57 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="16">
-
             <Grid ColumnDefinitions="Auto,*">
-                <Button Grid.Column="0" Text="← Volver"
-                        BackgroundColor="#F0F2F7" TextColor="#5A6282"
-                        CornerRadius="8" FontSize="12" Padding="12,7"
-                        x:Name="BtnVolver"/>
+                <Button Grid.Column="0" Text="Volver"
+                  BackgroundColor="#F0F2F7" TextColor="#5A6282"
+                  CornerRadius="8" FontSize="12" Padding="12,7"
+                  x:Name="BtnVolver"/>
                 <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="12,0,0,0">
-                    <Label Text="Detalle del equipo" FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                    <Label Text="Detalle del equipo" FontSize="22" FontAttributes="Bold"/>
                     <Label Text="{Binding Equipo.Codigo}" FontSize="13" TextColor="#9AA3BE"/>
                 </VerticalStackLayout>
             </Grid>
 
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
-
                 <VerticalStackLayout Grid.Column="0" Spacing="14">
 
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="18">
+                    <!-- Informacion general -->
+                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeShape="RoundRectangle 14" Padding="18">
                         <VerticalStackLayout Spacing="0">
                             <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
-                                <Label FontFamily="FontAwesome" Text="&#xf108;" FontSize="13" TextColor="#378ADD" VerticalOptions="Center"/>
-                                <Label Text="Información general" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                                <Label FontFamily="FontAwesome" Text="&#xf108;" FontSize="13" TextColor="#378ADD"/>
+                                <Label Text="Informacion general" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
                             </HorizontalStackLayout>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
-                                <Label Grid.Column="0" Text="Código" FontSize="12" TextColor="#9AA3BE"/>
+                                <Label Grid.Column="0" Text="Codigo" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Codigo}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Nombre" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Nombre}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
-                                <Label Grid.Column="0" Text="Categoría" FontSize="12" TextColor="#9AA3BE"/>
+                                <Label Grid.Column="0" Text="Categoria" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Categoria}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Tipo" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Tipo}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Marca" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Marca}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Modelo" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Modelo}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="No. serie" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.NumeroSerie}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
@@ -80,99 +72,84 @@
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="18">
+                    <!-- Ubicacion y estado -->
+                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeShape="RoundRectangle 14" Padding="18">
                         <VerticalStackLayout Spacing="0">
                             <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
-                                <Label FontFamily="FontAwesome" Text="&#xf3c5;" FontSize="13" TextColor="#E24B4A" VerticalOptions="Center"/>
-                                <Label Text="Ubicación y estado" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                                <Label FontFamily="FontAwesome" Text="&#xf3c5;" FontSize="13" TextColor="#E24B4A"/>
+                                <Label Text="Ubicacion y estado" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
                             </HorizontalStackLayout>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
-                                <Label Grid.Column="0" Text="Ubicación" FontSize="12" TextColor="#9AA3BE"/>
+                                <Label Grid.Column="0" Text="Ubicacion" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Ubicacion}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Estado" FontSize="12" TextColor="#9AA3BE"/>
                                 <Label Grid.Column="1" Text="{Binding Equipo.Estado}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#F0F2F7"/>
-
                             <Grid ColumnDefinitions="*,*" Padding="0,8">
                                 <Label Grid.Column="0" Text="Activo" FontSize="12" TextColor="#9AA3BE"/>
-                                <Label Grid.Column="1" Text="{Binding Equipo.Activo, Converter={StaticResource BoolToSiNo}}" FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
+                                <Label Grid.Column="1" Text="{Binding Equipo.Activo, Converter={StaticResource BoolToSiNo}}"
+                         FontSize="12" FontAttributes="Bold" HorizontalOptions="End"/>
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="18">
+                    <!-- Perifericos asignados -->
+                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeShape="RoundRectangle 14" Padding="18">
                         <VerticalStackLayout Spacing="0">
                             <HorizontalStackLayout Spacing="8" Margin="0,0,0,12">
-                                <Label FontFamily="FontAwesome" Text="&#xf287;" FontSize="13" TextColor="#7F77DD" VerticalOptions="Center"/>
-                                <Label Text="Periféricos asignados" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
+                                <Label FontFamily="FontAwesome" Text="&#xf287;" FontSize="13" TextColor="#7F77DD"/>
+                                <Label Text="Perifericos asignados" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
                             </HorizontalStackLayout>
-
                             <CollectionView ItemsSource="{Binding Perifericos}">
                                 <CollectionView.EmptyView>
-                                    <Label Text="Sin periféricos asignados" FontSize="12" TextColor="#9AA3BE" Padding="0,8"/>
+                                    <Label Text="Sin perifericos asignados" FontSize="12" TextColor="#9AA3BE" Padding="0,8"/>
                                 </CollectionView.EmptyView>
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid ColumnDefinitions="*,*" Padding="0,8">
                                             <HorizontalStackLayout Grid.Column="0" Spacing="8">
-                                                <Label FontFamily="FontAwesome" Text="&#xf287;" FontSize="11" TextColor="#7F77DD" VerticalOptions="Center"/>
-                                                <Label Text="{Binding NombrePeriferico}" FontSize="12" VerticalOptions="Center"/>
+                                                <Label FontFamily="FontAwesome" Text="&#xf287;" FontSize="11" TextColor="#7F77DD"/>
+                                                <Label Text="{Binding NombrePeriferico}" FontSize="12"/>
                                             </HorizontalStackLayout>
-                                            <Label Grid.Column="1" Text="{Binding CodigoPeriferico}" FontSize="12" TextColor="#9AA3BE" HorizontalOptions="End" VerticalOptions="Center"/>
+                                            <Label Grid.Column="1" Text="{Binding CodigoPeriferico}"
+                               FontSize="12" TextColor="#9AA3BE" HorizontalOptions="End"/>
                                         </Grid>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
-
                         </VerticalStackLayout>
                     </Border>
 
                 </VerticalStackLayout>
 
+                <!-- Acciones -->
                 <VerticalStackLayout Grid.Column="1" Spacing="10" WidthRequest="200">
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="16">
+                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeShape="RoundRectangle 14" Padding="16">
                         <VerticalStackLayout Spacing="8">
                             <HorizontalStackLayout Spacing="8" Margin="0,0,0,4">
-                                <Label FontFamily="FontAwesome" Text="&#xf0ad;" FontSize="13" TextColor="#1E2A6E" VerticalOptions="Center"/>
+                                <Label FontFamily="FontAwesome" Text="&#xf0ad;" FontSize="13" TextColor="#1E2A6E"/>
                                 <Label Text="Acciones" FontSize="13" FontAttributes="Bold" TextColor="#1E2A6E"/>
                             </HorizontalStackLayout>
-
                             <Button BackgroundColor="#DBEAFE" TextColor="#1E40AF"
-                                    CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnEditar">
+                        CornerRadius="9" FontSize="12" Padding="10" x:Name="BtnEditar">
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="FontAwesome" Glyph="&#xf044;" Color="#1E40AF" Size="13"/>
                                 </Button.ImageSource>
-                                <Button.Text>Editar información</Button.Text>
+                                <Button.Text>Editar informacion</Button.Text>
                             </Button>
-
                             <Button BackgroundColor="#FEF3C7" TextColor="#92400E"
-                                    CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnCambiarEstado">
+                        CornerRadius="9" FontSize="12" Padding="10" x:Name="BtnCambiarEstado">
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="FontAwesome" Glyph="&#xf021;" Color="#92400E" Size="13"/>
                                 </Button.ImageSource>
                                 <Button.Text>Cambiar estado</Button.Text>
                             </Button>
-
-                            <Button BackgroundColor="#EDE9FE" TextColor="#5B21B6"
-                                    CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnReclasificar">
-                                <Button.ImageSource>
-                                    <FontImageSource FontFamily="FontAwesome" Glyph="&#xf02b;" Color="#5B21B6" Size="13"/>
-                                </Button.ImageSource>
-                                <Button.Text>Reclasificar</Button.Text>
-                            </Button>
-
                             <Button BackgroundColor="#FEE2E2" TextColor="#991B1B"
-                                    CornerRadius="9" FontSize="12" Padding="10"
-                                    x:Name="BtnDesactivar">
+                        CornerRadius="9" FontSize="12" Padding="10" x:Name="BtnDesactivar">
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="FontAwesome" Glyph="&#xf2ed;" Color="#991B1B" Size="13"/>
                                 </Button.ImageSource>
@@ -184,4 +161,5 @@
             </Grid>
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>

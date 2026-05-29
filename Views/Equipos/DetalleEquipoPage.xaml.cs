@@ -37,34 +37,26 @@ public partial class DetalleEquipoPage : ContentPage
         {
             string accion = await DisplayActionSheet(
             "Cambiar estado", "Cancelar", null,
-            "Funcional",
-            "No funcional",
-            "En mantenimiento",
-            "Dado de baja");
+            "Funcional", "No funcional", "En mantenimiento", "Dado de baja");
 
             if (accion != null && accion != "Cancelar")
             {
                 await _viewModel.CambiarEstadoAsync(accion);
-                await DisplayAlert("Éxito", $"Estado cambiado a {accion}", "OK");
+                await DisplayAlert("Exito", $"Estado cambiado a {accion}", "OK");
             }
-        };
-
-        BtnReclasificar.Clicked += async (s, e) =>
-        {
-            await DisplayAlert("Reclasificar", "Selecciona la nueva clasificación del equipo.", "OK");
         };
 
         BtnDesactivar.Clicked += async (s, e) =>
         {
             if (_viewModel.Equipo == null) return;
             bool confirmar = await DisplayAlert("Desactivar",
-                $"¿Estás segura de desactivar {_viewModel.Equipo.Nombre}?", "Sí", "No");
+                $"Desactivar {_viewModel.Equipo.Nombre}?", "Si", "No");
             if (confirmar)
             {
                 var resultado = await _viewModel.DesactivarEquipoAsync();
                 if (resultado)
                 {
-                    await DisplayAlert("Éxito", "Equipo desactivado correctamente.", "OK");
+                    await DisplayAlert("Exito", "Equipo desactivado correctamente.", "OK");
                     await Shell.Current.GoToAsync("..");
                 }
                 else

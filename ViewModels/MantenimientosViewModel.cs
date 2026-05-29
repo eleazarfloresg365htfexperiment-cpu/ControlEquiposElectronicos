@@ -12,7 +12,7 @@ public class MantenimientosViewModel : BaseViewModel
     private readonly IAuditoriaApiService _auditoriaApiService;
 
     public ObservableCollection<MantenimientoListadoDto> Mantenimientos { get; set; } = new();
-    public ObservableCollection<AuditoriaDto> Historial { get; set; } = new();
+    public ObservableCollection<HistorialOperacionDto> Historial { get; set; } = new();
 
     private bool _mostrarHistorial = false;
     public bool MostrarHistorial
@@ -128,15 +128,13 @@ public class MantenimientosViewModel : BaseViewModel
 
     private async Task FinalizarAsync(MantenimientoListadoDto mantenimiento)
     {
-        // Pedir observación antes de finalizar
         string observacion = await Shell.Current.DisplayPromptAsync(
             "Finalizar mantenimiento",
             $"Equipo: {mantenimiento.CodigoEquipo}\n\nAgrega una observación (opcional):",
-            "Finalizar",
-            "Cancelar",
+            "Finalizar", "Cancelar",
             placeholder: "Ej: Se completó correctamente...");
 
-        if (observacion == null) return; // canceló
+        if (observacion == null) return;
 
         var dto = new ActualizarMantenimientoDto
         {

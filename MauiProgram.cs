@@ -48,6 +48,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUsuarioApiService, UsuarioApiService>();
         builder.Services.AddSingleton<ICatalogoApiService, CatalogoApiService>();
         builder.Services.AddSingleton<IAuditoriaApiService, AuditoriaApiService>();
+        builder.Services.AddSingleton<IExportService, ExportService>(); // ← fix Reportes
 
         // ViewModels y Pages — Equipos (suarlin)
         builder.Services.AddTransient<EquiposViewModel>();
@@ -88,6 +89,12 @@ public static class MauiProgram
         builder.Services.AddTransient<ConsultasPage>();
 
         var app = builder.Build();
+
+        // Rutas de subtabs de Equipos (Kevin)
+        Routing.RegisterRoute("RedPage", typeof(ControlEquiposElectronicos.Views.Equipos.RedPage));
+        Routing.RegisterRoute("ImpresionPage", typeof(ControlEquiposElectronicos.Views.Equipos.ImpresionPage));
+        Routing.RegisterRoute("ElectricidadPage", typeof(ControlEquiposElectronicos.Views.Equipos.ElectricidadPage));
+        Routing.RegisterRoute("SoporteAmbientalPage", typeof(ControlEquiposElectronicos.Views.Equipos.SoporteAmbientalPage));
 
         // Rutas del Checklist (danny)
         Routing.RegisterRoute(nameof(NuevoChecklistPage), typeof(NuevoChecklistPage));

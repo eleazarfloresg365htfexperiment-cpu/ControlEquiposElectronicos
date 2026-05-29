@@ -13,7 +13,7 @@ public class ReportesViewModel : BaseViewModel
     private readonly IExportService _exportService;
 
     public ObservableCollection<ReporteFallaListadoDto> Reportes { get; set; } = new();
-    public ObservableCollection<AuditoriaDto> Historial { get; set; } = new();
+    public ObservableCollection<HistorialOperacionDto> Historial { get; set; } = new();
 
     private bool _mostrarHistorial = false;
     public bool MostrarHistorial

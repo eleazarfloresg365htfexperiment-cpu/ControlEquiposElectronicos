@@ -22,3 +22,4 @@ public class AuditoriaApiService : IAuditoriaApiService
         return await _apiService.GetAsync<List<HistorialOperacionDto>>($"Auditoria/modulo/{modulo}") ?? new();
     }
 }
+ 
