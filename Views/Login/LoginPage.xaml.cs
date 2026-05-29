@@ -1,5 +1,6 @@
 ﻿using ControlEquiposElectronicos.DTOs;
 using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Services.Interfaces;
 
 namespace ControlEquiposElectronicos.Views.Login;
 

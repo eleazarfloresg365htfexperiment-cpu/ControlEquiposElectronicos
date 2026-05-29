@@ -3,12 +3,6 @@ using ControlEquiposElectronicos.Services.Interfaces;
 
 namespace ControlEquiposElectronicos.Services;
 
-public interface IAuthService
-{
-    // Intenta iniciar sesión. Devuelve los datos del usuario si las credenciales son correctas, null si no.
-    Task<LoginResponseDto?> LoginAsync(string nickname, string contrasena);
-}
-
 public class AuthService : IAuthService
 {
     private readonly IApiService _apiService;
@@ -30,3 +24,4 @@ public class AuthService : IAuthService
         return await _apiService.PostAsync<LoginRequestDto, LoginResponseDto>("Auth/login", datos);
     }
 }
+ 
