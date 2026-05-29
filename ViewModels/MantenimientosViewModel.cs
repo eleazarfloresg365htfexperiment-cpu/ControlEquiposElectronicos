@@ -128,18 +128,23 @@ public class MantenimientosViewModel : BaseViewModel
 
     private async Task FinalizarAsync(MantenimientoListadoDto mantenimiento)
     {
-        bool confirmar = await Shell.Current.DisplayAlertAsync(
+        // Pedir observación antes de finalizar
+        string observacion = await Shell.Current.DisplayPromptAsync(
             "Finalizar mantenimiento",
-            $"¿Deseas marcar como completado el mantenimiento del equipo {mantenimiento.CodigoEquipo}?",
-            "Sí, finalizar", "Cancelar");
+            $"Equipo: {mantenimiento.CodigoEquipo}\n\nAgrega una observación (opcional):",
+            "Finalizar",
+            "Cancelar",
+            placeholder: "Ej: Se completó correctamente...");
 
-        if (!confirmar) return;
+        if (observacion == null) return; // canceló
 
         var dto = new ActualizarMantenimientoDto
         {
             TipoMantenimientoId = mantenimiento.TipoMantenimientoId,
             TecnicoId = mantenimiento.TecnicoId,
-            Descripcion = mantenimiento.Descripcion,
+            Descripcion = string.IsNullOrWhiteSpace(observacion)
+                ? mantenimiento.Descripcion
+                : mantenimiento.Descripcion + "\n[Observación final]: " + observacion,
             EstadoMantenimiento = "Completado",
             Activo = true
         };

@@ -1,6 +1,5 @@
 ﻿using ControlEquiposElectronicos.DTOs.Auditoria;
 using ControlEquiposElectronicos.DTOs.Reportes;
-using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Services.Interfaces;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -22,6 +21,29 @@ public class ReportesViewModel : BaseViewModel
         get => _mostrarHistorial;
         set { _mostrarHistorial = value; OnPropertyChanged(); }
     }
+
+    private bool _mostrarFiltroFechas = false;
+    public bool MostrarFiltroFechas
+    {
+        get => _mostrarFiltroFechas;
+        set { _mostrarFiltroFechas = value; OnPropertyChanged(); }
+    }
+
+    private DateTime _fechaDesde = DateTime.Now.AddMonths(-1);
+    public DateTime FechaDesde
+    {
+        get => _fechaDesde;
+        set { _fechaDesde = value; OnPropertyChanged(); }
+    }
+
+    private DateTime _fechaHasta = DateTime.Now;
+    public DateTime FechaHasta
+    {
+        get => _fechaHasta;
+        set { _fechaHasta = value; OnPropertyChanged(); }
+    }
+
+    private string _tipoExport = string.Empty;
 
     private string _busqueda = string.Empty;
     public string Busqueda
@@ -45,6 +67,8 @@ public class ReportesViewModel : BaseViewModel
     public ICommand ExportarPdfCommand { get; }
     public ICommand HistorialCommand { get; }
     public ICommand CerrarHistorialCommand { get; }
+    public ICommand ConfirmarExportCommand { get; }
+    public ICommand CancelarExportCommand { get; }
 
     public ReportesViewModel(IReporteFallaApiService reporteFallaApiService, IAuditoriaApiService auditoriaApiService, IExportService exportService)
     {
@@ -55,10 +79,12 @@ public class ReportesViewModel : BaseViewModel
 
         EliminarCommand = new Command<ReporteFallaListadoDto>(async (r) => await EliminarAsync(r));
         NuevoReporteCommand = new Command(async () => await Shell.Current.GoToAsync("ReporteFallaFormulario"));
-        ExportarExcelCommand = new Command(async () => await ExportarExcelAsync());
-        ExportarPdfCommand = new Command(async () => await ExportarPdfAsync());
+        ExportarExcelCommand = new Command(() => { _tipoExport = "excel"; MostrarFiltroFechas = true; });
+        ExportarPdfCommand = new Command(() => { _tipoExport = "pdf"; MostrarFiltroFechas = true; });
         HistorialCommand = new Command(async () => await CargarHistorialAsync());
         CerrarHistorialCommand = new Command(() => MostrarHistorial = false);
+        ConfirmarExportCommand = new Command(async () => await ConfirmarExportAsync());
+        CancelarExportCommand = new Command(() => MostrarFiltroFechas = false);
     }
 
     public async Task CargarReportesAsync()
@@ -80,38 +106,29 @@ public class ReportesViewModel : BaseViewModel
         finally { IsBusy = false; }
     }
 
-    private async Task ExportarExcelAsync()
+    private async Task ConfirmarExportAsync()
     {
-        if (_todosLosReportes.Count == 0)
-        {
-            await Shell.Current.DisplayAlertAsync("Aviso", "No hay reportes para exportar.", "OK");
-            return;
-        }
-        IsBusy = true;
-        try
-        {
-            var path = await _exportService.ExportarReportesExcelAsync(_todosLosReportes);
-            await Shell.Current.DisplayAlertAsync("Éxito", $"Archivo guardado en:\n{path}", "OK");
-            await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(path) });
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
-        }
-        finally { IsBusy = false; }
-    }
+        MostrarFiltroFechas = false;
 
-    private async Task ExportarPdfAsync()
-    {
-        if (_todosLosReportes.Count == 0)
+        var filtrados = _todosLosReportes
+            .Where(r => r.FechaReporte.Date >= FechaDesde.Date && r.FechaReporte.Date <= FechaHasta.Date)
+            .ToList();
+
+        if (filtrados.Count == 0)
         {
-            await Shell.Current.DisplayAlertAsync("Aviso", "No hay reportes para exportar.", "OK");
+            await Shell.Current.DisplayAlertAsync("Aviso", "No hay reportes en el rango de fechas seleccionado.", "OK");
             return;
         }
+
         IsBusy = true;
         try
         {
-            var path = await _exportService.ExportarReportesPdfAsync(_todosLosReportes);
+            string path;
+            if (_tipoExport == "excel")
+                path = await _exportService.ExportarReportesExcelAsync(filtrados);
+            else
+                path = await _exportService.ExportarReportesPdfAsync(filtrados);
+
             await Shell.Current.DisplayAlertAsync("Éxito", $"Archivo guardado en:\n{path}", "OK");
             await Launcher.OpenAsync(new OpenFileRequest { File = new ReadOnlyFile(path) });
         }
