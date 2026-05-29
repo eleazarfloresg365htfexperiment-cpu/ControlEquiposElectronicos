@@ -23,5 +23,11 @@ public class UsuarioApiService : IUsuarioApiService
         var creado = await _apiService.PostAsync<CrearUsuarioDto, UsuarioListadoDto>("Usuarios", usuario);
         return creado != null;
     }
+
+    // Llama a PATCH api/Usuarios/{id}/rol con el nuevo rol
+    public async Task<bool> CambiarRolAsync(int usuarioId, string nuevoRol)
+    {
+        var dto = new ActualizarRolUsuarioDto { Rol = nuevoRol };
+        return await _apiService.PatchAsync<ActualizarRolUsuarioDto>($"Usuarios/{usuarioId}/rol", dto);
+    }
 }
- 

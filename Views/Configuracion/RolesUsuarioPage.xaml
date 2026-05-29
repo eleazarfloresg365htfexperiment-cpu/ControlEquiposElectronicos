@@ -27,7 +27,7 @@
                    FontSize="22"
                    FontAttributes="Bold"
                    TextColor="{StaticResource Gray900}" />
-            <Label Text="Consulta el rol asignado a cada usuario del sistema."
+            <Label Text="Toca un usuario para cambiar su rol."
                    FontSize="14"
                    TextColor="{StaticResource Gray500}" />
         </VerticalStackLayout>
@@ -48,6 +48,7 @@
                    BackgroundColor="Transparent" />
         </Border>
 
+        <!-- Indicador de carga (superpuesto a la lista) -->
         <ActivityIndicator Grid.Row="3"
                            x:Name="CargandoIndicator"
                            IsRunning="False"
@@ -69,53 +70,102 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="dtos:UsuarioListadoDto">
                     <Border BackgroundColor="White"
-                            Padding="16" Margin="0,5"
+                            Padding="16"
+                            Margin="0,5"
                             StrokeShape="RoundRectangle 10"
                             Stroke="{StaticResource Gray200}"
                             StrokeThickness="1">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnUsuarioTapped" />
                         </Border.GestureRecognizers>
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
 
-                            <!-- Icono de usuario -->
-                            <Border Grid.Column="0"
-                                    WidthRequest="44" HeightRequest="44"
-                                    BackgroundColor="{StaticResource Secondary}"
-                                    StrokeShape="RoundRectangle 22"
-                                    StrokeThickness="0"
-                                    VerticalOptions="Center">
-                                <Label FontFamily="FontAwesome"
-                                       Text="&#xf007;"
-                                       TextColor="{StaticResource Primary}"
-                                       FontSize="18"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                            </Border>
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="10">
 
-                            <!-- Datos del usuario -->
-                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                <Label Text="{Binding NombreCompleto}"
-                                       FontSize="15"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Gray900}" />
-                                <Label Text="{Binding Nickname, StringFormat='@{0}'}"
-                                       FontSize="12"
-                                       TextColor="{StaticResource Gray500}" />
-                            </VerticalStackLayout>
+                            <!-- Fila superior: avatar + datos + chip de rol -->
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="Auto,*,Auto"
+                                  ColumnSpacing="14">
 
-                            <!-- Rol destacado -->
-                            <Border Grid.Column="2"
-                                    BackgroundColor="{StaticResource Secondary}"
-                                    StrokeShape="RoundRectangle 6"
-                                    StrokeThickness="0"
-                                    Padding="10,4"
-                                    VerticalOptions="Center">
-                                <Label Text="{Binding Rol}"
-                                       FontSize="12"
-                                       FontAttributes="Bold"
-                                       TextColor="{StaticResource Primary}" />
-                            </Border>
+                                <!-- Avatar circular -->
+                                <Border Grid.Column="0"
+                                        WidthRequest="44" HeightRequest="44"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        StrokeShape="RoundRectangle 22"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                    <Label FontFamily="FontAwesome"
+                                           Text="&#xf007;"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="18"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+
+                                <!-- Nombre y nickname -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="{Binding NombreCompleto}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Gray900}" />
+                                    <Label Text="{Binding Nickname, StringFormat='@{0}'}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Gray500}" />
+                                </VerticalStackLayout>
+
+                                <!-- Chip del rol actual -->
+                                <Border Grid.Column="2"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        StrokeShape="RoundRectangle 6"
+                                        StrokeThickness="0"
+                                        Padding="10,4"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding Rol}"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Primary}" />
+                                </Border>
+
+                            </Grid>
+
+                            <!-- Fila inferior: botones de cambio de rol -->
+                            <Grid Grid.Row="1"
+                                  ColumnDefinitions="*,*,*"
+                                  ColumnSpacing="8">
+
+                                <Button Grid.Column="0"
+                                        Text="Administrador"
+                                        CommandParameter="{Binding .}"
+                                        Clicked="OnAsignarAdministradorClicked"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="White"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        CornerRadius="6" />
+
+                                <Button Grid.Column="1"
+                                        Text="Técnico"
+                                        CommandParameter="{Binding .}"
+                                        Clicked="OnAsignarTecnicoClicked"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="White"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        CornerRadius="6" />
+
+                                <Button Grid.Column="2"
+                                        Text="Consulta"
+                                        CommandParameter="{Binding .}"
+                                        Clicked="OnAsignarConsultaClicked"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        TextColor="{StaticResource Primary}"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        CornerRadius="6" />
+
+                            </Grid>
 
                         </Grid>
                     </Border>

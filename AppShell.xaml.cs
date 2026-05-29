@@ -11,9 +11,11 @@ public partial class AppShell : Shell
         InitializeComponent();
         _sesion = sesion;
 
+        // ── Rutas registradas ──────────────────────────────────────────────────
         Routing.RegisterRoute("PermisosRol", typeof(Views.Configuracion.PermisosRolPage));
         Routing.RegisterRoute("RegistroUsuario", typeof(Views.Login.RegistroUsuarioPage));
         Routing.RegisterRoute("RolesUsuario", typeof(Views.Configuracion.RolesUsuarioPage));
+        Routing.RegisterRoute("PerfilUsuario", typeof(Views.Configuracion.PerfilUsuarioPage)); // ← NUEVO
 
         MostrarUsuario();
         ConfigurarMenu();
@@ -23,27 +25,20 @@ public partial class AppShell : Shell
     private void OnMenuUsuarioTapped(object? sender, TappedEventArgs e)
     {
         MenuUsuarioDesplegable.IsVisible = !MenuUsuarioDesplegable.IsVisible;
-        // La flecha cambia: ▾ cuando está cerrado, ▴ cuando está abierto
         FlechaMenuLabel.Text = MenuUsuarioDesplegable.IsVisible ? "\u25B4" : "\u25BE";
     }
 
+    // Navega a la nueva PerfilUsuarioPage en lugar del DisplayAlert anterior
     private async void OnMiPerfilTapped(object? sender, TappedEventArgs e)
     {
-        // Cerrar el menú primero
         MenuUsuarioDesplegable.IsVisible = false;
         FlechaMenuLabel.Text = "\u25BE";
 
-        var usuario = _sesion.UsuarioActual;
-        if (usuario == null) return;
-
-        await DisplayAlert("Mi perfil",
-            $"Nombre: {usuario.Nombre}\nRol: {usuario.Rol}",
-            "Cerrar");
+        await Shell.Current.GoToAsync("PerfilUsuario");
     }
 
     private async void OnCerrarSesionTapped(object? sender, TappedEventArgs e)
     {
-        // Cerrar el menú primero
         MenuUsuarioDesplegable.IsVisible = false;
         FlechaMenuLabel.Text = "\u25BE";
 
@@ -84,4 +79,3 @@ public partial class AppShell : Shell
         }
     }
 }
- 
