@@ -11,82 +11,98 @@
         <Border
             VerticalOptions="Center"
             HorizontalOptions="Center"
-            WidthRequest="380"
-            Padding="32"
+            WidthRequest="400"
+            Padding="34"
             BackgroundColor="White"
-            StrokeShape="RoundRectangle 16"
+            StrokeShape="RoundRectangle 18"
             StrokeThickness="0">
 
             <VerticalStackLayout Spacing="18">
 
-                <!-- Logo CPC -->
-                <Border
-                    WidthRequest="76"
-                    HeightRequest="76"
-                    HorizontalOptions="Center"
-                    BackgroundColor="{StaticResource Primary}"
-                    StrokeShape="RoundRectangle 18"
-                    StrokeThickness="0">
-                    <Label
-                        Text="CPC"
-                        TextColor="White"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" />
-                </Border>
+                <!-- Logo temporal TechStorm -->
+                <Image
+    Source="logo_techstorm.png"
+    WidthRequest="92"
+    HeightRequest="92"
+    Aspect="AspectFit"
+    HorizontalOptions="Center" />
 
                 <!-- Títulos -->
                 <VerticalStackLayout Spacing="2">
                     <Label
-                        Text="Centro Profesional de Cómputo"
-                        FontSize="19"
+                        Text="StormCore"
+                        FontSize="24"
                         FontAttributes="Bold"
                         TextColor="{StaticResource Gray900}"
                         HorizontalOptions="Center"
                         HorizontalTextAlignment="Center" />
+
                     <Label
-                        Text="Control de Equipos Electrónicos"
+                        Text="Sistema de gestión de equipos electrónicos"
                         FontSize="13"
                         TextColor="{StaticResource Gray500}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center" />
+
+                    <Label
+                        Text="by TechStorm"
+                        FontSize="12"
+                        TextColor="{StaticResource Primary}"
+                        FontAttributes="Bold"
                         HorizontalOptions="Center"
                         HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
 
                 <!-- Campo Usuario -->
                 <VerticalStackLayout Spacing="6" Margin="0,8,0,0">
-                    <Label Text="Usuario" FontSize="13" TextColor="{StaticResource Gray500}" />
+                    <Label
+                        Text="Usuario"
+                        FontSize="13"
+                        TextColor="{StaticResource Gray500}" />
+
                     <Border
                         StrokeShape="RoundRectangle 8"
                         Stroke="{StaticResource Gray200}"
                         StrokeThickness="1"
                         Padding="12,0">
+
                         <Entry
+                            x:Name="UsuarioEntry"
                             Text="{Binding Usuario}"
                             Placeholder="Ej. jperez"
                             TextColor="{StaticResource Gray900}"
                             PlaceholderColor="{StaticResource Gray400}"
                             HeightRequest="44"
-                            BackgroundColor="Transparent" />
+                            BackgroundColor="Transparent"
+                            ReturnType="Next"
+                            Completed="UsuarioEntry_Completed" />
                     </Border>
                 </VerticalStackLayout>
 
                 <!-- Campo Contraseña -->
                 <VerticalStackLayout Spacing="6">
-                    <Label Text="Contraseña" FontSize="13" TextColor="{StaticResource Gray500}" />
+                    <Label
+                        Text="Contraseña"
+                        FontSize="13"
+                        TextColor="{StaticResource Gray500}" />
+
                     <Border
                         StrokeShape="RoundRectangle 8"
                         Stroke="{StaticResource Gray200}"
                         StrokeThickness="1"
                         Padding="12,0">
+
                         <Entry
+                            x:Name="ContrasenaEntry"
                             Text="{Binding Contrasena}"
                             Placeholder="••••••••"
                             IsPassword="True"
                             TextColor="{StaticResource Gray900}"
                             PlaceholderColor="{StaticResource Gray400}"
                             HeightRequest="44"
-                            BackgroundColor="Transparent" />
+                            BackgroundColor="Transparent"
+                            ReturnType="Go"
+                            ReturnCommand="{Binding IniciarSesionCommand}" />
                     </Border>
                 </VerticalStackLayout>
 
@@ -110,6 +126,7 @@
                     TextColor="{StaticResource Primary}"
                     HorizontalOptions="Center"
                     Margin="0,8,0,0">
+
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding RegistrarseCommand}" />
                     </Label.GestureRecognizers>

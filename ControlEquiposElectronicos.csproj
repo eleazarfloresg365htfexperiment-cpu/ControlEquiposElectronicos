@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -40,18 +40,23 @@
 		<AndroidResource Remove="ViewModels\Controls\**" />
 		<AndroidResource Remove="ViewModels\Helpers\**" />
 		<AndroidResource Remove="ViewModels\Models\**" />
+
 		<Compile Remove="ViewModels\Controls\**" />
 		<Compile Remove="ViewModels\Helpers\**" />
 		<Compile Remove="ViewModels\Models\**" />
+
 		<EmbeddedResource Remove="ViewModels\Controls\**" />
 		<EmbeddedResource Remove="ViewModels\Helpers\**" />
 		<EmbeddedResource Remove="ViewModels\Models\**" />
+
 		<MauiCss Remove="ViewModels\Controls\**" />
 		<MauiCss Remove="ViewModels\Helpers\**" />
 		<MauiCss Remove="ViewModels\Models\**" />
+
 		<MauiXaml Remove="ViewModels\Controls\**" />
 		<MauiXaml Remove="ViewModels\Helpers\**" />
 		<MauiXaml Remove="ViewModels\Models\**" />
+
 		<None Remove="ViewModels\Controls\**" />
 		<None Remove="ViewModels\Helpers\**" />
 		<None Remove="ViewModels\Models\**" />
@@ -71,67 +76,73 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Views\Configuracion\AuditoriaPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Configuracion\ConfiguracionPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Configuracion\PerfilUsuarioPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Configuracion\RolesUsuarioPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+
 		<MauiXaml Update="Views\Dashboard\DashboardPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+
+		<MauiXaml Update="Views\Equipos\AuditoriaPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Equipos\EquiposPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+
 		<MauiXaml Update="Views\Login\LoginPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+
 		<MauiXaml Update="Views\Mantenimientos\MantenimientosPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+
 		<MauiXaml Update="Views\Reportes\ReportesPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+
 		<MauiXaml Update="Views\Usuarios\UsuariosPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-	  <MauiXaml Update="Views\Configuracion\AuditoriaPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Configuracion\ConfiguracionPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Configuracion\PerfilUsuarioPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Configuracion\RolesUsuarioPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Dashboard\DashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Equipos\AuditoriaPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Equipos\EquiposPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Login\LoginPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Mantenimientos\MantenimientosPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Reportes\ReportesPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Usuarios\UsuariosPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="ControlEquiposElectronicos.Api\**\*.cs" />
-		<None Remove="ControlEquiposElectronicos.Api\**\*" />
-		<Content Remove="ControlEquiposElectronicos.Api\**\*" />
-		<EmbeddedResource Remove="ControlEquiposElectronicos.Api\**\*" />
+		<!-- Evita que MAUI compile archivos generados -->
+		<Compile Remove="bin\**" />
+		<Compile Remove="obj\**" />
+		<None Remove="bin\**" />
+		<None Remove="obj\**" />
+		<Content Remove="bin\**" />
+		<Content Remove="obj\**" />
+		<EmbeddedResource Remove="bin\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<MauiXaml Remove="bin\**" />
+		<MauiXaml Remove="obj\**" />
+
+		<!-- Evita que MAUI compile la API -->
+		<Compile Remove="ControlEquiposElectronicos.Api\**" />
+		<None Remove="ControlEquiposElectronicos.Api\**" />
+		<Content Remove="ControlEquiposElectronicos.Api\**" />
+		<EmbeddedResource Remove="ControlEquiposElectronicos.Api\**" />
+		<MauiXaml Remove="ControlEquiposElectronicos.Api\**" />
+
+		<!-- Evita que MAUI compile el proyecto de pruebas -->
+		<Compile Remove="ControlEquiposElectronicos.Tests\**" />
+		<None Remove="ControlEquiposElectronicos.Tests\**" />
+		<Content Remove="ControlEquiposElectronicos.Tests\**" />
+		<EmbeddedResource Remove="ControlEquiposElectronicos.Tests\**" />
+		<MauiXaml Remove="ControlEquiposElectronicos.Tests\**" />
 	</ItemGroup>
 
 </Project>

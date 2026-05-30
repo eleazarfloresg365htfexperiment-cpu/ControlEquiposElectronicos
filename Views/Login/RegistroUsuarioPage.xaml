@@ -5,63 +5,93 @@
     x:Class="ControlEquiposElectronicos.Views.Login.RegistroUsuarioPage"
     Title=""
     Shell.NavBarIsVisible="False"
-    BackgroundColor="#F5F6FA">
+    BackgroundColor="#EEF0F6">
 
-    <Grid ColumnDefinitions="*,420">
+    <Grid Padding="24">
 
-        <!-- ── OVERLAY IZQUIERDO (fondo difuminado) ── -->
-        <BoxView Grid.Column="0" BackgroundColor="#33000000"/>
+        <!-- Fondo suave -->
+        <BoxView BackgroundColor="#33000000"/>
 
-        <!-- ── PANEL LATERAL DERECHO ── -->
-        <Border Grid.Column="1"
-                BackgroundColor="White"
-                StrokeThickness="0"
-                StrokeShape="RoundRectangle 24,0,0,24">
+        <!-- Tarjeta centrada -->
+        <Border
+            BackgroundColor="White"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 24"
+            WidthRequest="520"
+            MaximumHeightRequest="760"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+
             <Border.Shadow>
-                <Shadow Brush="#40000000" Offset="-8,0" Radius="32" Opacity="1"/>
+                <Shadow Brush="#40000000"
+                        Offset="0,8"
+                        Radius="32"
+                        Opacity="0.45"/>
             </Border.Shadow>
 
             <ScrollView>
-                <VerticalStackLayout Padding="32,32,32,40" Spacing="0">
+                <VerticalStackLayout Padding="32,32,32,34" Spacing="0">
 
-                    <!-- ── ENCABEZADO ── -->
+                    <!-- ENCABEZADO -->
                     <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,6">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
                             <Label Text="Nuevo usuario"
-                                   FontSize="22" FontAttributes="Bold" TextColor="#1A1F3A"/>
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#1A1F3A"/>
+
                             <Label Text="Completa los datos para crear una cuenta de acceso al sistema."
-                                   FontSize="12" TextColor="#9AA3BE"/>
+                                   FontSize="13"
+                                   TextColor="#9AA3BE"/>
                         </VerticalStackLayout>
-                        <!-- Botón X cerrar — reutiliza OnVolverClicked -->
+
+                        <!-- Botón X -->
                         <Border Grid.Column="1"
                                 BackgroundColor="#F5F3FC"
                                 StrokeShape="RoundRectangle 10"
                                 StrokeThickness="0"
-                                WidthRequest="36" HeightRequest="36"
+                                WidthRequest="38"
+                                HeightRequest="38"
                                 VerticalOptions="Start">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnVolverClicked"/>
                             </Border.GestureRecognizers>
-                            <Label FontFamily="FontAwesome" Text="&#xf00d;"
-                                   FontSize="14" TextColor="#9AA3BE"
-                                   HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                            <Label FontFamily="FontAwesome"
+                                   Text="&#xf00d;"
+                                   FontSize="14"
+                                   TextColor="#9AA3BE"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
                         </Border>
                     </Grid>
 
-                    <BoxView HeightRequest="1" BackgroundColor="#F0EDF9" Margin="0,16,0,24"/>
+                    <BoxView HeightRequest="1"
+                             BackgroundColor="#F0EDF9"
+                             Margin="0,18,0,24"/>
 
-                    <!-- ── NOMBRE COMPLETO ── -->
+                    <!-- NOMBRE COMPLETO -->
                     <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
                         <Label Text="Nombre completo"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4A5270"
+                               CharacterSpacing="0.3"/>
+
                         <Border BackgroundColor="#F8F7FC"
                                 StrokeShape="RoundRectangle 12"
-                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Stroke="#E8E4F8"
+                                StrokeThickness="1"
                                 Padding="14,0">
+
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf007;"
-                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Label Grid.Column="0"
+                                       FontFamily="FontAwesome"
+                                       Text="&#xf007;"
+                                       FontSize="13"
+                                       TextColor="#C4B5FD"
+                                       VerticalOptions="Center"/>
+
                                 <Entry Grid.Column="1"
                                        x:Name="NombreEntry"
                                        Placeholder="Ej. Juan Pérez"
@@ -73,18 +103,28 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- ── NOMBRE DE USUARIO ── -->
+                    <!-- NOMBRE DE USUARIO -->
                     <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
                         <Label Text="Nombre de usuario"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4A5270"
+                               CharacterSpacing="0.3"/>
+
                         <Border BackgroundColor="#F8F7FC"
                                 StrokeShape="RoundRectangle 12"
-                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Stroke="#E8E4F8"
+                                StrokeThickness="1"
                                 Padding="14,0">
+
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf406;"
-                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Label Grid.Column="0"
+                                       FontFamily="FontAwesome"
+                                       Text="&#xf406;"
+                                       FontSize="13"
+                                       TextColor="#C4B5FD"
+                                       VerticalOptions="Center"/>
+
                                 <Entry Grid.Column="1"
                                        x:Name="NicknameEntry"
                                        Placeholder="Ej. jperez"
@@ -96,18 +136,28 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- ── CORREO ── -->
+                    <!-- CORREO -->
                     <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
                         <Label Text="Correo electrónico"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4A5270"
+                               CharacterSpacing="0.3"/>
+
                         <Border BackgroundColor="#F8F7FC"
                                 StrokeShape="RoundRectangle 12"
-                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Stroke="#E8E4F8"
+                                StrokeThickness="1"
                                 Padding="14,0">
+
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf0e0;"
-                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Label Grid.Column="0"
+                                       FontFamily="FontAwesome"
+                                       Text="&#xf0e0;"
+                                       FontSize="13"
+                                       TextColor="#C4B5FD"
+                                       VerticalOptions="Center"/>
+
                                 <Entry Grid.Column="1"
                                        x:Name="CorreoEntry"
                                        Placeholder="Ej. jperez@cpc.com"
@@ -120,18 +170,28 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- ── TELÉFONO ── -->
+                    <!-- TELÉFONO -->
                     <VerticalStackLayout Spacing="6" Margin="0,0,0,16">
                         <Label Text="Teléfono"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4A5270"
+                               CharacterSpacing="0.3"/>
+
                         <Border BackgroundColor="#F8F7FC"
                                 StrokeShape="RoundRectangle 12"
-                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Stroke="#E8E4F8"
+                                StrokeThickness="1"
                                 Padding="14,0">
+
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf095;"
-                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Label Grid.Column="0"
+                                       FontFamily="FontAwesome"
+                                       Text="&#xf095;"
+                                       FontSize="13"
+                                       TextColor="#C4B5FD"
+                                       VerticalOptions="Center"/>
+
                                 <Entry Grid.Column="1"
                                        x:Name="TelefonoEntry"
                                        Placeholder="Ej. 1234-5678"
@@ -144,18 +204,28 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- ── CONTRASEÑA ── -->
+                    <!-- CONTRASEÑA -->
                     <VerticalStackLayout Spacing="6" Margin="0,0,0,24">
                         <Label Text="Contraseña"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4A5270"
+                               CharacterSpacing="0.3"/>
+
                         <Border BackgroundColor="#F8F7FC"
                                 StrokeShape="RoundRectangle 12"
-                                Stroke="#E8E4F8" StrokeThickness="1"
+                                Stroke="#E8E4F8"
+                                StrokeThickness="1"
                                 Padding="14,0">
+
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Grid.Column="0" FontFamily="FontAwesome" Text="&#xf023;"
-                                       FontSize="13" TextColor="#C4B5FD" VerticalOptions="Center"/>
+                                <Label Grid.Column="0"
+                                       FontFamily="FontAwesome"
+                                       Text="&#xf023;"
+                                       FontSize="13"
+                                       TextColor="#C4B5FD"
+                                       VerticalOptions="Center"/>
+
                                 <Entry Grid.Column="1"
                                        x:Name="ContrasenaEntry"
                                        Placeholder="••••••••"
@@ -168,13 +238,14 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <!-- ── ROL ── -->
+                    <!-- ROL -->
                     <VerticalStackLayout x:Name="SeccionRol" Spacing="10" Margin="0,0,0,28">
                         <Label Text="Rol"
-                               FontSize="12" FontAttributes="Bold"
-                               TextColor="#4A5270" CharacterSpacing="0.3"/>
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#4A5270"
+                               CharacterSpacing="0.3"/>
 
-                        <!-- Administrador -->
                         <Button x:Name="BtnAdministrador"
                                 Clicked="OnRolAdministrador"
                                 Text="Administrador"
@@ -194,7 +265,6 @@
                             </Button.ImageSource>
                         </Button>
 
-                        <!-- Técnico / OP -->
                         <Button x:Name="BtnTecnico"
                                 Clicked="OnRolTecnico"
                                 Text="Técnico / OP"
@@ -214,7 +284,6 @@
                             </Button.ImageSource>
                         </Button>
 
-                        <!-- Consulta (visual, sin lógica nueva — apunta al mismo handler vacío) -->
                         <Button x:Name="BtnConsulta"
                                 Clicked="OnRolConsulta"
                                 Text="Consulta"
@@ -233,13 +302,13 @@
                                                  Size="14"/>
                             </Button.ImageSource>
                         </Button>
-
                     </VerticalStackLayout>
 
-                    <!-- Switch activo — oculto, siempre en true para la lógica del .cs -->
-                    <Switch x:Name="ActivoSwitch" IsToggled="True" IsVisible="False"/>
+                    <Switch x:Name="ActivoSwitch"
+                            IsToggled="True"
+                            IsVisible="False"/>
 
-                    <!-- ── BOTÓN REGISTRAR ── -->
+                    <!-- BOTÓN REGISTRAR -->
                     <Button Text="Registrar usuario"
                             Clicked="OnRegistrarClicked"
                             BackgroundColor="#512BD4"
@@ -256,11 +325,14 @@
                                              Size="15"/>
                         </Button.ImageSource>
                         <Button.Shadow>
-                            <Shadow Brush="#40512BD4" Offset="0,4" Radius="14" Opacity="1"/>
+                            <Shadow Brush="#40512BD4"
+                                    Offset="0,4"
+                                    Radius="14"
+                                    Opacity="1"/>
                         </Button.Shadow>
                     </Button>
 
-                    <!-- ── BOTÓN CANCELAR ── -->
+                    <!-- BOTÓN CANCELAR -->
                     <Button Text="Cancelar"
                             Clicked="OnVolverClicked"
                             BackgroundColor="Transparent"
@@ -274,6 +346,5 @@
                 </VerticalStackLayout>
             </ScrollView>
         </Border>
-
     </Grid>
 </ContentPage>

@@ -302,11 +302,23 @@
                                     <Label FontFamily="FontAwesome" Text="&#xf02f;" FontSize="16" TextColor="White" VerticalOptions="Center"/>
                                     <Label Text="Módulo de Impresión" FontSize="18" FontAttributes="Bold" TextColor="White"/>
                                 </HorizontalStackLayout>
-                                <Label Text="Impresoras · Cartuchos · Historial" FontSize="12" TextColor="#C4B5FD"/>
+                                <Label Text="Impresoras · Historial" FontSize="12" TextColor="#C4B5FD"/>
                             </VerticalStackLayout>
-                            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                                <Button Text="+ Impresora" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarImpresoraCommand}"/>
-                                <Button Text="+ Cartucho" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarCartuchoCommand}"/>
+                            <HorizontalStackLayout Grid.Column="1"
+                       Spacing="8"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End">
+
+                                <Button Text="+ Impresora"
+            BackgroundColor="White"
+            TextColor="#512BD4"
+            FontSize="12"
+            CornerRadius="8"
+            FontAttributes="Bold"
+            Padding="22,12"
+            MinimumWidthRequest="138"
+            Command="{Binding RegistrarImpresoraCommand}"/>
+
                             </HorizontalStackLayout>
                         </Grid>
                     </Border>

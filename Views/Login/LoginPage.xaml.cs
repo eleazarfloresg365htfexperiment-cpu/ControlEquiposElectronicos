@@ -9,4 +9,9 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    private void UsuarioEntry_Completed(object sender, EventArgs e)
+    {
+        ContrasenaEntry.Focus();
+    }
 }

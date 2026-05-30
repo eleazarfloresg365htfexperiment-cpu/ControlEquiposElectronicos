@@ -17,7 +17,7 @@
     Shell.BackgroundColor="#F4F6FA"
     Shell.ForegroundColor="White"
     Shell.TitleColor="#1A1A2E"
-    Title="CPC">
+    Title="StormCore">
 
     <Shell.ItemTemplate>
         <DataTemplate>
@@ -39,17 +39,27 @@
                            HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
 
-                <Border Grid.Column="1" x:Name="LogoCPC" WidthRequest="34" HeightRequest="34"
-                        BackgroundColor="{StaticResource Primary}" StrokeShape="RoundRectangle 8"
-                        StrokeThickness="0" VerticalOptions="Center">
-                    <Label Text="CPC" TextColor="White" FontSize="11" FontAttributes="Bold"
-                           HorizontalOptions="Center" VerticalOptions="Center" />
+                <Border Grid.Column="1"
+        x:Name="LogoCPC"
+        WidthRequest="38"
+        HeightRequest="38"
+        BackgroundColor="Transparent"
+        StrokeThickness="0"
+        VerticalOptions="Center">
+
+                    <Image
+        Source="logo_techstorm.png"
+        WidthRequest="38"
+        HeightRequest="38"
+        Aspect="AspectFit"
+        HorizontalOptions="Center"
+        VerticalOptions="Center" />
                 </Border>
 
                 <VerticalStackLayout Grid.Column="2" x:Name="NombreEmpresaStack"
-                                     VerticalOptions="Center" Spacing="0" Margin="4,0,0,0">
-                    <Label Text="Centro Profesional" TextColor="White" FontSize="11" FontAttributes="Bold" LineBreakMode="NoWrap" />
-                    <Label Text="de Cómputo" TextColor="#A78BFA" FontSize="10" LineBreakMode="NoWrap" />
+                     VerticalOptions="Center" Spacing="0" Margin="4,0,0,0">
+                    <Label Text="StormCore" TextColor="White" FontSize="12" FontAttributes="Bold" LineBreakMode="NoWrap" />
+                    <Label Text="TechStorm" TextColor="#A78BFA" FontSize="10" LineBreakMode="NoWrap" />
                 </VerticalStackLayout>
             </Grid>
 

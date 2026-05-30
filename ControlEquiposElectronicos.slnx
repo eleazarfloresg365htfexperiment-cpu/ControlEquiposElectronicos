@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="ControlEquiposElectronicos.Api/ControlEquiposElectronicos.Api.csproj" />
   <Project Path="ControlEquiposElectronicos.csproj" />
+  <Project Path="ControlEquiposElectronicos.Tests/ControlEquiposElectronicos.Tests.csproj" />
 </Solution>
