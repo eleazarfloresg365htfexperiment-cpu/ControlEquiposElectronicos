@@ -1,15 +1,130 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Equipos.ElectricidadPage"
-    Title="Electricidad">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Equipos"
+             x:Class="ControlEquiposElectronicos.Views.Equipos.ElectricidadPage"
+             Title="Electricidad y UPS" BackgroundColor="#F4F6F9">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Electricidad"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" BackgroundColor="#E65100" Padding="20,16" StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0"/>
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="⚡ Electricidad y UPS" FontSize="20"
+                           FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="UPS · Baterías · Mantenimientos eléctricos"
+                           FontSize="12" TextColor="#FFE0B2"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="+ UPS" Command="{Binding RegistrarUpsCommand}"
+                            BackgroundColor="White" TextColor="#E65100"
+                            FontSize="13" CornerRadius="8" FontAttributes="Bold"/>
+                    <Button Text="+ Mantenimiento" Command="{Binding RegistrarMantenimientoCommand}"
+                            BackgroundColor="White" TextColor="#E65100"
+                            FontSize="13" CornerRadius="8" FontAttributes="Bold"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="16">
+
+                <Border BackgroundColor="White" Padding="12"
+                        StrokeThickness="1" Stroke="#E0E0E0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Entry Placeholder="Buscar UPS por código o ubicación..."
+                               Text="{Binding BusquedaTexto}"
+                               TextColor="#212121" PlaceholderColor="#9E9E9E"
+                               BackgroundColor="Transparent"/>
+                        <Button Grid.Column="1" Text="Buscar"
+                                Command="{Binding BuscarCommand}"
+                                BackgroundColor="#E65100" TextColor="White" CornerRadius="8"/>
+                    </Grid>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border BackgroundColor="White" Padding="16"
+                            StrokeThickness="1" Stroke="#E0E0E0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <Label Text="⚡ UPS registradas" FontSize="13" TextColor="#757575"/>
+                            <Label Text="{Binding TotalUps}" FontSize="28"
+                                   FontAttributes="Bold" TextColor="#E65100"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" BackgroundColor="White" Padding="16"
+                            StrokeThickness="1" Stroke="#E0E0E0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <Label Text="🔧 Mantenimientos" FontSize="13" TextColor="#757575"/>
+                            <Label Text="{Binding TotalMantenimientos}" FontSize="28"
+                                   FontAttributes="Bold" TextColor="#E65100"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <ActivityIndicator IsRunning="{Binding Cargando}"
+                                   IsVisible="{Binding Cargando}"
+                                   Color="#E65100" HorizontalOptions="Center"/>
+
+                <Label Text="UPS registradas" FontSize="16"
+                       FontAttributes="Bold" TextColor="#212121"/>
+
+                <CollectionView ItemsSource="{Binding ListaUps}"
+                                EmptyView="No hay UPS registradas.">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,10" BackgroundColor="White"
+                                    Padding="16" StrokeThickness="1" Stroke="#E0E0E0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12"/>
+                                </Border.StrokeShape>
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Border WidthRequest="46" HeightRequest="46"
+                                            BackgroundColor="#FBE9E7" Padding="0" StrokeThickness="0">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="23"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="⚡" FontSize="20"
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                                        <Label Text="{Binding Nombre}" FontSize="15"
+                                               FontAttributes="Bold" TextColor="#212121"/>
+                                        <Label Text="{Binding Codigo}" FontSize="12" TextColor="#9E9E9E"/>
+                                        <Label Text="{Binding Ubicacion}" FontSize="12" TextColor="#E65100"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="2" Spacing="6">
+                                        <Button Text="Detalle"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.VerHistorialCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FBE9E7" TextColor="#E65100"
+                                                FontSize="12" CornerRadius="6" Padding="8,4"/>
+                                        <Button Text="Falla"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ReportarFallaCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FFEBEE" TextColor="#C62828"
+                                                FontSize="12" CornerRadius="6" Padding="8,4"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="↻ Actualizar lista" Command="{Binding ActualizarCommand}"
+                        BackgroundColor="#FBE9E7" TextColor="#E65100"
+                        CornerRadius="10" FontSize="13" Margin="0,0,0,20"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

@@ -14,4 +14,11 @@ public class EquipoChecklistPreparadoDto
     public bool TienePlantilla { get; set; }
 
     public List<ItemChecklistPreparadoDto> Items { get; set; } = new();
+
+    /// <summary>Coincide con la regla de la API al iniciar checklist (plantilla + aspectos activos).</summary>
+    public bool ListoParaIniciar => TienePlantilla && Items.Count > 0;
+
+    public bool MostrarSinAspectos => TienePlantilla && !ListoParaIniciar;
+
+    public bool MostrarSinPlantilla => !TienePlantilla;
 }

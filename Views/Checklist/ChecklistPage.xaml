@@ -1,15 +1,221 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.ChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.ChecklistPage"
-    Title="Checklist técnico">
+    xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Checklist"
+    x:DataType="vm:ChecklistViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource ChecklistPageBg}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Checklist técnico"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding CargarCommand}">
+        <ScrollView>
+            <VerticalStackLayout Padding="24" Spacing="20">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+                <!-- Encabezado -->
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Checklist Técnico"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource ChecklistHeader}" />
+                    <Label Text="Supervisa el estado técnico de los equipos por ubicación"
+                           FontSize="14"
+                           TextColor="{StaticResource Gray500}" />
+                </VerticalStackLayout>
+
+
+
+                <Label Text="{Binding MensajeError}"
+                       TextColor="{StaticResource ChecklistRed}"
+                       FontSize="13"
+                       IsVisible="{Binding TieneError}" />
+
+                <!-- Estadísticas -->
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Style="{StaticResource ChecklistStatCardStyle}">
+                        <HorizontalStackLayout Spacing="10">
+                            <Border BackgroundColor="#E8EDFF" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label Text="✓" FontSize="18" TextColor="{StaticResource ChecklistBlue}" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding EquiposRevisadosHoy}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource ChecklistHeader}" />
+                                <Label Text="Equipos revisados hoy" FontSize="11" TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" Style="{StaticResource ChecklistStatCardStyle}">
+                        <HorizontalStackLayout Spacing="10">
+                            <Border BackgroundColor="#E8F8EF" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label Text="🖥" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding ChecklistCompletados}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource ChecklistHeader}" />
+                                <Label Text="Checklist completados" FontSize="11" TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2" Style="{StaticResource ChecklistStatCardStyle}">
+                        <HorizontalStackLayout Spacing="10">
+                            <Border BackgroundColor="#FFF4E5" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label Text="⚠" FontSize="18" TextColor="{StaticResource ChecklistOrange}" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding ProblemasDetectados}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource ChecklistHeader}" />
+                                <Label Text="Problemas detectados" FontSize="11" TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="3" Style="{StaticResource ChecklistStatCardStyle}">
+                        <HorizontalStackLayout Spacing="10">
+                            <Border BackgroundColor="#FDECEC" WidthRequest="40" HeightRequest="40" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label Text="⏳" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding EquiposPendientes}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource ChecklistHeader}" />
+                                <Label Text="Equipos pendientes" FontSize="11" TextColor="{StaticResource Gray500}" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Tarjetas de navegación -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="14">
+                    <Border Grid.Column="0" Style="{StaticResource ChecklistNavCardStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NuevoCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" Padding="4">
+                            <Label Text="📋" FontSize="28" TextColor="{StaticResource ChecklistBlue}" />
+                            <Label Text="Nuevo Checklist" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource ChecklistHeader}" />
+                            <Label Text="Iniciar una nueva revisión técnica por ubicación."
+                                   FontSize="12" TextColor="{StaticResource Gray500}" LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" Style="{StaticResource ChecklistNavCardStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PlantillasCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" Padding="4">
+                            <Label Text="📄" FontSize="28" TextColor="{StaticResource ChecklistGreen}" />
+                            <Label Text="Plantillas" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource ChecklistHeader}" />
+                            <Label Text="Administrar aspectos y plantillas de revisión."
+                                   FontSize="12" TextColor="{StaticResource Gray500}" LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2" Style="{StaticResource ChecklistNavCardStyle}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding HistorialCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="8" Padding="4">
+                            <Label Text="🕐" FontSize="28" TextColor="{StaticResource ChecklistOrange}" />
+                            <Label Text="Historial" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource ChecklistHeader}" />
+                            <Label Text="Consultar revisiones y problemas detectados."
+                                   FontSize="12" TextColor="{StaticResource Gray500}" LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Tabla estado de revisiones -->
+                <Border Style="{StaticResource ChecklistTableCardStyle}">
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="Estado de revisiones"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource ChecklistHeader}"
+                                   VerticalOptions="Center" />
+                            <Button Grid.Column="1"
+                                    Text="+ Nuevo checklist"
+                                    Command="{Binding NuevoCommand}"
+                                    BackgroundColor="{StaticResource ChecklistBlue}"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Padding="16,8"
+                                    FontSize="13" />
+                        </Grid>
+
+                        <!-- Encabezados -->
+                        <Grid ColumnDefinitions="2*,*,*,*" Padding="8,0" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Ubicación" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="1" Text="Equipos" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="2" Text="Responsable" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="3" Text="Estado" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource Gray500}" />
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="{StaticResource Gray200}" />
+
+                        <CollectionView x:Name="RevisionesCollection"
+                                        ItemsSource="{Binding Revisiones}"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnRevisionSeleccionada">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:ChecklistResumenItem">
+                                    <Grid ColumnDefinitions="2*,*,*,*"
+                                          Padding="8,12"
+                                          ColumnSpacing="8">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Ubicacion}"
+                                               FontSize="14"
+                                               TextColor="{StaticResource ChecklistHeader}"
+                                               VerticalOptions="Center" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding EquiposTexto}"
+                                               FontSize="13"
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
+                                        <Label Grid.Column="2"
+                                               Text="{Binding Responsable}"
+                                               FontSize="13"
+                                               TextColor="{StaticResource Gray600}"
+                                               VerticalOptions="Center" />
+                                        <Border Grid.Column="3"
+                                                Padding="10,4"
+                                                BackgroundColor="{Binding EstadoBadgeColor}"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center"
+                                                StrokeThickness="0">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="12" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding EstadoEtiqueta}"
+                                                   FontSize="11"
+                                                   TextColor="White"
+                                                   FontAttributes="Bold" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <Label Text="No hay revisiones registradas."
+                                       TextColor="{StaticResource Gray500}"
+                                       HorizontalOptions="Center"
+                                       Margin="0,20" />
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>

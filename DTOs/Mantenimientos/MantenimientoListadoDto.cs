@@ -6,8 +6,15 @@ public class MantenimientoListadoDto
     public int EquipoId { get; set; }
     public string CodigoEquipo { get; set; } = string.Empty;
     public string NombreEquipo { get; set; } = string.Empty;
+    public int TipoMantenimientoId { get; set; }
     public string TipoMantenimiento { get; set; } = string.Empty;
+    public int TecnicoId { get; set; }
+    public string Tecnico { get; set; } = string.Empty;
+    public string Descripcion { get; set; } = string.Empty;
+    public string? Diagnostico { get; set; }
     public string EstadoMantenimiento { get; set; } = string.Empty;
     public DateTime FechaInicio { get; set; }
     public DateTime? FechaFin { get; set; }
+    public decimal? CostoEstimado { get; set; }
+    public bool Activo { get; set; }
 }

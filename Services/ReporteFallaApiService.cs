@@ -16,4 +16,23 @@ public class ReporteFallaApiService : IReporteFallaApiService
     {
         return await _apiService.GetAsync<List<ReporteFallaListadoDto>>("ReportesFalla") ?? new();
     }
+
+    public async Task<(bool Success, string? ErrorMessage)> CrearAsync(CrearReporteFallaDto dto)
+    {
+        var (response, error) = await _apiService.PostWithErrorAsync<CrearReporteFallaDto, ReporteFallaDetalleDto>(
+            "ReportesFalla", dto);
+
+        if (response != null && response.Id > 0)
+            return (true, null);
+
+        if (!string.IsNullOrWhiteSpace(error))
+            return (false, error);
+
+        return (false, "No se pudo registrar el reporte. Verifica que la API esté en ejecución.");
+    }
+
+    public async Task<bool> EliminarAsync(int id)
+    {
+        return await _apiService.DeleteAsync($"ReportesFalla/{id}");
+    }
 }

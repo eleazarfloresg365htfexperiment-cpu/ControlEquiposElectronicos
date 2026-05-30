@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace ControlEquiposElectronicos.Services.Interfaces;
 
-namespace ControlEquiposElectronicos.Services.Interfaces
+public interface IPermisoService
 {
-    internal interface IPermisoService
-    {
-    }
+    bool TienePermiso(string permiso);
+    bool PuedeVerModulo(string modulo);
+    bool EsAdministradorOP();
 }

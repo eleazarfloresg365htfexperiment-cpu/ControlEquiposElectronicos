@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Configuracion.AuditoriaPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dtos="clr-namespace:ControlEquiposElectronicos.DTOs.Auditoria"
+    Title="Auditoría del sistema"
+    BackgroundColor="{StaticResource Gray100}">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="24" RowSpacing="12">
+
+        <!-- Botón volver -->
+        <Border
+                BackgroundColor="Transparent"
+                StrokeShape="RoundRectangle 10"
+                StrokeThickness="1"
+                Stroke="#DDD8F7"
+                Padding="12,8"
+                HorizontalOptions="Start">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnVolverClicked" />
+            </Border.GestureRecognizers>
+            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="8">
+                <Label Grid.Column="0"
+                           FontFamily="FontAwesome"
+                           Text="&#xf060;"
+                           TextColor="{StaticResource Primary}"
+                           FontSize="13"
+                           VerticalOptions="Center" />
+                <Label Grid.Column="1"
+                           Text="Volver"
+                           TextColor="{StaticResource Primary}"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Encabezado -->
+        <VerticalStackLayout Grid.Row="1" Spacing="2">
+            <Label Text="Auditoría del sistema"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Gray900}" />
+            <Label Text="Historial completo de operaciones registradas."
+                   FontSize="14"
+                   TextColor="{StaticResource Gray500}" />
+        </VerticalStackLayout>
+
+        <!-- Buscador -->
+        <Border Grid.Row="2"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 8"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="12,0">
+            <Entry x:Name="BusquedaEntry"
+                   Placeholder="Buscar por usuario, acción, módulo..."
+                   TextChanged="OnBusquedaTextChanged"
+                   TextColor="{StaticResource Gray900}"
+                   PlaceholderColor="{StaticResource Gray400}"
+                   HeightRequest="44"
+                   BackgroundColor="Transparent" />
+        </Border>
+
+        <!-- Filtro por módulo -->
+        <Border Grid.Row="3"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 8"
+                Stroke="{StaticResource Gray200}"
+                StrokeThickness="1"
+                Padding="12,4">
+            <Picker x:Name="ModuloPicker"
+                    Title="Filtrar por módulo..."
+                    SelectedIndexChanged="OnModuloFiltrado"
+                    TextColor="{StaticResource Gray900}"
+                    TitleColor="{StaticResource Gray400}"
+                    BackgroundColor="Transparent">
+                <Picker.Items>
+                    <x:String>Todos</x:String>
+                    <x:String>Dashboard</x:String>
+                    <x:String>Equipos</x:String>
+                    <x:String>Mantenimientos</x:String>
+                    <x:String>Checklist</x:String>
+                    <x:String>Reportes</x:String>
+                    <x:String>Usuarios</x:String>
+                    <x:String>Configuracion</x:String>
+                </Picker.Items>
+            </Picker>
+        </Border>
+
+        <!-- Lista + indicador de carga -->
+        <Grid Grid.Row="4">
+
+            <ActivityIndicator x:Name="CargandoIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               Color="{StaticResource Primary}"
+                               VerticalOptions="Start"
+                               HorizontalOptions="Center"
+                               Margin="0,20,0,0" />
+
+            <CollectionView x:Name="AuditoriaCollection">
+
+                <CollectionView.EmptyView>
+                    <Label Text="No hay registros de auditoría."
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="{StaticResource Gray500}" />
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dtos:HistorialOperacionDto">
+                        <Border BackgroundColor="White"
+                                Padding="16"
+                                Margin="0,4"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="{StaticResource Gray200}"
+                                StrokeThickness="1">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRegistroTapped" />
+                            </Border.GestureRecognizers>
+
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
+                                <!-- Icono de módulo -->
+                                <Border Grid.Column="0"
+                                        WidthRequest="42" HeightRequest="42"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                    <Label x:Name="IconoModulo"
+                                           FontFamily="FontAwesome"
+                                           Text="&#xf013;"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="16"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Border>
+
+                                <!-- Datos principales -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="{Binding Accion}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Gray900}" />
+                                    <Label Text="{Binding Modulo}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Primary}" />
+                                    <Label Text="{Binding Usuario, StringFormat='@{0}'}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Gray500}" />
+                                </VerticalStackLayout>
+
+                                <!-- Fecha -->
+                                <Label Grid.Column="2"
+                                       Text="{Binding FechaOperacion, StringFormat='{0:dd/MM/yyyy\nHH:mm}'}"
+                                       FontSize="11"
+                                       TextColor="{StaticResource Gray400}"
+                                       HorizontalTextAlignment="End"
+                                       VerticalOptions="Center" />
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

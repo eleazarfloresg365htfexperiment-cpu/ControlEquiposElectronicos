@@ -1,9 +1,215 @@
-﻿namespace ControlEquiposElectronicos.ViewModels;
+﻿using ControlEquiposElectronicos.DTOs.Catalogos;
+using ControlEquiposElectronicos.DTOs.Equipos;
+using ControlEquiposElectronicos.Services.Interfaces;
+using System.Collections.ObjectModel;
+
+namespace ControlEquiposElectronicos.ViewModels;
 
 public class EquiposViewModel : BaseViewModel
 {
-    public EquiposViewModel()
+    private readonly IEquipoApiService _equipoApiService;
+    private readonly ICatalogoApiService _catalogoApiService;
+
+    private List<EquipoListadoDto> _todosLosEquipos = new();
+    public ObservableCollection<EquipoListadoDto> Equipos { get; set; } = new();
+    public ObservableCollection<CatalogoItemDto> Tipos { get; set; } = new();
+    public ObservableCollection<CatalogoItemDto> Ubicaciones { get; set; } = new();
+    public ObservableCollection<CatalogoItemDto> Estados { get; set; } = new();
+
+    private string _textoBusqueda = string.Empty;
+    public string TextoBusqueda
     {
-        Title = "Equipos";
+        get => _textoBusqueda;
+        set
+        {
+            _textoBusqueda = value;
+            OnPropertyChanged();
+            FiltrarEquipos();
+        }
+    }
+
+    private CatalogoItemDto? _tipoSeleccionado;
+    public CatalogoItemDto? TipoSeleccionado
+    {
+        get => _tipoSeleccionado;
+        set
+        {
+            _tipoSeleccionado = value;
+            OnPropertyChanged();
+            FiltrarEquipos();
+        }
+    }
+
+    private CatalogoItemDto? _ubicacionSeleccionada;
+    public CatalogoItemDto? UbicacionSeleccionada
+    {
+        get => _ubicacionSeleccionada;
+        set
+        {
+            _ubicacionSeleccionada = value;
+            OnPropertyChanged();
+            FiltrarEquipos();
+        }
+    }
+
+    private CatalogoItemDto? _estadoSeleccionado;
+    public CatalogoItemDto? EstadoSeleccionado
+    {
+        get => _estadoSeleccionado;
+        set
+        {
+            _estadoSeleccionado = value;
+            OnPropertyChanged();
+            FiltrarEquipos();
+        }
+    }
+
+    public EquiposViewModel(IEquipoApiService equipoApiService, ICatalogoApiService catalogoApiService)
+    {
+        Title = "Gestión de Equipos";
+        _equipoApiService = equipoApiService;
+        _catalogoApiService = catalogoApiService;
+    }
+
+    public async Task CargarEquiposAsync()
+    {
+        if (IsBusy) return;
+        try
+        {
+            IsBusy = true;
+            var lista = (await _equipoApiService.ObtenerTodosAsync())
+            .Where(e => e.Activo)
+            .ToList();
+            _todosLosEquipos = lista;
+            Equipos.Clear();
+            foreach (var equipo in lista)
+                Equipos.Add(equipo);
+
+            var tipos = await _catalogoApiService.ObtenerTiposEquipoAsync();
+            Tipos.Clear();
+            foreach (var item in tipos) Tipos.Add(item);
+
+            var ubicaciones = await _catalogoApiService.ObtenerUbicacionesAsync();
+            Ubicaciones.Clear();
+            foreach (var item in ubicaciones) Ubicaciones.Add(item);
+
+            var estados = await _catalogoApiService.ObtenerEstadosEquipoAsync();
+            Estados.Clear();
+            foreach (var item in estados) Estados.Add(item);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"No se pudo cargar los equipos: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    public void FiltrarEquipos()
+    {
+        var filtrados = _todosLosEquipos.Where(e =>
+            (string.IsNullOrWhiteSpace(TextoBusqueda) ||
+             e.Codigo.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase) ||
+             e.Nombre.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase) ||
+             e.Tipo.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase) ||
+             e.Ubicacion.Contains(TextoBusqueda, StringComparison.OrdinalIgnoreCase)) &&
+            (TipoSeleccionado == null || e.Tipo == TipoSeleccionado.Nombre) &&
+            (UbicacionSeleccionada == null || e.Ubicacion == UbicacionSeleccionada.Nombre) &&
+            (EstadoSeleccionado == null || e.Estado == EstadoSeleccionado.Nombre)
+        ).ToList();
+
+        Equipos.Clear();
+        foreach (var equipo in filtrados)
+            Equipos.Add(equipo);
+    }
+
+    public void FiltrarPorEstado(string estado)
+    {
+        var filtrados = _todosLosEquipos
+            .Where(e => e.Activo && e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        Equipos.Clear();
+        foreach (var equipo in filtrados)
+            Equipos.Add(equipo);
+    }
+    public void ActualizarEstadoVisual(int id, string nuevoEstado)
+    {
+        var equipo = Equipos.FirstOrDefault(e => e.Id == id);
+        if (equipo != null)
+        {
+            var index = Equipos.IndexOf(equipo);
+            equipo.Estado = nuevoEstado;
+            Equipos.RemoveAt(index);
+            Equipos.Insert(index, equipo);
+        }
+
+        var equipoEnLista = _todosLosEquipos.FirstOrDefault(e => e.Id == id);
+        if (equipoEnLista != null)
+            equipoEnLista.Estado = nuevoEstado;
+    }
+    public List<EquipoListadoDto> ObtenerPorEstados(params string[] estados)
+    {
+        return _todosLosEquipos
+            .Where(e => e.Activo && estados.Any(s =>
+                e.Estado.Contains(s, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+    }
+    public async Task<EquipoPerifericoDto?> AsignarPerifericoAsync(AsignarPerifericoDto dto)
+    {
+        try
+        {
+            return await _equipoApiService.AsignarPerifericoAsync(dto);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    public async Task<bool> CambiarEstadoEquipoAsync(int id, string nuevoEstado)
+    {
+        try
+        {
+            IsBusy = true;
+            var estados = await _catalogoApiService.ObtenerEstadosEquipoAsync();
+            var estado = estados.FirstOrDefault(e =>
+                e.Nombre.Contains(nuevoEstado, StringComparison.OrdinalIgnoreCase));
+
+            if (estado == null) return false;
+
+            var equipo = _todosLosEquipos.FirstOrDefault(e => e.Id == id);
+            if (equipo == null) return false;
+
+            var dto = new ActualizarEquipoDto
+            {
+                Codigo = equipo.Codigo,
+                Nombre = equipo.Nombre,
+                Marca = equipo.Marca ?? string.Empty,
+                Modelo = equipo.Modelo ?? string.Empty,
+                NumeroSerie = equipo.NumeroSerie ?? string.Empty,
+                Observaciones = equipo.Observaciones ?? string.Empty,
+                CategoriaEquipoId = equipo.CategoriaEquipoId,
+                TipoEquipoId = equipo.TipoEquipoId,
+                EstadoEquipoId = estado.Id,
+                UbicacionId = equipo.UbicacionId,
+                Activo = true
+            };
+
+            var resultado = await _equipoApiService.ActualizarAsync(id, dto);
+            if (resultado)
+                ActualizarEstadoVisual(id, nuevoEstado);
+
+            return resultado;
+        }
+        catch
+        {
+            return false;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

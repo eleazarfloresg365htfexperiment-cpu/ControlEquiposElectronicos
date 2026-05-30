@@ -1,9 +1,74 @@
-﻿namespace ControlEquiposElectronicos.Views.Equipos;
+﻿using ControlEquiposElectronicos.ViewModels.Equipos;
 
+namespace ControlEquiposElectronicos.Views.Equipos;
+
+[QueryProperty(nameof(EquipoId), "equipoId")]
 public partial class DetalleEquipoPage : ContentPage
 {
-    public DetalleEquipoPage()
+    private readonly DetalleEquiposViewModel _viewModel;
+
+    private int _equipoId;
+    public int EquipoId
+    {
+        get => _equipoId;
+        set
+        {
+            _equipoId = value;
+            _ = _viewModel.CargarEquipoAsync(value);
+            _ = _viewModel.CargarPerifericos(value);
+        }
+    }
+
+    public DetalleEquipoPage(DetalleEquiposViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
+
+        BtnVolver.Clicked += async (s, e) => await Shell.Current.GoToAsync("..");
+
+        BtnEditar.Clicked += async (s, e) =>
+        {
+            if (_viewModel.Equipo == null) return;
+            await Shell.Current.GoToAsync($"RegistrarEquipoPage?equipoId={_viewModel.Equipo.Id}");
+        };
+
+        BtnCambiarEstado.Clicked += async (s, e) =>
+        {
+            string accion = await DisplayActionSheet(
+            "Cambiar estado", "Cancelar", null,
+            "Funcional", "No funcional", "En mantenimiento", "Dado de baja");
+
+            if (accion != null && accion != "Cancelar")
+            {
+                await _viewModel.CambiarEstadoAsync(accion);
+                await DisplayAlert("Exito", $"Estado cambiado a {accion}", "OK");
+            }
+        };
+
+        BtnDesactivar.Clicked += async (s, e) =>
+        {
+            if (_viewModel.Equipo == null) return;
+            bool confirmar = await DisplayAlert("Desactivar",
+                $"Desactivar {_viewModel.Equipo.Nombre}?", "Si", "No");
+            if (confirmar)
+            {
+                var resultado = await _viewModel.DesactivarEquipoAsync();
+                if (resultado)
+                {
+                    await DisplayAlert("Exito", "Equipo desactivado correctamente.", "OK");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se pudo desactivar el equipo.", "OK");
+                }
+            }
+        };
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
     }
 }

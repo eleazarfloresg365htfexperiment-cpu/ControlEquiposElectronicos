@@ -20,7 +20,8 @@ public class ApiService : IApiService
 
         _jsonOptions = new JsonSerializerOptions
         {
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
     }
 
@@ -29,32 +30,42 @@ public class ApiService : IApiService
         try
         {
             var response = await _httpClient.GetAsync(endpoint);
-
-            if (!response.IsSuccessStatusCode)
-                return default;
-
+            if (!response.IsSuccessStatusCode) return default;
             return await response.Content.ReadFromJsonAsync<T>(_jsonOptions);
         }
-        catch
-        {
-            return default;
-        }
+        catch { return default; }
     }
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string endpoint, TRequest data)
     {
+        var (response, _) = await PostWithErrorAsync<TRequest, TResponse>(endpoint, data);
+        return response;
+    }
+
+    public async Task<(TResponse? Response, string? ErrorMessage)> PostWithErrorAsync<TRequest, TResponse>(
+        string endpoint, TRequest data)
+    {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(endpoint, data, _jsonOptions);
-
+            var json = JsonSerializer.Serialize(data, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(endpoint, content);
             if (!response.IsSuccessStatusCode)
-                return default;
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                return (default, ExtraerMensajeError(errorBody, response.StatusCode));
+            }
 
-            return await response.Content.ReadFromJsonAsync<TResponse>(_jsonOptions);
+            var body = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(body))
+                return (default, null);
+
+            var result = JsonSerializer.Deserialize<TResponse>(body, _jsonOptions);
+            return (result, null);
         }
-        catch
+        catch (Exception ex)
         {
-            return default;
+            return (default, $"No se pudo conectar con la API: {ex.Message}");
         }
     }
 
@@ -65,30 +76,39 @@ public class ApiService : IApiService
             var response = await _httpClient.PutAsJsonAsync(endpoint, data, _jsonOptions);
             return response.IsSuccessStatusCode;
         }
-        catch
-        {
-            return false;
-        }
+        catch { return false; }
     }
 
     public async Task<bool> PatchAsync<TRequest>(string endpoint, TRequest data)
+    {
+        var (exito, _) = await PatchWithErrorAsync(endpoint, data);
+        return exito;
+    }
+
+    // Devuelve éxito + el mensaje de error exacto que manda la API (ej: "El usuario ya tiene ese rol.")
+    public async Task<(bool Exito, string? ErrorMessage)> PatchWithErrorAsync<TRequest>(
+        string endpoint, TRequest data)
     {
         try
         {
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var request = new HttpRequestMessage(HttpMethod.Patch, endpoint)
-            {
-                Content = content
-            };
+            var request = new HttpRequestMessage(HttpMethod.Patch, endpoint) { Content = content };
 
             var response = await _httpClient.SendAsync(request);
-            return response.IsSuccessStatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                return (false, string.IsNullOrWhiteSpace(errorBody)
+                    ? $"Error HTTP {(int)response.StatusCode}"
+                    : errorBody);
+            }
+            return (true, null);
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            return (false, $"No se pudo conectar con la API: {ex.Message}");
         }
     }
 
@@ -99,9 +119,25 @@ public class ApiService : IApiService
             var response = await _httpClient.DeleteAsync(endpoint);
             return response.IsSuccessStatusCode;
         }
+        catch { return false; }
+    }
+
+    private static string ExtraerMensajeError(string errorBody, System.Net.HttpStatusCode statusCode)
+    {
+        if (string.IsNullOrWhiteSpace(errorBody))
+            return $"Error HTTP {(int)statusCode}";
+
+        try
+        {
+            using var doc = JsonDocument.Parse(errorBody);
+            if (doc.RootElement.TryGetProperty("mensaje", out var mensaje))
+                return mensaje.GetString() ?? errorBody;
+        }
         catch
         {
-            return false;
+            // usar texto crudo
         }
+
+        return errorBody;
     }
 }

@@ -1,0 +1,22 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+<<<<<<< HEAD
+/modules.xml
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.ControlEquiposElectronicos.iml
+=======
+/contentModel.xml
+/modules.xml
+/.idea.ControlEquiposElectronicos.iml
+/projectSettingsUpdater.xml
+>>>>>>> origin/danny-checklist-plantillas
+# Ignored default folder with query files
+/queries/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

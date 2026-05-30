@@ -1,15 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.NuevoChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.NuevoChecklistPage"
-    Title="Nuevo checklist">
+    xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Checklist"
+    xmlns:dto="clr-namespace:ControlEquiposElectronicos.DTOs.Checklist"
+    x:DataType="vm:NuevoChecklistViewModel"
+    Title="{Binding Title}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Nuevo checklist"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <Label Text="{Binding TituloChecklistActivo}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   IsVisible="{Binding ChecklistIniciado}" />
+
+            <VerticalStackLayout IsVisible="{Binding MostrarSeleccionUbicacion}" Spacing="8">
+                <Label Text="Selecciona ubicación" FontAttributes="Bold" />
+                <Picker Title="Ubicación"
+                        ItemsSource="{Binding Ubicaciones}"
+                        ItemDisplayBinding="{Binding Nombre}"
+                        SelectedItem="{Binding UbicacionSeleccionada}" />
+                <Editor Placeholder="Observaciones generales (opcional)"
+                        Text="{Binding ObservacionesGenerales}"
+                        AutoSize="TextChanges"
+                        MinimumHeightRequest="80" />
+                <Button Text="Preparar ubicación" Command="{Binding PrepararCommand}" />
+                <Button Text="Iniciar checklist" Command="{Binding IniciarCommand}" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding MostrarPreparacion}" Spacing="6">
+                <Label Text="{Binding ResumenPreparacion}" FontAttributes="Bold" />
+                <CollectionView ItemsSource="{Binding EquiposPreview}" HeightRequest="220">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto:EquipoChecklistPreparadoDto">
+                            <Border Padding="10" Margin="0,0,0,6" StrokeThickness="1" Stroke="{StaticResource Gray200}">
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="{Binding CodigoEquipo}" FontAttributes="Bold" />
+                                    <Label Text="{Binding NombreEquipo}" FontSize="13" />
+                                    <Label Text="{Binding TipoEquipo, StringFormat='Tipo: {0}'}" FontSize="12" TextColor="Gray" />
+                                    <Label Text="{Binding PlantillaChecklist, StringFormat='Plantilla: {0}'}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Primary}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding ChecklistIniciado}" Spacing="8">
+                <Label Text="Equipos de la ubicación" FontAttributes="Bold" />
+                <CollectionView x:Name="EquiposCardsCollection"
+                                ItemsSource="{Binding EquiposCards}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnEquipoSeleccionado">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:EquipoChecklistCardItem">
+                            <Border Padding="14" Margin="0,0,0,10" StrokeThickness="1" Stroke="{Binding EstadoColor}">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding CodigoEquipo}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding NombreEquipo}" />
+                                    <Label Text="{Binding TipoEquipo, StringFormat='Tipo: {0}'}" FontSize="12" TextColor="Gray" />
+                                    <Label Text="{Binding ResultadoGeneral, StringFormat='Estado: {0}'}" FontSize="13" />
+                                    <Label Text="{Binding ProgresoAspectos}" FontSize="12" TextColor="{StaticResource Primary}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button Text="Finalizar checklist" Command="{Binding FinalizarCommand}" BackgroundColor="DarkGreen" TextColor="White" />
+            </VerticalStackLayout>
+
+            <Label Text="{Binding MensajeError}" TextColor="IndianRed" IsVisible="{Binding TieneError}" />
+            <Label Text="{Binding MensajeInfo}" TextColor="DarkGreen" IsVisible="{Binding TieneInfo}" />
+            <Button Text="Volver" Command="{Binding VolverCommand}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

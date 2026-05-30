@@ -1,20 +1,17 @@
-﻿using ControlEquiposElectronicos.Services;
-using ControlEquiposElectronicos.Views.Login;
+﻿using ControlEquiposElectronicos.Views.Login;
 
 namespace ControlEquiposElectronicos;
 
 public partial class App : Application
 {
-    private readonly SesionService _sesionService;
-
-    public App(SesionService sesionService)
+    public App()
     {
         InitializeComponent();
-        _sesionService = sesionService;
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new LoginPage(_sesionService));
+        var loginPage = IPlatformApplication.Current!.Services.GetRequiredService<LoginPage>();
+        return new Window(loginPage);
     }
 }

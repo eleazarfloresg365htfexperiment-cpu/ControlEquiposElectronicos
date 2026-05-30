@@ -1,15 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.RevisionEquipoChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.RevisionEquipoChecklistPage"
-    Title="Revisión de equipo">
+    xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Checklist"
+    x:DataType="vm:RevisionEquipoChecklistViewModel"
+    Title="{Binding Title}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Revisión de equipo"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+            <Label Text="{Binding EncabezadoEquipo}" FontSize="20" FontAttributes="Bold" />
+            <Label Text="Marca el estado de cada aspecto de revisión." FontSize="13" TextColor="Gray" />
+
+            <Editor Placeholder="Observaciones del equipo"
+                    Text="{Binding ObservacionesEquipo}"
+                    AutoSize="TextChanges"
+                    MinimumHeightRequest="70" />
+
+            <CollectionView ItemsSource="{Binding Aspectos}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:AspectoRevisionItem">
+                        <Border Padding="12" Margin="0,0,0,10" StrokeThickness="1" Stroke="{StaticResource Gray200}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding Nombre}" FontAttributes="Bold" />
+                                <Label Text="{Binding Descripcion}" FontSize="12" TextColor="Gray" />
+                                <Picker Title="Estado de revisión"
+                                        ItemsSource="{Binding EstadosDisponibles}"
+                                        SelectedItem="{Binding EstadoRevision}" />
+                                <Entry Placeholder="Observación (opcional)"
+                                       Text="{Binding Observacion}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="{Binding MensajeError}" TextColor="IndianRed" IsVisible="{Binding TieneError}" />
+            <Label Text="{Binding MensajeInfo}" TextColor="DarkGreen" IsVisible="{Binding TieneInfo}" />
+
+            <Button Text="Guardar avance" Command="{Binding GuardarAvanceCommand}" />
+            <Button Text="Volver sin guardar" Command="{Binding VolverCommand}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

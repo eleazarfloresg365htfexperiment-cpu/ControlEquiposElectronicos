@@ -1,15 +1,216 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="ControlEquiposElectronicos.Views.Checklist.PlantillasChecklistPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ControlEquiposElectronicos.Views.Checklist.PlantillasChecklistPage"
-    Title="Plantillas de checklist">
+    xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels.Checklist"
+    x:DataType="vm:PlantillasChecklistViewModel"
+    Title="{Binding Title}"
+    BackgroundColor="{StaticResource ChecklistPageBg}">
 
-    <VerticalStackLayout Padding="20" Spacing="12">
-        <Label Text="Plantillas de checklist"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <ContentPage.Resources>
+        <DataTemplate x:Key="PlantillaChecklistItemTemplate" x:DataType="vm:PlantillaChecklistItem">
+            <Border Padding="14" Margin="0,0,0,12"
+                    Stroke="{StaticResource Gray200}"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="White">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="16"
+                           TextColor="{StaticResource ChecklistHeader}" />
+                    <Label Text="{Binding TipoEquipo, StringFormat='Tipo: {0}'}" FontSize="13" />
+                    <Label Text="{Binding CategoriaEquipo, StringFormat='Categoría: {0}'}"
+                           FontSize="12" TextColor="{StaticResource Gray500}" />
+                    <Label Text="{Binding TotalAspectos, StringFormat='{0} aspectos de revisión'}"
+                           FontSize="12" TextColor="{StaticResource ChecklistBlue}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Aspectos}" Spacing="6" Padding="8,4,0,0">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:PlantillaAspectoItem">
+                                <Border Padding="10" BackgroundColor="#F8F9FC" StrokeShape="RoundRectangle 8" Stroke="{StaticResource Gray200}">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="13" />
+                                        <Label Text="{Binding Descripcion}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                        <Label Text="{Binding ObligatorioTexto}" FontSize="11" TextColor="{StaticResource ChecklistBlue}" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+    </ContentPage.Resources>
 
-        <Label Text="Pantalla base pendiente de diseño e integración con la API." />
-    </VerticalStackLayout>
+    <Grid>
+
+        <Grid RowDefinitions="Auto,*,Auto" Padding="20" RowSpacing="12">
+
+            <VerticalStackLayout Grid.Row="0" Spacing="12">
+                <Label Text="Plantillas de checklist"
+                       FontSize="24" FontAttributes="Bold"
+                       TextColor="{StaticResource ChecklistHeader}" />
+                <Label Text="Define los aspectos de revisión por tipo de equipo"
+                       FontSize="13" TextColor="{StaticResource Gray500}" />
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Button Grid.Column="0"
+                            Text="← Volver"
+                            Command="{Binding VolverCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource ChecklistBlue}"
+                            BorderColor="{StaticResource ChecklistBlue}"
+                            BorderWidth="1"
+                            CornerRadius="8"
+                            HorizontalOptions="Start"
+                            Padding="14,8" />
+                    <Button Grid.Column="1"
+                            Text="+ Nueva plantilla"
+                            Command="{Binding AbrirCrearCommand}"
+                            BackgroundColor="{StaticResource ChecklistGreen}"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            Padding="16,10" />
+                </Grid>
+
+                <Label Text="{Binding MensajeError}"
+                       TextColor="{StaticResource ChecklistRed}"
+                       FontSize="13"
+                       IsVisible="{Binding TieneError}" />
+                <Label Text="{Binding MensajeInfo}"
+                       TextColor="{StaticResource ChecklistBlue}"
+                       FontSize="13"
+                       IsVisible="{Binding TieneInfo}" />
+            </VerticalStackLayout>
+
+            <RefreshView Grid.Row="1"
+                         IsRefreshing="{Binding IsBusy}"
+                         Command="{Binding CargarCommand}">
+                <CollectionView ItemsSource="{Binding Plantillas}"
+                                ItemTemplate="{StaticResource PlantillaChecklistItemTemplate}"
+                                EmptyView="No hay plantillas. Pulsa «Nueva plantilla» para crear una." />
+            </RefreshView>
+
+            <ActivityIndicator Grid.Row="1"
+                               IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{StaticResource ChecklistBlue}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Panel crear plantilla -->
+        <Grid IsVisible="{Binding MostrarFormularioCrear}"
+              BackgroundColor="#80000000"
+              Padding="24,40">
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{StaticResource Gray200}"
+                    Padding="0"
+                    MaximumHeightRequest="620"
+                    VerticalOptions="Center">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,16,16,8">
+                        <Label Grid.Column="0"
+                               Text="Nueva plantilla"
+                               FontSize="20" FontAttributes="Bold"
+                               TextColor="{StaticResource ChecklistHeader}"
+                               VerticalOptions="Center" />
+                        <Button Grid.Column="1"
+                                Text="✕"
+                                Command="{Binding CerrarCrearCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource Gray500}"
+                                FontSize="18"
+                                WidthRequest="40" HeightRequest="40" />
+                    </Grid>
+
+                    <ScrollView Grid.Row="1" Padding="20,0">
+                        <VerticalStackLayout Spacing="14">
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Nombre *" FontAttributes="Bold" FontSize="13" />
+                                <Entry Text="{Binding NombrePlantilla}"
+                                       Placeholder="Ej. Revisión PC laboratorio" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Descripción" FontAttributes="Bold" FontSize="13" />
+                                <Editor Text="{Binding DescripcionPlantilla}"
+                                        Placeholder="Detalle opcional de la plantilla"
+                                        AutoSize="TextChanges"
+                                        MinimumHeightRequest="60" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Categoría (opcional)" FontAttributes="Bold" FontSize="13" />
+                                <Picker Title="Sin categoría"
+                                        ItemsSource="{Binding Categorias}"
+                                        ItemDisplayBinding="{Binding Nombre}"
+                                        SelectedItem="{Binding CategoriaSeleccionada}" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Tipo de equipo *" FontAttributes="Bold" FontSize="13" />
+                                <Picker Title="Selecciona tipo"
+                                        ItemsSource="{Binding TiposEquipo}"
+                                        ItemDisplayBinding="{Binding Nombre}"
+                                        SelectedItem="{Binding TipoSeleccionado}" />
+                            </VerticalStackLayout>
+
+                            <Label Text="Aspectos de revisión"
+                                   FontAttributes="Bold" FontSize="15"
+                                   TextColor="{StaticResource ChecklistHeader}" />
+
+                            <CollectionView ItemsSource="{Binding AspectosNuevos}"
+                                            SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:NuevoAspectoFormItem">
+                                        <Border Padding="12" Margin="0,0,0,10"
+                                                Stroke="{StaticResource Gray200}"
+                                                StrokeShape="RoundRectangle 10">
+                                            <VerticalStackLayout Spacing="8">
+                                                <Entry Text="{Binding Nombre}"
+                                                       Placeholder="Nombre del aspecto *" />
+                                                <Entry Text="{Binding Descripcion}"
+                                                       Placeholder="Descripción (opcional)" />
+                                                <HorizontalStackLayout Spacing="8">
+                                                    <Label Text="Obligatorio" VerticalOptions="Center" FontSize="13" />
+                                                    <Switch IsToggled="{Binding EsObligatorio}"
+                                                            OnColor="{StaticResource ChecklistGreen}" />
+                                                </HorizontalStackLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                            <Button Text="+ Agregar otro aspecto"
+                                    Command="{Binding AgregarAspectoCommand}"
+                                    BackgroundColor="#E8EDFF"
+                                    TextColor="{StaticResource ChecklistBlue}"
+                                    CornerRadius="8" />
+                        </VerticalStackLayout>
+                    </ScrollView>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="12" Padding="20,12,20,20">
+                        <Button Grid.Column="0"
+                                Text="Cancelar"
+                                Command="{Binding CerrarCrearCommand}"
+                                BackgroundColor="#F5F5F5"
+                                TextColor="{StaticResource Gray500}"
+                                CornerRadius="8" />
+                        <Button Grid.Column="1"
+                                Text="Guardar plantilla"
+                                Command="{Binding GuardarPlantillaCommand}"
+                                BackgroundColor="{StaticResource ChecklistGreen}"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="8" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+
 </ContentPage>
