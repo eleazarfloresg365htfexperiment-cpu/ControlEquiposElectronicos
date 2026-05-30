@@ -13,8 +13,20 @@ public class UsuarioActualService : IUsuarioActualService
 
     public int ObtenerUsuarioId()
     {
-        // Temporal mientras no usamos autenticación con token/JWT.
-        // Por ahora usamos el usuario de prueba con Id = 1.
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext == null)
+            return 1;
+
+        if (httpContext.Request.Headers.TryGetValue("X-Usuario-Id", out var usuarioIdHeader))
+        {
+            var valor = usuarioIdHeader.FirstOrDefault();
+
+            if (int.TryParse(valor, out var usuarioId) && usuarioId > 0)
+                return usuarioId;
+        }
+
+        // Temporal para pruebas desde Swagger/Postman.
         return 1;
     }
 

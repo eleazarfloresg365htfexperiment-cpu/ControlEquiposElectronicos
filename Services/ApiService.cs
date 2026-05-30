@@ -10,9 +10,12 @@ public class ApiService : IApiService
 {
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly SesionService _sesionService;
 
-    public ApiService()
+    public ApiService(SesionService sesionService)
     {
+        _sesionService = sesionService;
+
         _httpClient = new HttpClient
         {
             BaseAddress = new Uri(ApiConstants.BaseUrl)
@@ -25,15 +28,35 @@ public class ApiService : IApiService
         };
     }
 
+    private void AgregarUsuarioActualHeader()
+    {
+        _httpClient.DefaultRequestHeaders.Remove("X-Usuario-Id");
+
+        if (_sesionService.UsuarioActual == null)
+            return;
+
+        _httpClient.DefaultRequestHeaders.Add(
+            "X-Usuario-Id",
+            _sesionService.UsuarioActual.UsuarioId.ToString());
+    }
+
     public async Task<T?> GetAsync<T>(string endpoint)
     {
         try
         {
+            AgregarUsuarioActualHeader();
+
             var response = await _httpClient.GetAsync(endpoint);
-            if (!response.IsSuccessStatusCode) return default;
+
+            if (!response.IsSuccessStatusCode)
+                return default;
+
             return await response.Content.ReadFromJsonAsync<T>(_jsonOptions);
         }
-        catch { return default; }
+        catch
+        {
+            return default;
+        }
     }
 
     public async Task<TResponse?> PostAsync<TRequest, TResponse>(string endpoint, TRequest data)
@@ -43,13 +66,18 @@ public class ApiService : IApiService
     }
 
     public async Task<(TResponse? Response, string? ErrorMessage)> PostWithErrorAsync<TRequest, TResponse>(
-        string endpoint, TRequest data)
+        string endpoint,
+        TRequest data)
     {
         try
         {
+            AgregarUsuarioActualHeader();
+
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+
             var response = await _httpClient.PostAsync(endpoint, content);
+
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
@@ -57,6 +85,7 @@ public class ApiService : IApiService
             }
 
             var body = await response.Content.ReadAsStringAsync();
+
             if (string.IsNullOrWhiteSpace(body))
                 return (default, null);
 
@@ -73,10 +102,15 @@ public class ApiService : IApiService
     {
         try
         {
+            AgregarUsuarioActualHeader();
+
             var response = await _httpClient.PutAsJsonAsync(endpoint, data, _jsonOptions);
             return response.IsSuccessStatusCode;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     public async Task<bool> PatchAsync<TRequest>(string endpoint, TRequest data)
@@ -85,25 +119,33 @@ public class ApiService : IApiService
         return exito;
     }
 
-    // Devuelve éxito + el mensaje de error exacto que manda la API (ej: "El usuario ya tiene ese rol.")
     public async Task<(bool Exito, string? ErrorMessage)> PatchWithErrorAsync<TRequest>(
-        string endpoint, TRequest data)
+        string endpoint,
+        TRequest data)
     {
         try
         {
+            AgregarUsuarioActualHeader();
+
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var request = new HttpRequestMessage(HttpMethod.Patch, endpoint) { Content = content };
+
+            var request = new HttpRequestMessage(HttpMethod.Patch, endpoint)
+            {
+                Content = content
+            };
 
             var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
+
                 return (false, string.IsNullOrWhiteSpace(errorBody)
                     ? $"Error HTTP {(int)response.StatusCode}"
                     : errorBody);
             }
+
             return (true, null);
         }
         catch (Exception ex)
@@ -116,10 +158,15 @@ public class ApiService : IApiService
     {
         try
         {
+            AgregarUsuarioActualHeader();
+
             var response = await _httpClient.DeleteAsync(endpoint);
             return response.IsSuccessStatusCode;
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     private static string ExtraerMensajeError(string errorBody, System.Net.HttpStatusCode statusCode)
@@ -130,12 +177,19 @@ public class ApiService : IApiService
         try
         {
             using var doc = JsonDocument.Parse(errorBody);
+
             if (doc.RootElement.TryGetProperty("mensaje", out var mensaje))
                 return mensaje.GetString() ?? errorBody;
+
+            if (doc.RootElement.TryGetProperty("message", out var message))
+                return message.GetString() ?? errorBody;
+
+            if (doc.RootElement.TryGetProperty("title", out var title))
+                return title.GetString() ?? errorBody;
         }
         catch
         {
-            // usar texto crudo
+            // Si no es JSON válido, se devuelve el texto original.
         }
 
         return errorBody;
