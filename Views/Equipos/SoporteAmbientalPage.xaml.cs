@@ -1,41 +1,19 @@
-﻿namespace ControlEquiposElectronicos.Views.Equipos;
+﻿using ControlEquiposElectronicos.ViewModels.Equipos;
+
+namespace ControlEquiposElectronicos.Views.Equipos;
 
 public partial class SoporteAmbientalPage : ContentPage
 {
-    public SoporteAmbientalPage()
+    public SoporteAmbientalPage(SoporteAmbientalViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
-    private async void OnRegistrarAmbientador(object sender, EventArgs e)
+    protected override async void OnAppearing()
     {
-        await DisplayAlert(
-            "Ambientador",
-            "Registrar Ambientador funcionando",
-            "OK");
-    }
-
-    private async void OnRegistrarSoporte(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "Soporte",
-            "Registrar Soporte funcionando",
-            "OK");
-    }
-
-    private async void OnEditarDetalle(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "Detalle",
-            "Editar detalle funcionando",
-            "OK");
-    }
-
-    private async void OnReportarProblema(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "Problema",
-            "Reporte funcionando",
-            "OK");
+        base.OnAppearing();
+        if (BindingContext is SoporteAmbientalViewModel vm)
+            await vm.CargarAsync();
     }
 }

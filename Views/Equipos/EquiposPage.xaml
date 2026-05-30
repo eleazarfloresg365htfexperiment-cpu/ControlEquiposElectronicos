@@ -3,6 +3,7 @@
     x:Class="ControlEquiposElectronicos.Views.Equipos.EquiposPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dto="clr-namespace:ControlEquiposElectronicos.DTOs.Equipos"
     Title=""
     Shell.NavBarIsVisible="False"
     BackgroundColor="#F5F5F5">
@@ -232,54 +233,62 @@
                                 <Label Text="Routers · Switches · Repetidores" FontSize="12" TextColor="#C4B5FD"/>
                             </VerticalStackLayout>
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                                <Button Text="+ Router" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarRouter"/>
-                                <Button Text="+ Switch" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarSwitch"/>
-                                <Button Text="+ Repetidor" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarRepetidor"/>
+                                <Button Text="+ Router" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarRouterCommand}"/>
+                                <Button Text="+ Switch" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarSwitchCommand}"/>
+                                <Button Text="+ Repetidor" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarRepetidorCommand}"/>
                             </HorizontalStackLayout>
                         </Grid>
                     </Border>
                     <!-- Buscador -->
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="14,10">
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Entry Placeholder="Buscar por código, ubicación o tipo..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
-                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12"/>
+                            <Entry Text="{Binding BusquedaTexto}" Placeholder="Buscar por código, ubicación o tipo..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
+                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12" Command="{Binding BuscarCommand}"/>
                         </Grid>
                     </Border>
-                    <!-- Tarjetas resumen -->
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
                         <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                             <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf6ff;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Routers" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                                <Label Text="Routers" FontSize="13" TextColor="#9AA3BE"/>
+                                <Label Text="{Binding TotalRouters}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
                             </VerticalStackLayout>
                         </Border>
                         <Border Grid.Column="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                             <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf1e0;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Switches" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                                <Label Text="Switches" FontSize="13" TextColor="#9AA3BE"/>
+                                <Label Text="{Binding TotalSwitches}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
                             </VerticalStackLayout>
                         </Border>
                         <Border Grid.Column="2" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                             <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf519;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Repetidores" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                                <Label Text="Repetidores" FontSize="13" TextColor="#9AA3BE"/>
+                                <Label Text="{Binding TotalRepetidores}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
                     <Label Text="Dispositivos registrados" FontSize="16" FontAttributes="Bold" TextColor="#1A1F3A"/>
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                        <Label Text="No hay dispositivos registrados." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
-                    </Border>
-                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13"/>
+                    <CollectionView ItemsSource="{Binding Equipos}" SelectionMode="None" HeightRequest="220">
+                        <CollectionView.EmptyView>
+                            <Label Text="No hay dispositivos registrados." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="dto:EquipoListadoDto">
+                                <Border Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="12" Margin="0,4">
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="13"/>
+                                            <Label Text="{Binding Codigo}" FontSize="11" TextColor="#9AA3BE"/>
+                                            <Label Text="{Binding Ubicacion}" FontSize="11" TextColor="#5A6282"/>
+                                        </VerticalStackLayout>
+                                        <Button Grid.Column="1" Text="Detalle" FontSize="11"
+                                                Command="{Binding Source={x:Reference ContenidoRed}, Path=BindingContext.VerDetalleCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13" Command="{Binding ActualizarCommand}"/>
                 </VerticalStackLayout>
             </ScrollView>
 
@@ -296,42 +305,41 @@
                                 <Label Text="Impresoras · Cartuchos · Historial" FontSize="12" TextColor="#C4B5FD"/>
                             </VerticalStackLayout>
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                                <Button Text="+ Impresora" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarImpresora"/>
-                                <Button Text="+ Cartucho" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarCartucho"/>
+                                <Button Text="+ Impresora" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarImpresoraCommand}"/>
+                                <Button Text="+ Cartucho" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarCartuchoCommand}"/>
                             </HorizontalStackLayout>
                         </Grid>
                     </Border>
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="14,10">
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Entry Placeholder="Buscar impresora..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
-                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12"/>
+                            <Entry Text="{Binding BusquedaTexto}" Placeholder="Buscar impresora..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
+                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12" Command="{Binding BuscarCommand}"/>
                         </Grid>
                     </Border>
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                             <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf02f;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Impresoras" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
-                            </VerticalStackLayout>
-                        </Border>
-                        <Border Grid.Column="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                            <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf305;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Cambios cartucho" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                                <Label Text="Impresoras" FontSize="13" TextColor="#9AA3BE"/>
+                                <Label Text="{Binding TotalImpresoras}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
-                    <Label Text="Impresoras registradas" FontSize="16" FontAttributes="Bold" TextColor="#1A1F3A"/>
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                        <Label Text="No hay impresoras registradas." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
-                    </Border>
-                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13"/>
+                    <CollectionView ItemsSource="{Binding Equipos}" SelectionMode="None" HeightRequest="220">
+                        <CollectionView.EmptyView>
+                            <Label Text="No hay impresoras registradas." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="dto:EquipoListadoDto">
+                                <Border Stroke="#E2E6F0" Padding="12" Margin="0,4">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Codigo}" FontSize="11" TextColor="#9AA3BE"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13" Command="{Binding ActualizarCommand}"/>
                 </VerticalStackLayout>
             </ScrollView>
 
@@ -348,42 +356,39 @@
                                 <Label Text="UPS · Baterías · Mantenimientos eléctricos" FontSize="12" TextColor="#C4B5FD"/>
                             </VerticalStackLayout>
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                                <Button Text="+ UPS" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarUps"/>
-                                <Button Text="+ Mantenimiento" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarMantenimientoElectrico"/>
+                                <Button Text="+ UPS" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarUpsCommand}"/>
+                                <Button Text="+ Mantenimiento" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarMantenimientoCommand}"/>
                             </HorizontalStackLayout>
                         </Grid>
                     </Border>
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="14,10">
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Entry Placeholder="Buscar UPS por código o ubicación..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
-                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12"/>
+                            <Entry Text="{Binding BusquedaTexto}" Placeholder="Buscar UPS por código o ubicación..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
+                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12" Command="{Binding BuscarCommand}"/>
                         </Grid>
                     </Border>
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                        <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                            <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf0e7;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="UPS registradas" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
-                            </VerticalStackLayout>
-                        </Border>
-                        <Border Grid.Column="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                            <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf0ad;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Mantenimientos" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
-                            </VerticalStackLayout>
-                        </Border>
-                    </Grid>
-                    <Label Text="UPS registradas" FontSize="16" FontAttributes="Bold" TextColor="#1A1F3A"/>
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                        <Label Text="No hay UPS registradas." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
+                        <VerticalStackLayout>
+                            <Label Text="UPS registradas" FontSize="13" TextColor="#9AA3BE"/>
+                            <Label Text="{Binding TotalUps}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                        </VerticalStackLayout>
                     </Border>
-                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13"/>
+                    <CollectionView ItemsSource="{Binding Equipos}" SelectionMode="None" HeightRequest="220">
+                        <CollectionView.EmptyView>
+                            <Label Text="No hay UPS registradas." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="dto:EquipoListadoDto">
+                                <Border Stroke="#E2E6F0" Padding="12" Margin="0,4">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Estado}" FontSize="11" TextColor="#5A6282"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13" Command="{Binding ActualizarCommand}"/>
                 </VerticalStackLayout>
             </ScrollView>
 
@@ -400,42 +405,47 @@
                                 <Label Text="Aire acondicionado · Ambientadores · Mantenimiento" FontSize="12" TextColor="#C4B5FD"/>
                             </VerticalStackLayout>
                             <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                                <Button Text="+ Aire" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarAire"/>
-                                <Button Text="+ Ambientador" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Clicked="OnRegistrarAmbientador"/>
+                                <Button Text="+ Aire" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarAireCommand}"/>
+                                <Button Text="+ Ambientador" BackgroundColor="White" TextColor="#512BD4" FontSize="12" CornerRadius="8" FontAttributes="Bold" Command="{Binding RegistrarAmbientadorCommand}"/>
                             </HorizontalStackLayout>
                         </Grid>
                     </Border>
                     <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="14,10">
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Entry Placeholder="Buscar por código o ubicación..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
-                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12"/>
+                            <Entry Text="{Binding BusquedaTexto}" Placeholder="Buscar por código o ubicación..." PlaceholderColor="#9AA3BE" BackgroundColor="Transparent"/>
+                            <Button Grid.Column="1" Text="Buscar" BackgroundColor="#512BD4" TextColor="White" CornerRadius="8" FontSize="12" Command="{Binding BuscarCommand}"/>
                         </Grid>
                     </Border>
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                             <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf2c9;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Aires acondicionados" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                                <Label Text="Aires acondicionados" FontSize="13" TextColor="#9AA3BE"/>
+                                <Label Text="{Binding TotalAires}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
                             </VerticalStackLayout>
                         </Border>
                         <Border Grid.Column="1" BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
                             <VerticalStackLayout>
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label FontFamily="FontAwesome" Text="&#xf72e;" FontSize="12" TextColor="#512BD4"/>
-                                    <Label Text="Ambientadores" FontSize="13" TextColor="#9AA3BE"/>
-                                </HorizontalStackLayout>
-                                <Label Text="0" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
+                                <Label Text="Ambientadores" FontSize="13" TextColor="#9AA3BE"/>
+                                <Label Text="{Binding TotalAmbientadores}" FontSize="28" FontAttributes="Bold" TextColor="#512BD4"/>
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
-                    <Label Text="Equipos ambientales" FontSize="16" FontAttributes="Bold" TextColor="#1A1F3A"/>
-                    <Border BackgroundColor="White" Stroke="#E2E6F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
-                        <Label Text="No hay equipos ambientales registrados." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
-                    </Border>
-                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13"/>
+                    <CollectionView ItemsSource="{Binding Equipos}" SelectionMode="None" HeightRequest="220">
+                        <CollectionView.EmptyView>
+                            <Label Text="No hay equipos ambientales registrados." FontSize="13" TextColor="#9AA3BE" HorizontalOptions="Center" Padding="0,20"/>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="dto:EquipoListadoDto">
+                                <Border Stroke="#E2E6F0" Padding="12" Margin="0,4">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Tipo}" FontSize="11" TextColor="#9AA3BE"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="↻ Actualizar lista" BackgroundColor="#F0EBFF" TextColor="#512BD4" CornerRadius="10" FontSize="13" Command="{Binding ActualizarCommand}"/>
                 </VerticalStackLayout>
             </ScrollView>
 

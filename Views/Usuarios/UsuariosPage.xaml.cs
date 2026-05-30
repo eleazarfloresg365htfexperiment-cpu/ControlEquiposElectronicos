@@ -11,14 +11,11 @@ public partial class UsuariosPage : ContentPage
     private List<UsuarioListadoDto> _todosLosUsuarios = new();
     private string _rolSeleccionado = string.Empty;
 
-    public UsuariosPage()
+    public UsuariosPage(UsuariosViewModel viewModel, IUsuarioApiService usuarioApi)
     {
         InitializeComponent();
-
-        _usuarioApi = IPlatformApplication.Current!.Services
-            .GetRequiredService<IUsuarioApiService>();
-
-        _viewModel = new UsuariosViewModel(_usuarioApi);
+        _viewModel = viewModel;
+        _usuarioApi = usuarioApi;
         BindingContext = _viewModel;
     }
 
@@ -28,21 +25,29 @@ public partial class UsuariosPage : ContentPage
         await _viewModel.CargarAsync();
         _todosLosUsuarios = _viewModel.Usuarios.ToList();
         ActualizarEstadisticas(_todosLosUsuarios);
+        UsuariosCollection.ItemsSource = _todosLosUsuarios;
     }
 
-    // ── Estadísticas ───────────────────────────────────────────────
     private void ActualizarEstadisticas(List<UsuarioListadoDto> lista)
     {
         LblTotal.Text = lista.Count.ToString();
-        LblActivos.Text = lista.Count(u => u.Activo).ToString();
-        LblInactivos.Text = lista.Count(u => !u.Activo).ToString();
-        LblAdmins.Text = lista.Count(u =>
-            u.Rol.Equals("Administrador", StringComparison.OrdinalIgnoreCase) ||
-            u.Rol.Equals("Admin", StringComparison.OrdinalIgnoreCase) ||
-            u.Rol.Equals("OP", StringComparison.OrdinalIgnoreCase)).ToString();
+        LblAdmins.Text = lista.Count(u => EsRolAdministrador(u.Rol)).ToString();
+        LblTecnicos.Text = lista.Count(u => EsRolTecnico(u.Rol)).ToString();
+        LblConsulta.Text = lista.Count(u => EsRolConsulta(u.Rol)).ToString();
     }
 
-    // ── Búsqueda ───────────────────────────────────────────────────
+    private static bool EsRolAdministrador(string rol) =>
+        rol.Equals("Administrador", StringComparison.OrdinalIgnoreCase) ||
+        rol.Equals("Admin", StringComparison.OrdinalIgnoreCase) ||
+        rol.Equals("OP", StringComparison.OrdinalIgnoreCase);
+
+    private static bool EsRolTecnico(string rol) =>
+        rol.Equals("Tecnico", StringComparison.OrdinalIgnoreCase) ||
+        rol.Equals("Técnico", StringComparison.OrdinalIgnoreCase);
+
+    private static bool EsRolConsulta(string rol) =>
+        rol.Equals("Consulta", StringComparison.OrdinalIgnoreCase);
+
     private void OnBusquedaTextChanged(object? sender, TextChangedEventArgs e)
     {
         var texto = (e.NewTextValue ?? string.Empty).Trim().ToLower();
@@ -54,7 +59,6 @@ public partial class UsuariosPage : ContentPage
                 u.Rol.ToLower().Contains(texto)).ToList();
     }
 
-    // ── Panel: abrir / cerrar ──────────────────────────────────────
     private void OnNuevoUsuarioTapped(object? sender, TappedEventArgs e)
     {
         LimpiarFormulario();
@@ -89,7 +93,6 @@ public partial class UsuariosPage : ContentPage
         }
     }
 
-    // ── Selección de rol ───────────────────────────────────────────
     private void OnRolAdministrador(object? sender, EventArgs e)
     {
         _rolSeleccionado = "Administrador";
@@ -116,7 +119,6 @@ public partial class UsuariosPage : ContentPage
         elegido.BorderColor = Color.FromArgb("#512BD4");
     }
 
-    // ── Registrar usuario ──────────────────────────────────────────
     private async void OnRegistrarClicked(object? sender, EventArgs e)
     {
         var nombre = NombreEntry.Text?.Trim() ?? string.Empty;
@@ -166,10 +168,10 @@ public partial class UsuariosPage : ContentPage
             PanelOverlay.IsVisible = false;
             LimpiarFormulario();
 
-            // Recargar lista y estadísticas
             await _viewModel.CargarAsync();
             _todosLosUsuarios = _viewModel.Usuarios.ToList();
             ActualizarEstadisticas(_todosLosUsuarios);
+            UsuariosCollection.ItemsSource = _todosLosUsuarios;
         }
         else
         {
@@ -179,7 +181,6 @@ public partial class UsuariosPage : ContentPage
         }
     }
 
-    // ── Navegación: permisos y roles (rutas existentes) ────────────
     private async void OnPermisosRolTapped(object? sender, TappedEventArgs e)
         => await Shell.Current.GoToAsync("PermisosRol");
 

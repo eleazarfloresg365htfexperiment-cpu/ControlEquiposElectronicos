@@ -1,38 +1,27 @@
-﻿using ControlEquiposElectronicos.Services;
+﻿using ControlEquiposElectronicos.ViewModels;
 
 namespace ControlEquiposElectronicos.Views.Configuracion;
 
 public partial class ConfiguracionPage : ContentPage
 {
-    private readonly SesionService _sesion;
+    private readonly ConfiguracionViewModel _viewModel;
 
-    public ConfiguracionPage()
+    public ConfiguracionPage(ConfiguracionViewModel viewModel)
     {
         InitializeComponent();
-        _sesion = IPlatformApplication.Current!.Services.GetRequiredService<SesionService>();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        VerificarAcceso();
-    }
-
-    private void VerificarAcceso()
-    {
-        var usuario = _sesion.UsuarioActual;
-        var rol = usuario?.Rol;
-        bool esAdminOSuperior = rol == "Administrador" || rol == "OP";
-
-        ContenidoConfig.IsVisible = esAdminOSuperior;
-        AccesoRestringido.IsVisible = !esAdminOSuperior;
-
-        if (esAdminOSuperior && usuario != null)
-        {
-            NombreLabel.Text = usuario.Nombre;
-            RolLabel.Text = usuario.Rol;
-            SeccionAuditoria.IsVisible = rol == "OP";
-        }
+        _viewModel.Refrescar();
+        ContenidoConfig.IsVisible = _viewModel.TieneAcceso;
+        AccesoRestringido.IsVisible = !_viewModel.TieneAcceso;
+        NombreLabel.Text = _viewModel.NombreUsuario;
+        RolLabel.Text = _viewModel.RolUsuario;
+        SeccionAuditoria.IsVisible = _viewModel.MostrarAuditoria;
     }
 
     private async void OnPermisosClicked(object? sender, EventArgs e)

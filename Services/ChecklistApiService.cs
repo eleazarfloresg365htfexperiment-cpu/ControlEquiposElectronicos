@@ -63,7 +63,16 @@ public class ChecklistApiService : IChecklistApiService
 
     public async Task<PlantillaChecklistDto?> CrearPlantillaAsync(CrearPlantillaChecklistDto dto)
     {
-        return await _apiService.PostAsync<CrearPlantillaChecklistDto, PlantillaChecklistDto>("PlantillasChecklist", dto);
+        var (plantilla, _) = await CrearPlantillaConDetalleAsync(dto);
+        return plantilla;
+    }
+
+    public async Task<(PlantillaChecklistDto? Plantilla, string? ErrorMessage)> CrearPlantillaConDetalleAsync(
+        CrearPlantillaChecklistDto dto)
+    {
+        return await _apiService.PostWithErrorAsync<CrearPlantillaChecklistDto, PlantillaChecklistDto>(
+            "PlantillasChecklist",
+            dto);
     }
 
     public async Task<PlantillaChecklistItemDto?> AgregarItemPlantillaAsync(int plantillaId, CrearPlantillaChecklistItemDto dto)

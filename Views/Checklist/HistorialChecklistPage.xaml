@@ -37,7 +37,7 @@
             </CollectionView>
         </RefreshView>
 
-        <Button Grid.Row="2" Text="Volver" Clicked="OnVolverClicked" />
+        <Button Grid.Row="2" Text="Volver" Command="{Binding VolverCommand}" />
         <ActivityIndicator Grid.Row="1"
                            IsRunning="{Binding IsBusy}"
                            IsVisible="{Binding IsBusy}"

@@ -34,7 +34,7 @@
             <!-- ═══════════════════════════════════════════════════════ -->
             <!-- TARJETAS DE RESUMEN                                     -->
             <!-- ═══════════════════════════════════════════════════════ -->
-            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16" Margin="0,0,0,32">
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16" Margin="0,0,0,32">
 
                 <!-- Equipos -->
                 <Border x:Name="TarjetaEquipos"
@@ -135,6 +135,39 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <!-- Checklist -->
+                <Border x:Name="TarjetaChecklist"
+                        Grid.Column="3"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="22,20">
+                    <Border.Shadow>
+                        <Shadow Brush="#1A7F77DD" Offset="0,4" Radius="16" Opacity="1" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="14">
+                        <Border WidthRequest="46" HeightRequest="46"
+                                BackgroundColor="#EEECFF"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0">
+                            <Label FontFamily="FontAwesome" Text="&#xf46c;"
+                                   TextColor="#7F77DD" FontSize="19"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding TotalChecklists}"
+                                   FontSize="34" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" />
+                            <Label Text="Checklists técnicos"
+                                   FontSize="13" TextColor="#8A8FA8" />
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="3" WidthRequest="36"
+                                 BackgroundColor="#7F77DD"
+                                 HorizontalOptions="Start"
+                                 CornerRadius="2" />
+                    </VerticalStackLayout>
+                </Border>
+
             </Grid>
 
             <!-- ═══════════════════════════════════════════════════════ -->
@@ -151,7 +184,7 @@
             </Grid>
 
             <!-- Grid de accesos: 3 columnas x 2 filas -->
-            <Grid ColumnDefinitions="*,*,*"
+            <Grid ColumnDefinitions="*,*,*,*"
                   RowDefinitions="Auto,Auto"
                   ColumnSpacing="16"
                   RowSpacing="16">
@@ -260,7 +293,7 @@
 
                 <!-- Usuarios -->
                 <Border x:Name="AccesoUsuarios"
-                        Grid.Row="1" Grid.Column="0"
+                        Grid.Row="1" Grid.Column="3"
                         BackgroundColor="White"
                         StrokeShape="RoundRectangle 16"
                         StrokeThickness="0"
@@ -292,9 +325,65 @@
                     </Grid>
                 </Border>
 
+                <!-- Checklist -->
+                <Border x:Name="AccesoChecklist"
+                        Grid.Row="1" Grid.Column="0"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnChecklistTapped" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0" WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#EEECFF" StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf46c;"
+                                   TextColor="#7F77DD" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Checklist" FontSize="15" FontAttributes="Bold" TextColor="#1A1A2E" />
+                            <Label Text="Revisiones técnicas" FontSize="12" TextColor="#8A8FA8" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Consultas -->
+                <Border x:Name="AccesoConsultas"
+                        Grid.Row="1" Grid.Column="1"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="0"
+                        Padding="20,18">
+                    <Border.Shadow>
+                        <Shadow Brush="#10000000" Offset="0,2" Radius="12" Opacity="1" />
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnConsultasTapped" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Border Grid.Column="0" WidthRequest="48" HeightRequest="48"
+                                BackgroundColor="#E8F8F0" StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0" VerticalOptions="Center">
+                            <Label FontFamily="FontAwesome" Text="&#xf002;"
+                                   TextColor="#2ECB8A" FontSize="20"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                            <Label Text="Consultas" FontSize="15" FontAttributes="Bold" TextColor="#1A1A2E" />
+                            <Label Text="Búsqueda avanzada" FontSize="12" TextColor="#8A8FA8" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
                 <!-- Configuración -->
                 <Border x:Name="AccesoConfiguracion"
-                        Grid.Row="1" Grid.Column="1"
+                        Grid.Row="1" Grid.Column="2"
                         BackgroundColor="White"
                         StrokeShape="RoundRectangle 16"
                         StrokeThickness="0"

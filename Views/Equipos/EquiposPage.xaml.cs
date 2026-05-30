@@ -1,35 +1,59 @@
 ﻿using ControlEquiposElectronicos.DTOs.Equipos;
 using ControlEquiposElectronicos.ViewModels;
+using ControlEquiposElectronicos.ViewModels.Equipos;
 
 namespace ControlEquiposElectronicos.Views.Equipos;
 
 public partial class EquiposPage : ContentPage
 {
     private readonly EquiposViewModel _viewModel;
+    private readonly RedViewModel _redViewModel;
+    private readonly ImpresionViewModel _impresionViewModel;
+    private readonly ElectricidadViewModel _electricidadViewModel;
+    private readonly SoporteAmbientalViewModel _ambientalViewModel;
     private Border? _tabActivo;
 
-    // Contenidos de cada tab
     private View[] _contenidos = null!;
     private Border[] _tabs = null!;
 
-    public EquiposPage(EquiposViewModel viewModel)
+    public EquiposPage(
+        EquiposViewModel viewModel,
+        RedViewModel redViewModel,
+        ImpresionViewModel impresionViewModel,
+        ElectricidadViewModel electricidadViewModel,
+        SoporteAmbientalViewModel ambientalViewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
-        BindingContext = _viewModel;
+        _redViewModel = redViewModel;
+        _impresionViewModel = impresionViewModel;
+        _electricidadViewModel = electricidadViewModel;
+        _ambientalViewModel = ambientalViewModel;
 
-        _contenidos = new View[] { ContenidoGeneral, ContenidoRed, ContenidoImpresion, ContenidoElectricidad, ContenidoSoporteAmbiental };
-        _tabs = new Border[] { TabGeneral, TabRed, TabImpresion, TabElectricidad, TabSoporteAmbiental };
+        BindingContext = _viewModel;
+        ContenidoRed.BindingContext = _redViewModel;
+        ContenidoImpresion.BindingContext = _impresionViewModel;
+        ContenidoElectricidad.BindingContext = _electricidadViewModel;
+        ContenidoSoporteAmbiental.BindingContext = _ambientalViewModel;
+
+        _contenidos = [ContenidoGeneral, ContenidoRed, ContenidoImpresion, ContenidoElectricidad, ContenidoSoporteAmbiental];
+        _tabs = [TabGeneral, TabRed, TabImpresion, TabElectricidad, TabSoporteAmbiental];
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        try { await _viewModel.CargarEquiposAsync(); }
-        catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
+        try
+        {
+            await _viewModel.CargarEquiposAsync();
+            await _redViewModel.CargarAsync();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
     }
 
-    // ── Helpers de tabs ────────────────────────────────────────────
     private void MostrarTab(int index)
     {
         for (int i = 0; i < _contenidos.Length; i++)
@@ -47,16 +71,34 @@ public partial class EquiposPage : ContentPage
                         lbl.TextColor = activo ? Colors.White
                             : (lbl.FontFamily == "FontAwesome" ? Color.FromArgb("#512BD4") : Color.FromArgb("#4A5270"));
         }
+
+        _ = CargarSubmoduloAsync(index);
     }
 
-    // ── Handlers tabs ──────────────────────────────────────────────
+    private async Task CargarSubmoduloAsync(int index)
+    {
+        try
+        {
+            switch (index)
+            {
+                case 1: await _redViewModel.CargarAsync(); break;
+                case 2: await _impresionViewModel.CargarAsync(); break;
+                case 3: await _electricidadViewModel.CargarAsync(); break;
+                case 4: await _ambientalViewModel.CargarAsync(); break;
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
     private void OnTabGeneralTapped(object sender, TappedEventArgs e) => MostrarTab(0);
     private void OnTabRedTapped(object sender, TappedEventArgs e) => MostrarTab(1);
     private void OnTabImpresionTapped(object sender, TappedEventArgs e) => MostrarTab(2);
     private void OnTabElectricidadTapped(object sender, TappedEventArgs e) => MostrarTab(3);
     private void OnTabSoporteAmbientalTapped(object sender, TappedEventArgs e) => MostrarTab(4);
 
-    // ── Acciones General ──────────────────────────────────────────
     private async void OnRegistrarEquipoTapped(object sender, EventArgs e)
         => await Shell.Current.GoToAsync("RegistrarEquipoPage");
 
@@ -135,35 +177,4 @@ public partial class EquiposPage : ContentPage
         ListaEquipos.SelectedItem = null;
         await Shell.Current.GoToAsync($"DetalleEquipoPage?equipoId={equipo.Id}");
     }
-
-    // ── Handlers Red ───────────────────────────────────────────────
-    private async void OnRegistrarRouter(object sender, EventArgs e)
-        => await DisplayAlert("Router", "Registrar Router", "OK");
-
-    private async void OnRegistrarSwitch(object sender, EventArgs e)
-        => await DisplayAlert("Switch", "Registrar Switch", "OK");
-
-    private async void OnRegistrarRepetidor(object sender, EventArgs e)
-        => await DisplayAlert("Repetidor", "Registrar Repetidor", "OK");
-
-    // ── Handlers Impresión ─────────────────────────────────────────
-    private async void OnRegistrarImpresora(object sender, EventArgs e)
-        => await DisplayAlert("Impresora", "Registrar Impresora", "OK");
-
-    private async void OnRegistrarCartucho(object sender, EventArgs e)
-        => await DisplayAlert("Cartucho", "Registrar Cartucho", "OK");
-
-    // ── Handlers Electricidad ──────────────────────────────────────
-    private async void OnRegistrarUps(object sender, EventArgs e)
-        => await DisplayAlert("UPS", "Registrar UPS", "OK");
-
-    private async void OnRegistrarMantenimientoElectrico(object sender, EventArgs e)
-        => await DisplayAlert("Mantenimiento", "Registrar Mantenimiento Eléctrico", "OK");
-
-    // ── Handlers Soporte Ambiental ─────────────────────────────────
-    private async void OnRegistrarAire(object sender, EventArgs e)
-        => await DisplayAlert("Aire", "Registrar Aire Acondicionado", "OK");
-
-    private async void OnRegistrarAmbientador(object sender, EventArgs e)
-        => await DisplayAlert("Ambientador", "Registrar Ambientador", "OK");
 }

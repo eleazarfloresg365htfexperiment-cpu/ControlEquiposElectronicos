@@ -6,10 +6,6 @@
              Title="Infraestructura de Red"
              BackgroundColor="#F4F6F9">
 
-    <ContentPage.BindingContext>
-        <vm:RedViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,*">
 
         <!-- Header azul claro con texto blanco legible -->

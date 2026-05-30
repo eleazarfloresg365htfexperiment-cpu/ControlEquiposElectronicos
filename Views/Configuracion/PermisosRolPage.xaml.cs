@@ -1,59 +1,44 @@
-﻿namespace ControlEquiposElectronicos.Views.Configuracion;
+﻿using ControlEquiposElectronicos.ViewModels.Configuracion;
+
+namespace ControlEquiposElectronicos.Views.Configuracion;
 
 public partial class PermisosRolPage : ContentPage
 {
-    public PermisosRolPage()
+    private readonly PermisosRolViewModel _viewModel;
+
+    public PermisosRolPage(PermisosRolViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
         RolPicker.SelectedIndex = 0;
+        SincronizarToggles();
     }
 
     private void OnRolCambiado(object? sender, EventArgs e)
     {
-        var rol = RolPicker.SelectedItem?.ToString();
-
-        switch (rol)
+        if (RolPicker.SelectedItem is string rol)
         {
-            case "OP":
-                EstablecerModulos(true, true, true, true, true, true, true);
-                EstablecerAcciones(true, true, true, true);
-                break;
-            case "Administrador":
-                EstablecerModulos(true, true, true, true, true, true, true);
-                EstablecerAcciones(true, true, true, false);
-                break;
-            case "Técnico":
-                EstablecerModulos(true, true, true, true, false, false, true);
-                EstablecerAcciones(true, true, false, false);
-                break;
-            case "Consulta":
-                EstablecerModulos(true, true, true, true, false, false, true);
-                EstablecerAcciones(false, false, false, false);
-                break;
+            _viewModel.RolSeleccionado = rol;
+            SincronizarToggles();
         }
     }
 
-    private void EstablecerModulos(bool dashboard, bool equipos, bool mantenimientos,
-        bool reportes, bool usuarios, bool configuracion, bool checklist)
+    private void SincronizarToggles()
     {
-        SwDashboard.IsToggled = dashboard;
-        SwEquipos.IsToggled = equipos;
-        SwMantenimientos.IsToggled = mantenimientos;
-        SwReportes.IsToggled = reportes;
-        SwUsuarios.IsToggled = usuarios;
-        SwConfiguracion.IsToggled = configuracion;
-        SwChecklist.IsToggled = checklist;
+        SwDashboard.IsToggled = _viewModel.SwDashboard;
+        SwEquipos.IsToggled = _viewModel.SwEquipos;
+        SwMantenimientos.IsToggled = _viewModel.SwMantenimientos;
+        SwReportes.IsToggled = _viewModel.SwReportes;
+        SwUsuarios.IsToggled = _viewModel.SwUsuarios;
+        SwConfiguracion.IsToggled = _viewModel.SwConfiguracion;
+        SwChecklist.IsToggled = _viewModel.SwChecklist;
+        SwCrear.IsToggled = _viewModel.SwCrear;
+        SwEditar.IsToggled = _viewModel.SwEditar;
+        SwEliminar.IsToggled = _viewModel.SwEliminar;
+        SwGestionarPermisos.IsToggled = _viewModel.SwGestionarPermisos;
     }
 
-    private void EstablecerAcciones(bool crear, bool editar, bool eliminar, bool gestionarPermisos)
-    {
-        SwCrear.IsToggled = crear;
-        SwEditar.IsToggled = editar;
-        SwEliminar.IsToggled = eliminar;
-        SwGestionarPermisos.IsToggled = gestionarPermisos;
-    }
-
-    // Volver con Shell — compatible con Clicked y TapGestureRecognizer
     private async void OnVolverClicked(object? sender, EventArgs e)
         => await Shell.Current.GoToAsync("..");
 }

@@ -31,4 +31,9 @@ public class CatalogoApiService : ICatalogoApiService
     {
         return await _apiService.GetAsync<List<CatalogoItemDto>>("Catalogos/ubicaciones") ?? new();
     }
+
+    public async Task<List<CatalogoItemDto>> ObtenerEstadosReporteAsync()
+    {
+        return await _apiService.GetAsync<List<CatalogoItemDto>>("Catalogos/estados-reporte") ?? new();
+    }
 }

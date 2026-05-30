@@ -22,7 +22,4 @@ public partial class HistorialChecklistPage : ContentPage
         await _viewModel.CargarAsync();
     }
 
-    private async void OnVolverClicked(object? sender, EventArgs e) =>
-        await Navigation.PopModalAsync();
-
 }

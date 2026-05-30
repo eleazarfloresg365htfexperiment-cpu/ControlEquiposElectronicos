@@ -17,6 +17,7 @@ public class HistorialChecklistViewModel : BaseViewModel
         Title = "Historial de checklist";
         Historial = new ObservableCollection<ChecklistResumenItem>();
         CargarCommand = new AsyncRelayCommand(CargarAsync);
+        VolverCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
     }
 
     public ObservableCollection<ChecklistResumenItem> Historial { get; }
@@ -35,6 +36,7 @@ public class HistorialChecklistViewModel : BaseViewModel
     public bool TieneError => !string.IsNullOrWhiteSpace(MensajeError);
 
     public ICommand CargarCommand { get; }
+    public ICommand VolverCommand { get; }
 
     public async Task CargarAsync()
     {

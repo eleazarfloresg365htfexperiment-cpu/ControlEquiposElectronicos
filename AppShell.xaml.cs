@@ -1,4 +1,5 @@
 using ControlEquiposElectronicos.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ControlEquiposElectronicos;
 
@@ -46,6 +47,9 @@ public partial class AppShell : Shell
     private async void OnReportesTapped(object? s, TappedEventArgs e)
     { await GoToAsync("//Reportes"); ActualizarBotonActivo(BtnReportes); }
 
+    private async void OnConsultasTapped(object? s, TappedEventArgs e)
+    { await GoToAsync("//Consultas"); ActualizarBotonActivo(BtnConsultas); }
+
     private async void OnUsuariosTapped(object? s, TappedEventArgs e)
     { await GoToAsync("//Usuarios"); ActualizarBotonActivo(BtnUsuarios); }
 
@@ -86,6 +90,7 @@ public partial class AppShell : Shell
                 LblMantenimientos.FadeTo(1, 200, Easing.CubicOut),
                 LblChecklist.FadeTo(1, 200, Easing.CubicOut),
                 LblReportes.FadeTo(1, 200, Easing.CubicOut),
+                LblConsultas.FadeTo(1, 200, Easing.CubicOut),
                 LblUsuarios.FadeTo(1, 200, Easing.CubicOut),
                 LblConfiguracion.FadeTo(1, 200, Easing.CubicOut),
                 FlechaMenuLabel.FadeTo(1, 200, Easing.CubicOut)
@@ -101,6 +106,7 @@ public partial class AppShell : Shell
                 LblMantenimientos.FadeTo(0, 150, Easing.CubicIn),
                 LblChecklist.FadeTo(0, 150, Easing.CubicIn),
                 LblReportes.FadeTo(0, 150, Easing.CubicIn),
+                LblConsultas.FadeTo(0, 150, Easing.CubicIn),
                 LblUsuarios.FadeTo(0, 150, Easing.CubicIn),
                 LblConfiguracion.FadeTo(0, 150, Easing.CubicIn),
                 FlechaMenuLabel.FadeTo(0, 150, Easing.CubicIn)
@@ -123,14 +129,14 @@ public partial class AppShell : Shell
     {
         NombreEmpresaStack.Opacity = NombreUsuarioStack.Opacity = v;
         LblDashboard.Opacity = LblEquipos.Opacity = LblMantenimientos.Opacity = v;
-        LblChecklist.Opacity = LblReportes.Opacity = LblUsuarios.Opacity = v;
+        LblChecklist.Opacity = LblReportes.Opacity = LblConsultas.Opacity = LblUsuarios.Opacity = v;
         LblConfiguracion.Opacity = FlechaMenuLabel.Opacity = v;
     }
 
     private void MostrarTextos(bool visible)
     {
         LblDashboard.IsVisible = LblEquipos.IsVisible = LblMantenimientos.IsVisible = visible;
-        LblChecklist.IsVisible = LblReportes.IsVisible = LblUsuarios.IsVisible = visible;
+        LblChecklist.IsVisible = LblReportes.IsVisible = LblConsultas.IsVisible = LblUsuarios.IsVisible = visible;
         LblConfiguracion.IsVisible = FlechaMenuLabel.IsVisible = visible;
     }
 
@@ -155,7 +161,8 @@ public partial class AppShell : Shell
             "¿Seguro que deseas cerrar sesión?", "Sí", "Cancelar");
         if (!ok) return;
         _sesion.CerrarSesion();
-        Application.Current!.Windows[0].Page = new Views.Login.LoginPage(_sesion);
+        Application.Current!.Windows[0].Page =
+            IPlatformApplication.Current!.Services.GetRequiredService<Views.Login.LoginPage>();
     }
 
     private void MostrarUsuario()
@@ -173,6 +180,9 @@ public partial class AppShell : Shell
         BtnMantenimientos.IsVisible = _sesion.TienePermiso("Mantenimientos.Ver");
         BtnChecklist.IsVisible = _sesion.TienePermiso("Checklist.Ver");
         BtnReportes.IsVisible = _sesion.TienePermiso("Reportes.Ver");
+        BtnConsultas.IsVisible = _sesion.TienePermiso("Equipos.Ver")
+            || _sesion.TienePermiso("Reportes.Ver")
+            || _sesion.TienePermiso("Mantenimientos.Ver");
         BtnUsuarios.IsVisible = _sesion.TienePermiso("Usuarios.Ver");
         BtnConfiguracion.IsVisible = _sesion.TienePermiso("Configuracion.Ver");
     }

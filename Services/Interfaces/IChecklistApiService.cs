@@ -14,5 +14,6 @@ public interface IChecklistApiService
 
     Task<List<PlantillaChecklistDto>> ObtenerPlantillasAsync();
     Task<PlantillaChecklistDto?> CrearPlantillaAsync(CrearPlantillaChecklistDto dto);
+    Task<(PlantillaChecklistDto? Plantilla, string? ErrorMessage)> CrearPlantillaConDetalleAsync(CrearPlantillaChecklistDto dto);
     Task<PlantillaChecklistItemDto?> AgregarItemPlantillaAsync(int plantillaId, CrearPlantillaChecklistItemDto dto);
 }

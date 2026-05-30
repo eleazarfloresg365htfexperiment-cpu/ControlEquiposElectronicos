@@ -8,6 +8,7 @@
     xmlns:mantenimientos="clr-namespace:ControlEquiposElectronicos.Views.Mantenimientos"
     xmlns:checklist="clr-namespace:ControlEquiposElectronicos.Views.Checklist"
     xmlns:reportes="clr-namespace:ControlEquiposElectronicos.Views.Reportes"
+    xmlns:consultas="clr-namespace:ControlEquiposElectronicos.Views.Consultas"
     xmlns:usuarios="clr-namespace:ControlEquiposElectronicos.Views.Usuarios"
     xmlns:config="clr-namespace:ControlEquiposElectronicos.Views.Configuracion"
     Shell.FlyoutBehavior="Locked"
@@ -123,6 +124,19 @@
                     <Label FontFamily="FontAwesome" Text="&#xf15c;" TextColor="#A78BFA"
                            FontSize="14" HorizontalOptions="Center" VerticalOptions="Center" />
                     <Label x:Name="LblReportes" Grid.Column="1" Text="Reportes"
+                           TextColor="#C4B5FD" FontSize="13" VerticalOptions="Center" LineBreakMode="NoWrap" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="BtnConsultas" BackgroundColor="Transparent"
+                    StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="8,9" Margin="6,0,6,1">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnConsultasTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="20,*" ColumnSpacing="8">
+                    <Label FontFamily="FontAwesome" Text="&#xf002;" TextColor="#A78BFA"
+                           FontSize="14" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label x:Name="LblConsultas" Grid.Column="1" Text="Consultas"
                            TextColor="#C4B5FD" FontSize="13" VerticalOptions="Center" LineBreakMode="NoWrap" />
                 </Grid>
             </Border>
@@ -247,6 +261,9 @@
     </FlyoutItem>
     <FlyoutItem Title="Reportes" Route="Reportes">
         <ShellContent ContentTemplate="{DataTemplate reportes:ReportesPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Consultas" Route="Consultas">
+        <ShellContent ContentTemplate="{DataTemplate consultas:ConsultasPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Usuarios" Route="Usuarios">
         <ShellContent ContentTemplate="{DataTemplate usuarios:UsuariosPage}" />

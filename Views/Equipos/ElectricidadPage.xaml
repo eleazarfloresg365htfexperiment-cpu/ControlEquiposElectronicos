@@ -5,10 +5,6 @@
              x:Class="ControlEquiposElectronicos.Views.Equipos.ElectricidadPage"
              Title="Electricidad y UPS" BackgroundColor="#F4F6F9">
 
-    <ContentPage.BindingContext>
-        <vm:ElectricidadViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,*">
         <Border Grid.Row="0" BackgroundColor="#E65100" Padding="20,16" StrokeThickness="0">
             <Border.StrokeShape>

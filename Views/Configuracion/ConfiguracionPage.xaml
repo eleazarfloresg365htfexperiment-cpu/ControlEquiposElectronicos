@@ -108,10 +108,12 @@
                 </Border>
 
                 <!-- ── FILA: AJUSTES + ADMINISTRACIÓN + SISTEMA ── -->
-                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
 
-                    <!-- AJUSTES GENERALES -->
-                    <Border Grid.Column="0" WidthRequest="260"
+                    <!-- AJUSTES GENERALES (oculto; preferencias pendientes de API) -->
+                    <Border x:Name="SeccionAjustesGenerales"
+                            Grid.Column="0" WidthRequest="260"
+                            IsVisible="False"
                             BackgroundColor="White"
                             StrokeShape="RoundRectangle 16"
                             Stroke="#EEEBf8" StrokeThickness="1"
@@ -125,8 +127,10 @@
                             <Label Text="Preferencias de la aplicación"
                                    FontSize="11" TextColor="#9AA3BE" Margin="0,2,0,18"/>
 
-                            <!-- Notificaciones -->
-                            <Border BackgroundColor="#FAFAFA"
+                            <!-- Notificaciones (oculto) -->
+                            <Border x:Name="AjusteNotificaciones"
+                                    IsVisible="False"
+                                    BackgroundColor="#FAFAFA"
                                     StrokeShape="RoundRectangle 12"
                                     Stroke="#F0EDF9" StrokeThickness="1"
                                     Padding="14,12" Margin="0,0,0,10">
@@ -151,8 +155,10 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Confirmar antes de eliminar -->
-                            <Border BackgroundColor="#FAFAFA"
+                            <!-- Confirmar antes de eliminar (oculto) -->
+                            <Border x:Name="AjusteConfirmarEliminar"
+                                    IsVisible="False"
+                                    BackgroundColor="#FAFAFA"
                                     StrokeShape="RoundRectangle 12"
                                     Stroke="#F0EDF9" StrokeThickness="1"
                                     Padding="14,12">
@@ -181,7 +187,7 @@
                     </Border>
 
                     <!-- ADMINISTRACIÓN -->
-                    <Border Grid.Column="1"
+                    <Border Grid.Column="0"
                             BackgroundColor="White"
                             StrokeShape="RoundRectangle 16"
                             Stroke="#EEEBf8" StrokeThickness="1"
@@ -224,8 +230,10 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Card: Gestionar permisos por rol -->
-                            <Border BackgroundColor="#FAFAFA"
+                            <!-- Card: Gestionar permisos por rol (oculto; acceso vía ruta PermisosRol) -->
+                            <Border x:Name="CardPermisosRol"
+                                    IsVisible="False"
+                                    BackgroundColor="#FAFAFA"
                                     StrokeShape="RoundRectangle 12"
                                     Stroke="#F0EDF9" StrokeThickness="1"
                                     Padding="16,14" Margin="0,0,0,10">
@@ -287,7 +295,7 @@
 
                     <!-- SISTEMA (auditoría) -->
                     <Border x:Name="SeccionAuditoria"
-                            Grid.Column="2" WidthRequest="220"
+                            Grid.Column="1" WidthRequest="220"
                             IsVisible="False"
                             BackgroundColor="White"
                             StrokeShape="RoundRectangle 16"

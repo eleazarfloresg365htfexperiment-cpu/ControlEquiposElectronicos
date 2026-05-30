@@ -87,7 +87,7 @@
                                     TextColor="#1A1A2E"
                                     FontSize="14"
                                     BackgroundColor="Transparent"
-                                    SelectedItem="{Binding EstadoReporte}">
+                                    SelectedItem="{Binding EstadoReporteNombre}">
                                 <Picker.Items>
                                     <x:String>Abierto</x:String>
                                     <x:String>En revisión</x:String>

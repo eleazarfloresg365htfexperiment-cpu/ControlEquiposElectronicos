@@ -5,10 +5,6 @@
              x:Class="ControlEquiposElectronicos.Views.Equipos.ImpresionPage"
              Title="Impresión" BackgroundColor="#F4F6F9">
 
-    <ContentPage.BindingContext>
-        <vm:ImpresionViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,*">
         <Border Grid.Row="0" BackgroundColor="#6A1B9A" Padding="20,16" StrokeThickness="0">
             <Border.StrokeShape>

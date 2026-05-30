@@ -62,7 +62,7 @@
                         StrokeThickness="1"
                         Padding="12,0">
                         <Entry
-                            x:Name="UsuarioEntry"
+                            Text="{Binding Usuario}"
                             Placeholder="Ej. jperez"
                             TextColor="{StaticResource Gray900}"
                             PlaceholderColor="{StaticResource Gray400}"
@@ -80,7 +80,7 @@
                         StrokeThickness="1"
                         Padding="12,0">
                         <Entry
-                            x:Name="ContrasenaEntry"
+                            Text="{Binding Contrasena}"
                             Placeholder="••••••••"
                             IsPassword="True"
                             TextColor="{StaticResource Gray900}"
@@ -93,7 +93,7 @@
                 <!-- Botón Iniciar sesión -->
                 <Button
                     Text="Iniciar sesión"
-                    Clicked="OnLoginClicked"
+                    Command="{Binding IniciarSesionCommand}"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White"
                     FontSize="15"
@@ -111,7 +111,7 @@
                     HorizontalOptions="Center"
                     Margin="0,8,0,0">
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnRegistrarseTapped" />
+                        <TapGestureRecognizer Command="{Binding RegistrarseCommand}" />
                     </Label.GestureRecognizers>
                 </Label>
 

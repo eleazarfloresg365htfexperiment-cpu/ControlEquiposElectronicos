@@ -20,7 +20,8 @@ public class ApiService : IApiService
 
         _jsonOptions = new JsonSerializerOptions
         {
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
     }
 
@@ -46,15 +47,20 @@ public class ApiService : IApiService
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(endpoint, data, _jsonOptions);
+            var json = JsonSerializer.Serialize(data, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(endpoint, content);
             if (!response.IsSuccessStatusCode)
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
-                return (default, string.IsNullOrWhiteSpace(errorBody)
-                    ? $"Error HTTP {(int)response.StatusCode}"
-                    : errorBody);
+                return (default, ExtraerMensajeError(errorBody, response.StatusCode));
             }
-            var result = await response.Content.ReadFromJsonAsync<TResponse>(_jsonOptions);
+
+            var body = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(body))
+                return (default, null);
+
+            var result = JsonSerializer.Deserialize<TResponse>(body, _jsonOptions);
             return (result, null);
         }
         catch (Exception ex)
@@ -114,5 +120,24 @@ public class ApiService : IApiService
             return response.IsSuccessStatusCode;
         }
         catch { return false; }
+    }
+
+    private static string ExtraerMensajeError(string errorBody, System.Net.HttpStatusCode statusCode)
+    {
+        if (string.IsNullOrWhiteSpace(errorBody))
+            return $"Error HTTP {(int)statusCode}";
+
+        try
+        {
+            using var doc = JsonDocument.Parse(errorBody);
+            if (doc.RootElement.TryGetProperty("mensaje", out var mensaje))
+                return mensaje.GetString() ?? errorBody;
+        }
+        catch
+        {
+            // usar texto crudo
+        }
+
+        return errorBody;
     }
 }

@@ -1,12 +1,18 @@
-﻿using ControlEquiposElectronicos.DTOs.Reportes;
+﻿using ControlEquiposElectronicos.DTOs.Catalogos;
+using ControlEquiposElectronicos.DTOs.Reportes;
+using ControlEquiposElectronicos.Services;
 using ControlEquiposElectronicos.Services.Interfaces;
 using System.Windows.Input;
 
 namespace ControlEquiposElectronicos.ViewModels.Reportes;
 
-public class ReporteFallaFormularioViewModel : BaseViewModel
+public class ReporteFallaFormularioViewModel : BaseViewModel, IQueryAttributable
 {
     private readonly IReporteFallaApiService _reporteFallaApiService;
+    private readonly ICatalogoApiService _catalogoApiService;
+    private readonly SesionService _sesionService;
+
+    private List<CatalogoItemDto> _estadosReporte = new();
 
     private string _equipoIdTexto = string.Empty;
     public string EquipoIdTexto
@@ -44,15 +50,63 @@ public class ReporteFallaFormularioViewModel : BaseViewModel
         set { _prioridad = value; OnPropertyChanged(); }
     }
 
+    private string _estadoReporteNombre = "Abierto";
+    public string EstadoReporteNombre
+    {
+        get => _estadoReporteNombre;
+        set { _estadoReporteNombre = value; OnPropertyChanged(); }
+    }
+
     public ICommand GuardarCommand { get; }
     public ICommand CancelarCommand { get; }
 
-    public ReporteFallaFormularioViewModel(IReporteFallaApiService reporteFallaApiService)
+    public ReporteFallaFormularioViewModel(
+        IReporteFallaApiService reporteFallaApiService,
+        ICatalogoApiService catalogoApiService,
+        SesionService sesionService)
     {
         Title = "Reporte de falla";
         _reporteFallaApiService = reporteFallaApiService;
+        _catalogoApiService = catalogoApiService;
+        _sesionService = sesionService;
         GuardarCommand = new Command(async () => await GuardarAsync());
         CancelarCommand = new Command(async () => await Shell.Current.GoToAsync(".."));
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.TryGetValue("equipoId", out var valor) &&
+            int.TryParse(valor?.ToString(), out var id))
+        {
+            EquipoId = id;
+            EquipoIdTexto = id.ToString();
+        }
+    }
+
+    public async Task InicializarAsync()
+    {
+        try
+        {
+            _estadosReporte = await _catalogoApiService.ObtenerEstadosReporteAsync();
+        }
+        catch
+        {
+            _estadosReporte = new();
+        }
+    }
+
+    private int ResolverEstadoReporteId()
+    {
+        var estado = _estadosReporte.FirstOrDefault(e =>
+            e.Nombre.Equals(EstadoReporteNombre, StringComparison.OrdinalIgnoreCase));
+
+        if (estado != null)
+            return estado.Id;
+
+        var abierto = _estadosReporte.FirstOrDefault(e =>
+            e.Nombre.Contains("Abierto", StringComparison.OrdinalIgnoreCase));
+
+        return abierto?.Id ?? 1;
     }
 
     private async Task GuardarAsync()
@@ -75,35 +129,46 @@ public class ReporteFallaFormularioViewModel : BaseViewModel
             return;
         }
 
+        var usuarioId = _sesionService.UsuarioActual?.UsuarioId ?? 0;
+        if (usuarioId <= 0)
+        {
+            await Shell.Current.DisplayAlertAsync("Sesión",
+                "No se pudo identificar al usuario. Cierra sesión e ingresa de nuevo.", "OK");
+            return;
+        }
+
         IsBusy = true;
         try
         {
             var dto = new CrearReporteFallaDto
             {
                 EquipoId = EquipoId,
-                UsuarioReportaId = 1,
-                EstadoReporteId = 1,
-                Titulo = Titulo,
-                Descripcion = Descripcion,
-                Prioridad = Prioridad
+                UsuarioReportaId = usuarioId,
+                EstadoReporteId = ResolverEstadoReporteId(),
+                Titulo = Titulo.Trim(),
+                Descripcion = Descripcion.Trim(),
+                Prioridad = string.IsNullOrWhiteSpace(Prioridad) ? "Media" : Prioridad
             };
 
-            var resultado = await _reporteFallaApiService.CrearAsync(dto);
+            var (exito, error) = await _reporteFallaApiService.CrearAsync(dto);
 
-            if (resultado)
+            if (exito)
             {
                 await Shell.Current.DisplayAlertAsync("Éxito", "Reporte registrado correctamente.", "OK");
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                await Shell.Current.DisplayAlertAsync("Error", "No se pudo registrar el reporte.", "OK");
+                await Shell.Current.DisplayAlertAsync("Error", error ?? "No se pudo registrar el reporte.", "OK");
             }
         }
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
         }
-        finally { IsBusy = false; }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

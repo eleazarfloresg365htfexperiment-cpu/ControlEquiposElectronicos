@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="ControlEquiposElectronicos.Views.Reportes.ReportesPage"
+    x:Name="ReportesPageRoot"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:ControlEquiposElectronicos.ViewModels"
     Title="Reportes"
     BackgroundColor="#F5F5F5">
 
@@ -59,32 +61,89 @@
                 </Border>
             </Grid>
 
-            <!-- FILTRO DE FECHAS PARA EXPORTAR -->
-            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20" IsVisible="{Binding MostrarFiltroFechas}">
-                <VerticalStackLayout Spacing="16">
-                    <Label Text="Selecciona el rango de fechas" FontSize="16" FontAttributes="Bold" TextColor="#1A1A2E" />
+            <!-- CALENDARIO DE EXPORTACIÓN -->
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 12" Stroke="#E0E0E0" Padding="20" IsVisible="{Binding MostrarOpcionesExport}">
+                <VerticalStackLayout Spacing="14">
 
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                        <VerticalStackLayout Grid.Column="0" Spacing="6">
-                            <Label Text="Fecha desde" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
-                            <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
-                                <DatePicker Date="{Binding FechaDesde}" Format="dd/MM/yyyy" FontSize="13" BackgroundColor="Transparent" />
-                            </Border>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="1" Spacing="6">
-                            <Label Text="Fecha hasta" FontAttributes="Bold" FontSize="13" TextColor="#1A1A2E" />
-                            <Border StrokeShape="RoundRectangle 8" Stroke="#E0E0E0" BackgroundColor="#FAFAFA" Padding="12,4">
-                                <DatePicker Date="{Binding FechaHasta}" Format="dd/MM/yyyy" FontSize="13" BackgroundColor="Transparent" />
-                            </Border>
-                        </VerticalStackLayout>
-                    </Grid>
+                    <Label Text="Selección para exportar" FontSize="16" FontAttributes="Bold" TextColor="#1A1A2E" />
+                    <Label Text="Elige uno o varios meses en el calendario, o exporta todo el historial."
+                           FontSize="13" TextColor="#666666" />
+
+                    <!-- Exportar todos -->
+                    <Border BackgroundColor="#F0F7FF" StrokeShape="RoundRectangle 10" Stroke="#4F8EF7" StrokeThickness="1" Padding="14,12">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="2">
+                                <Label Text="Exportar todos los reportes" FontAttributes="Bold" FontSize="14" TextColor="#1A1A2E" />
+                                <Label Text="Incluye todo el historial sin filtrar por mes" FontSize="11" TextColor="#666666" />
+                            </VerticalStackLayout>
+                            <Switch Grid.Column="1" IsToggled="{Binding ExportarTodos}" OnColor="#4F8EF7" VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Calendario por año -->
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding MostrarCalendarioMeses}">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                            <Button Grid.Column="0" Text="‹" FontSize="18" WidthRequest="44" HeightRequest="44"
+                                    BackgroundColor="#F0F0F0" TextColor="#1A1A2E" CornerRadius="8"
+                                    Command="{Binding AnioAnteriorCommand}" />
+                            <Label Grid.Column="1" Text="{Binding TextoAnioCalendario}" FontSize="22" FontAttributes="Bold"
+                                   TextColor="#1A1A2E" HorizontalOptions="Center" VerticalOptions="Center" />
+                            <Button Grid.Column="2" Text="›" FontSize="18" WidthRequest="44" HeightRequest="44"
+                                    BackgroundColor="#F0F0F0" TextColor="#1A1A2E" CornerRadius="8"
+                                    Command="{Binding AnioSiguienteCommand}" />
+                        </Grid>
+
+                        <Label Text="Toca los meses para seleccionar varios (azul = seleccionado). Los meses con datos se muestran en celeste."
+                               FontSize="11" TextColor="#888888" />
+
+                        <CollectionView ItemsSource="{Binding MesesCalendario}" SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="8" VerticalItemSpacing="8" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:MesCalendarioExportItem">
+                                    <Border StrokeShape="RoundRectangle 10"
+                                            Stroke="{Binding ColorBorde}"
+                                            StrokeThickness="1.5"
+                                            BackgroundColor="{Binding ColorCelda}"
+                                            Padding="10,12"
+                                            MinimumHeightRequest="72">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={x:Reference ReportesPageRoot}, Path=BindingContext.ToggleMesCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                                            <Label Text="{Binding NombreCorto}" FontSize="15" FontAttributes="Bold"
+                                                   TextColor="{Binding ColorTexto}" HorizontalOptions="Center" />
+                                            <Label Text="{Binding CantidadTexto}" FontSize="10"
+                                                   TextColor="{Binding ColorTexto}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0" Text="Meses con datos" FontSize="12" CornerRadius="8"
+                                    BackgroundColor="#EBF4FF" TextColor="#1E40AF"
+                                    Command="{Binding SeleccionarMesesConDatosCommand}" />
+                            <Button Grid.Column="1" Text="Limpiar selección" FontSize="12" CornerRadius="8"
+                                    BackgroundColor="#F5F5F5" TextColor="#666666"
+                                    Command="{Binding LimpiarMesesCommand}" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <Border BackgroundColor="#FAFAFA" StrokeShape="RoundRectangle 8" Stroke="#E8E8E8" Padding="12,10">
+                        <Label Text="{Binding ResumenExportacion}" FontSize="13" TextColor="#4A5270" />
+                    </Border>
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Border Grid.Column="0" StrokeShape="RoundRectangle 8" Stroke="#CCCCCC" BackgroundColor="White" Padding="0">
                             <Button Text="Cancelar" BackgroundColor="White" TextColor="#666666" FontAttributes="Bold" FontSize="14" Command="{Binding CancelarExportCommand}" />
                         </Border>
                         <Border Grid.Column="1" StrokeShape="RoundRectangle 8" Stroke="Transparent" BackgroundColor="#4F8EF7" Padding="0">
-                            <Button Text="Generar reporte" BackgroundColor="#4F8EF7" TextColor="White" FontAttributes="Bold" FontSize="14" Command="{Binding ConfirmarExportCommand}" />
+                            <Button Text="Generar archivo" BackgroundColor="#4F8EF7" TextColor="White" FontAttributes="Bold" FontSize="14" Command="{Binding ConfirmarExportCommand}" />
                         </Border>
                     </Grid>
                 </VerticalStackLayout>

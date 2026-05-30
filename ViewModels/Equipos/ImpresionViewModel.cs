@@ -1,96 +1,46 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using ControlEquiposElectronicos.Services;
+using ControlEquiposElectronicos.Services.Interfaces;
 using System.Windows.Input;
-using System.Net.Http.Json;
 
 namespace ControlEquiposElectronicos.ViewModels.Equipos;
 
-public class ImpresionViewModel : INotifyPropertyChanged
+public class ImpresionViewModel : EquipoSubmoduloViewModelBase
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-    void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-    private readonly HttpClient _http;
-
-    public ImpresionViewModel()
+    public ImpresionViewModel(
+        IEquipoApiService equipoApiService,
+        IReporteFallaApiService reporteFallaApiService,
+        SesionService sesionService,
+        ICatalogoApiService catalogoApiService)
+        : base(equipoApiService, reporteFallaApiService, sesionService, catalogoApiService)
     {
-        _http = new HttpClient { BaseAddress = new Uri("https://localhost:7212/") };
-        CargarDatos();
+        Title = "Impresión";
     }
 
-    private string _busquedaTexto = string.Empty;
-    public string BusquedaTexto
-    {
-        get => _busquedaTexto;
-        set { _busquedaTexto = value; OnPropertyChanged(); }
-    }
+    protected override IReadOnlyList<string> TiposEquipo { get; } = ["Impresora", "Multifuncional"];
 
     private int _totalImpresoras;
     public int TotalImpresoras
     {
         get => _totalImpresoras;
-        set { _totalImpresoras = value; OnPropertyChanged(); }
+        private set { _totalImpresoras = value; OnPropertyChanged(); }
     }
 
-    private int _totalCambiosCartucho;
-    public int TotalCambiosCartucho
-    {
-        get => _totalCambiosCartucho;
-        set { _totalCambiosCartucho = value; OnPropertyChanged(); }
-    }
+    public ICommand RegistrarImpresoraCommand => CrearRegistrarCommand("Impresora");
 
-    private bool _cargando;
-    public bool Cargando
-    {
-        get => _cargando;
-        set { _cargando = value; OnPropertyChanged(); }
-    }
+    public ICommand VerHistorialCommand => new Command(async () =>
+        await Shell.Current.DisplayAlertAsync("Historial", "Historial de cartuchos — próximamente.", "OK"));
 
-    public ObservableCollection<EquipoItem> Impresoras { get; } = new();
-
-    async void CargarDatos()
-    {
-        try
-        {
-            Cargando = true;
-            var equipos = await _http.GetFromJsonAsync<List<EquipoItem>>("api/Equipos");
-            if (equipos != null)
-            {
-                Impresoras.Clear();
-                var impresoras = equipos.Where(e => e.TipoEquipo == "Impresora").ToList();
-                foreach (var e in impresoras)
-                    Impresoras.Add(e);
-                TotalImpresoras = impresoras.Count;
-            }
-        }
-        catch
-        {
-            // API no disponible aún
-        }
-        finally
-        {
-            Cargando = false;
-        }
-    }
-
-    public ICommand RegistrarImpresoraCommand => new Command(async () =>
-        await Shell.Current.GoToAsync("RegistrarEquipoPage?tipo=Impresora"));
+    public ICommand GenerarReporteCommand => new Command(async () =>
+        await Shell.Current.DisplayAlertAsync("Reporte", "Generación de reporte — próximamente.", "OK"));
 
     public ICommand RegistrarCartuchoCommand => new Command(async () =>
-        await Shell.Current.DisplayAlert("Cartucho", "Registrar cambio de cartucho - próximamente", "OK"));
+        await Shell.Current.DisplayAlertAsync(
+            "Cartucho",
+            "El registro de cambios de cartucho se conectará cuando el endpoint esté disponible en la API.",
+            "OK"));
 
-    public ICommand BuscarCommand => new Command(CargarDatos);
-
-    public ICommand VerHistorialCommand => new Command(async (item) =>
-        await Shell.Current.DisplayAlert("Historial", "Ver historial de cartuchos", "OK"));
-
-    public ICommand ReportarFallaCommand => new Command(async (item) =>
-        await Shell.Current.DisplayAlert("Falla", "Reportar falla de impresión", "OK"));
-
-    public ICommand GenerarReporteCommand => new Command(async (item) =>
-        await Shell.Current.DisplayAlert("Reporte", "Generar reporte de impresora", "OK"));
-
-    public ICommand ActualizarCommand => new Command(CargarDatos);
+    protected override void ActualizarContadores()
+    {
+        TotalImpresoras = Equipos.Count;
+    }
 }

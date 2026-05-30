@@ -1,49 +1,19 @@
-﻿namespace ControlEquiposElectronicos.Views.Equipos;
+﻿using ControlEquiposElectronicos.ViewModels.Equipos;
+
+namespace ControlEquiposElectronicos.Views.Equipos;
 
 public partial class ElectricidadPage : ContentPage
 {
-    public ElectricidadPage()
+    public ElectricidadPage(ElectricidadViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
-    private async void OnRegistrarUPS(object sender, EventArgs e)
+    protected override async void OnAppearing()
     {
-        await DisplayAlert(
-            "UPS",
-            "Registrar UPS funcionando",
-            "OK");
-    }
-
-    private async void OnRegistrarBateria(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "Batería",
-            "Registrar Batería funcionando",
-            "OK");
-    }
-
-    private async void OnRegistrarAire(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "Aire Acondicionado",
-            "Registrar Aire Acondicionado funcionando",
-            "OK");
-    }
-
-    private async void OnRegistrarBTU(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "BTU",
-            "Registrar BTU funcionando",
-            "OK");
-    }
-
-    private async void OnVerServicios(object sender, EventArgs e)
-    {
-        await DisplayAlert(
-            "Servicios",
-            "Ver Servicios funcionando",
-            "OK");
+        base.OnAppearing();
+        if (BindingContext is ElectricidadViewModel vm)
+            await vm.CargarAsync();
     }
 }

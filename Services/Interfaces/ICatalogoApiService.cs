@@ -8,4 +8,5 @@ public interface ICatalogoApiService
     Task<List<CatalogoItemDto>> ObtenerTiposEquipoAsync();
     Task<List<CatalogoItemDto>> ObtenerEstadosEquipoAsync();
     Task<List<CatalogoItemDto>> ObtenerUbicacionesAsync();
+    Task<List<CatalogoItemDto>> ObtenerEstadosReporteAsync();
 }
